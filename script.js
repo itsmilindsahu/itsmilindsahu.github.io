@@ -164,3 +164,24 @@ window.addEventListener('scroll', () => {
     nav.style.background = 'rgba(255,255,255,0.92)';
   }
 });
+
+// ── DARK / LIGHT THEME TOGGLE ──
+const themeBtn = document.querySelector('.theme-toggle');
+const savedTheme = localStorage.getItem('axl-theme') || 'light';
+
+// Apply saved theme on load
+if (savedTheme === 'dark') {
+  document.body.classList.add('dark');
+  if (themeBtn) themeBtn.textContent = '☀';
+} else {
+  if (themeBtn) themeBtn.textContent = '◑';
+}
+
+if (themeBtn) {
+  themeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    themeBtn.textContent = isDark ? '☀' : '◑';
+    localStorage.setItem('axl-theme', isDark ? 'dark' : 'light');
+  });
+}
