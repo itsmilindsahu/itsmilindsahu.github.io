@@ -1,6 +1,6 @@
-// CURSOR
+// CURSOR — mix-blend-mode handles visibility on dark/light
 const cursor = document.querySelector('.cursor');
-const ring = document.querySelector('.cursor-ring');
+const ring   = document.querySelector('.cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
 
 document.addEventListener('mousemove', e => {
@@ -8,52 +8,28 @@ document.addEventListener('mousemove', e => {
   cursor.style.left = mx + 'px';
   cursor.style.top  = my + 'px';
 });
-function animateRing() {
+(function animateRing() {
   rx += (mx - rx) * 0.12;
   ry += (my - ry) * 0.12;
   ring.style.left = rx + 'px';
   ring.style.top  = ry + 'px';
   requestAnimationFrame(animateRing);
-}
-animateRing();
-
-// CURSOR COLOR — white on dark sections
-const darkSections = ['hero', 'research'];
-function updateCursorColor() {
-  const el = document.elementFromPoint(mx, my);
-  if (!el) return;
-  const section = el.closest('section, footer, nav');
-  const isDark = section && (
-    section.id === 'hero' ||
-    section.id === 'research' ||
-    section.tagName === 'FOOTER'
-  );
-  if (isDark) {
-    cursor.style.background = 'white';
-    ring.style.borderColor = 'white';
-  } else {
-    cursor.style.background = document.body.classList.contains('dark') ? 'white' : '#0d0d0b';
-    ring.style.borderColor  = document.body.classList.contains('dark') ? 'white' : '#0d0d0b';
-  }
-}
-document.addEventListener('mousemove', updateCursorColor);
+})();
 
 // HAMBURGER
 const hamburger = document.querySelector('.hamburger');
 const navLinks  = document.querySelector('.nav-links');
-if (hamburger) {
-  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
-}
+if (hamburger) hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
 
 // TERMINAL TYPING
 const lines = [
-  { prompt: '$', text: 'whoami' },
-  { prompt: '',  text: 'milind_sahu @ iiser_tirupati', cls: 'terminal-output' },
-  { prompt: '$', text: 'cat research.txt' },
-  { prompt: '>',  text: 'Math Economics / Optimization', cls: 'terminal-output' },
-  { prompt: '>',  text: 'Energy Systems / Game Theory',  cls: 'terminal-output' },
-  { prompt: '$', text: 'echo $AFFILIATION' },
-  { prompt: '',  text: 'AXL — Axiom Labs', cls: 'terminal-output' },
+  { prompt:'$', text:'whoami' },
+  { prompt:'',  text:'milind_sahu @ iiser_tirupati', cls:'terminal-output' },
+  { prompt:'$', text:'cat research.txt' },
+  { prompt:'>', text:'Math Economics / Optimization', cls:'terminal-output' },
+  { prompt:'>', text:'Energy Systems / Game Theory',  cls:'terminal-output' },
+  { prompt:'$', text:'echo $AFFILIATION' },
+  { prompt:'',  text:'AXL — Axiom Labs', cls:'terminal-output' },
 ];
 const termBody = document.querySelector('.terminal-body');
 if (termBody) {
@@ -67,12 +43,10 @@ if (termBody) {
     }
     const l = lines[i++];
     const div = document.createElement('div');
-    div.className = 'terminal-line';
-    if (l.cls) div.classList.add(l.cls);
+    div.className = 'terminal-line' + (l.cls ? ' ' + l.cls : '');
     if (l.prompt) {
       const p = document.createElement('span');
-      p.className = 'prompt';
-      p.textContent = l.prompt;
+      p.className = 'prompt'; p.textContent = l.prompt;
       div.appendChild(p);
     }
     const t = document.createElement('span');
@@ -87,10 +61,10 @@ if (termBody) {
 // FADE IN on scroll
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
+}, { threshold: 0.1 });
 document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
-// PROJECT FILTER (projects.html)
+// PROJECT FILTER
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
