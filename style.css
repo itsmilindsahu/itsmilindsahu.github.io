@@ -259,16 +259,17 @@ body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
 ═══════════════════════════════════════ */
 #research-graph{
   width:100%;
-  min-height:480px;
+  height:540px;
+  min-height:540px;
   position:relative;
   border:1px solid #1a1a18;
   background:#020206;
   overflow:hidden;
+  display:block;
 }
-/* Three.js injects a <canvas> — make sure it fills */
+/* Canvas inside galaxy — do NOT override width/height, JS controls those */
 #research-graph canvas{
   display:block !important;
-  width:100% !important;
 }
 .graph-hint{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#2a2a28;margin-bottom:10px;}
 
