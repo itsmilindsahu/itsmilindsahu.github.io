@@ -402,3 +402,28 @@ body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
   .interests-grid  { grid-template-columns: 1fr; }
   .certs-grid-dark { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ── RESEARCH CARDS — glowy white text ── */
+.interest-item .interest-num {
+  color: var(--accent) !important;
+  text-shadow: 0 0 8px rgba(26,86,219,.6);
+}
+.interest-item .interest-title {
+  color: #ffffff !important;
+  text-shadow: 0 0 12px rgba(255,255,255,.25);
+}
+.interest-item .interest-symbol {
+  color: #2a2a28 !important;
+  font-size: 34px;
+}
+.interest-item:hover .interest-title {
+  text-shadow: 0 0 16px rgba(26,86,219,.5);
+}
+.interest-item:hover .interest-symbol {
+  color: rgba(26,86,219,.45) !important;
+  text-shadow: 0 0 20px rgba(26,86,219,.3);
+}
+
+/* ── CERT labels visible ── */
+.cert-dark-label { color: #777 !important; }
+.cert-dark-item:hover .cert-dark-label { color: #bbb !important; }
