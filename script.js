@@ -117,7 +117,9 @@ function buildGalaxy() {
   container.style.overflow   = 'hidden';
   container.style.position   = 'relative';
 
-  const W = container.clientWidth || 900;
+  // Force a layout read — getBoundingClientRect is more reliable than clientWidth
+  var W = container.getBoundingClientRect().width || container.offsetWidth || container.parentElement.clientWidth || 900;
+  W = Math.floor(W);
   const H = 540;
 
   // ── Renderer ──────────────────────────────────────────────────────────
@@ -126,7 +128,7 @@ function buildGalaxy() {
   renderer.setSize(W, H);
   renderer.setClearColor(0x020206, 1);
   container.appendChild(renderer.domElement);
-  renderer.domElement.style.display = 'block';
+  renderer.domElement.style.cssText = 'display:block;width:100%!important;height:' + H + 'px;';
 
   // ── Scene ──────────────────────────────────────────────────────────────
   const scene = new THREE.Scene();
@@ -426,18 +428,83 @@ function buildGalaxy() {
 }
 
 // ── Bootstrap Three.js then build ──────────────────────────────────────
-function initGalaxy() {
+// Waits until the container has real pixel width before building,
+// so Three.js renderer never gets size(0, H).
+function waitForSizeAndBuild() {
+  var container = document.getElementById('research-graph');
+  if (!container) return;
+
+  var built = false;
+  function tryBuild() {
+    if (built) return;
+    var w = container.getBoundingClientRect().width || container.offsetWidth;
+    if (w > 10) {
+      built = true;
+      buildGalaxy();
+    }
+  }
+
+  // Try immediately
+  tryBuild();
+  if (built) return;
+
+  // Use ResizeObserver if available (fires as soon as element gets painted dimensions)
+  if (typeof ResizeObserver !== 'undefined') {
+    var ro = new ResizeObserver(function() {
+      tryBuild();
+      if (built) ro.disconnect();
+    });
+    ro.observe(container);
+    // Fallback: also disconnect after 5s to avoid orphaned observer
+    setTimeout(function() { ro.disconnect(); }, 5000);
+    return;
+  }
+
+  // Fallback: poll
+  var attempts = 0;
+  var poll = setInterval(function() {
+    attempts++;
+    tryBuild();
+    if (built || attempts > 80) clearInterval(poll);
+  }, 80);
+}
+
+function loadThreeAndBuild() {
   if (!document.getElementById('research-graph')) return;
-  if (typeof THREE !== 'undefined') { buildGalaxy(); return; }
+  if (typeof THREE !== 'undefined') {
+    waitForSizeAndBuild();
+    return;
+  }
   var s = document.createElement('script');
   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-  s.onload  = buildGalaxy;
+  s.onload  = waitForSizeAndBuild;
   s.onerror = function() { console.warn('[AXL] Three.js CDN failed'); };
   document.head.appendChild(s);
+}
+
+// Also use IntersectionObserver to trigger on scroll-into-view
+function initGalaxy() {
+  var container = document.getElementById('research-graph');
+  if (!container) return;
+
+  // Load Three.js right away (non-blocking)
+  if (typeof THREE === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    s.onload = function() {
+      // Once loaded, wait for real dimensions then build
+      waitForSizeAndBuild();
+    };
+    s.onerror = function() { console.warn('[AXL] Three.js CDN failed'); };
+    document.head.appendChild(s);
+  } else {
+    waitForSizeAndBuild();
+  }
 }
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initGalaxy);
 } else {
-  initGalaxy();
+  // Small delay lets the browser complete layout so clientWidth is valid
+  setTimeout(initGalaxy, 0);
 }
