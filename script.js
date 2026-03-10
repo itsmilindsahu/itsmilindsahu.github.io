@@ -105,406 +105,407 @@ filterBtns.forEach(btn => {
 //  AXL sun at centre · research domains orbit as glowing planets
 //  Drag to rotate · Scroll to zoom · Hover for tooltip + formula
 // ══════════════════════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════════════════════
+//  3D-STYLE RESEARCH GALAXY  ·  Pure Canvas 2D  ·  Zero dependencies
+//  AXL sun at centre · research domains orbit as glowing planets
+//  Drag to rotate view · Scroll to zoom · Hover for formula tooltip
+// ══════════════════════════════════════════════════════════════════════════
 function buildGalaxy() {
-  const container = document.getElementById('research-graph');
+  var container = document.getElementById('research-graph');
   if (!container) return;
 
-  // Clear any leftover SVG / D3 markup
+  // Prevent double-init
+  if (container.dataset.galaxyBuilt) return;
+  container.dataset.galaxyBuilt = '1';
+
   container.innerHTML = '';
-  container.style.height    = '540px';
+  container.style.position = 'relative';
+  container.style.overflow  = 'hidden';
   container.style.background = '#020206';
-  container.style.cursor     = 'grab';
-  container.style.overflow   = 'hidden';
-  container.style.position   = 'relative';
+  container.style.cursor    = 'grab';
 
-  // Force a layout read — getBoundingClientRect is more reliable than clientWidth
-  var W = container.getBoundingClientRect().width || container.offsetWidth || container.parentElement.clientWidth || 900;
-  W = Math.floor(W);
-  const H = 540;
+  var canvas = document.createElement('canvas');
+  canvas.style.cssText = 'display:block;width:100%;height:100%;';
+  container.appendChild(canvas);
 
-  // ── Renderer ──────────────────────────────────────────────────────────
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(W, H);
-  renderer.setClearColor(0x020206, 1);
-  container.appendChild(renderer.domElement);
-  renderer.domElement.style.cssText = 'display:block;width:100%!important;height:' + H + 'px;';
+  // Update hint text
+  var hint = container.previousElementSibling;
+  if (hint && hint.classList && hint.classList.contains('graph-hint'))
+    hint.textContent = 'Drag to rotate · Scroll to zoom · Hover planets';
 
-  // ── Scene ──────────────────────────────────────────────────────────────
-  const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x020206, 0.012);
-
-  // ── Camera ─────────────────────────────────────────────────────────────
-  const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 800);
-  let camTheta = 0.25, camPhi = 0.38, camR = 46;
-  function updateCamera() {
-    camera.position.set(
-      Math.sin(camTheta) * Math.cos(camPhi) * camR,
-      Math.sin(camPhi) * camR,
-      Math.cos(camTheta) * Math.cos(camPhi) * camR
-    );
-    camera.lookAt(0, 0, 0);
+  var W, H, dpr;
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    W = container.offsetWidth  || 900;
+    H = container.offsetHeight || 540;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
   }
-  updateCamera();
+  resize();
 
-  // ── Lights ─────────────────────────────────────────────────────────────
-  scene.add(new THREE.AmbientLight(0x08081a, 2.2));
-  const sunPt = new THREE.PointLight(0x1a56db, 5, 90);
-  scene.add(sunPt);
-  const fillPt = new THREE.PointLight(0x00c896, 0.7, 70);
-  fillPt.position.set(25, 12, 20);
-  scene.add(fillPt);
+  var ctx = canvas.getContext('2d');
 
-  // ── Starfield ──────────────────────────────────────────────────────────
-  (function() {
-    const N = 2200;
-    const pos = new Float32Array(N * 3);
-    for (let i = 0; i < N * 3; i++) pos[i] = (Math.random() - 0.5) * 320;
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    scene.add(new THREE.Points(geo,
-      new THREE.PointsMaterial({ color: 0x1a2240, size: 0.20, transparent: true, opacity: 0.75 })
-    ));
-  })();
-
-  // ── AXL Sun ────────────────────────────────────────────────────────────
-  const sunMesh = new THREE.Mesh(
-    new THREE.SphereGeometry(2.8, 48, 48),
-    new THREE.MeshStandardMaterial({
-      color: 0x1a56db, emissive: 0x1a56db, emissiveIntensity: 1.6,
-      roughness: 0.1, metalness: 0.95
-    })
-  );
-  scene.add(sunMesh);
-
-  // Glow shells
-  [{ r: 4.4, o: 0.055 }, { r: 6.6, o: 0.018 }].forEach(function(cfg) {
-    scene.add(new THREE.Mesh(
-      new THREE.SphereGeometry(cfg.r, 24, 24),
-      new THREE.MeshBasicMaterial({ color: 0x1a56db, transparent: true, opacity: cfg.o, side: THREE.BackSide })
-    ));
-  });
-
-  // "AXL" canvas label above sun
-  const lc = document.createElement('canvas'); lc.width = 256; lc.height = 128;
-  const lctx = lc.getContext('2d');
-  lctx.clearRect(0, 0, 256, 128);
-  lctx.shadowColor = '#1a56db'; lctx.shadowBlur = 28;
-  lctx.font = 'bold 72px monospace'; lctx.fillStyle = '#ffffff';
-  lctx.textAlign = 'center'; lctx.fillText('AXL', 128, 82);
-  const axlLabel = new THREE.Mesh(
-    new THREE.PlaneGeometry(5.4, 2.7),
-    new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(lc), transparent: true, depthWrite: false })
-  );
-  axlLabel.position.y = 4.8;
-  scene.add(axlLabel);
-
-  // ── Planet definitions ─────────────────────────────────────────────────
+  // ── Planet data ──────────────────────────────────────────────────────
   var PLANETS = [
     // Inner ring — blue (Math foundations)
-    { name:'Quantitative\nMathematics', formula:'∀ε>0, ∃δ: |f(x)−L| < ε',         col:0x1a56db, emi:0x091840, r:1.1,  orbit:8.5,  spd:0.44,  ph:0,    tilt:0.18, ring:false, g:0 },
-    { name:'Optimization\nTheory',      formula:'min f(x)  s.t.  g(x) ≤ 0',         col:0x2b6ff5, emi:0x091840, r:0.82, orbit:11.0, spd:0.30,  ph:2.09, tilt:0.09, ring:false, g:0 },
-    { name:'Statistics',                formula:'Var(X) = E[X²] − (E[X])²',          col:0x4a8fff, emi:0x091840, r:0.68, orbit:13.5, spd:0.22,  ph:4.18, tilt:0.28, ring:false, g:0 },
+    { name:'Quantitative Mathematics', formula:'∀ε>0, ∃δ: |f(x)−L| < ε',  col:'#1a56db', r:14, orbit:90,  spd:0.0035, ph:0,    tilt:0.18, g:0 },
+    { name:'Optimization Theory',      formula:'min f(x)  s.t. g(x) ≤ 0',  col:'#2b6ff5', r:10, orbit:115, spd:0.0024, ph:2.09, tilt:0.08, g:0 },
+    { name:'Statistics',               formula:'Var(X) = E[X²] − (E[X])²', col:'#4a8fff', r:8,  orbit:140, spd:0.0018, ph:4.18, tilt:0.25, g:0 },
     // Middle ring — green (Applied domains)
-    { name:'Machine\nLearning',         formula:'∇_θ L → θ* = argmin L(θ)',          col:0x00c896, emi:0x003d2e, r:1.3,  orbit:18.0, spd:0.16,  ph:1.05, tilt:0.13, ring:true,  g:1 },
-    { name:'Energy Systems\nAnalytics', formula:'ΔE = P·Δt  |  NILM ≡ f(V,I)',      col:0x00e0a8, emi:0x003530, r:0.88, orbit:22.0, spd:0.115, ph:3.67, tilt:0.22, ring:false, g:1 },
+    { name:'Machine Learning',         formula:'∇_θ L → θ* = argmin L(θ)', col:'#00c896', r:16, orbit:185, spd:0.0013, ph:1.05, tilt:0.12, g:1 },
+    { name:'Energy Systems Analytics', formula:'ΔE = P·Δt  |  NILM≡f(V,I)',col:'#00e0a8', r:11, orbit:225, spd:0.0009, ph:3.67, tilt:0.20, g:1 },
     // Outer ring — purple (ML Methods)
-    { name:'Random\nForest',            formula:'ŷ = (1/T) Σᵢ hᵢ(x)',                col:0x9c7ef0, emi:0x2a0a60, r:0.62, orbit:26.5, spd:0.088, ph:0.52, tilt:0.40, ring:false, g:2 },
-    { name:'LSTM\nNetworks',            formula:'cₜ = fₜ⊙cₜ₋₁ + iₜ⊙c̃ₜ',            col:0xb090ff, emi:0x300a90, r:0.58, orbit:30.0, spd:0.072, ph:2.81, tilt:0.20, ring:false, g:2 },
-    { name:'Time-Series\nModeling',     formula:'Xₜ = μ + Σφᵢ Xₜ₋ᵢ + εₜ',           col:0x7c5fe6, emi:0x200850, r:0.52, orbit:33.5, spd:0.060, ph:5.14, tilt:0.33, ring:false, g:2 },
-    { name:'Anomaly\nDetection',        formula:'score(x) = −log P(x|θ)',             col:0xa07af8, emi:0x2a0888, r:0.50, orbit:37.0, spd:0.049, ph:1.88, tilt:0.12, ring:false, g:2 },
+    { name:'Random Forest',            formula:'ŷ = (1/T) Σᵢ hᵢ(x)',       col:'#9c7ef0', r:8,  orbit:265, spd:0.0007, ph:0.52, tilt:0.38, g:2 },
+    { name:'LSTM Networks',            formula:'cₜ = fₜ⊙cₜ₋₁ + iₜ⊙c̃ₜ',   col:'#b090ff', r:7,  orbit:298, spd:0.0006, ph:2.81, tilt:0.18, g:2 },
+    { name:'Time-Series Modeling',     formula:'Xₜ = μ + Σφᵢ Xₜ₋ᵢ + εₜ',  col:'#7c5fe6', r:7,  orbit:328, spd:0.0005, ph:5.14, tilt:0.30, g:2 },
+    { name:'Anomaly Detection',        formula:'score(x) = −log P(x|θ)',    col:'#a07af8', r:6,  orbit:356, spd:0.0004, ph:1.88, tilt:0.10, g:2 },
   ];
 
-  var GC = { 0:0x1a56db, 1:0x00c896, 2:0x9c7ef0 };
-  var labelColors = ['#88aaff', '#44ddaa', '#bb99ff'];
+  // Angles start at defined phase
+  PLANETS.forEach(function(p) { p.angle = p.ph; });
 
-  // ── Orbit rings ────────────────────────────────────────────────────────
-  var orbitMats = [];
-  PLANETS.forEach(function(p) {
-    var pts = [];
-    for (var i = 0; i <= 128; i++) {
-      var a = (i / 128) * Math.PI * 2;
-      pts.push(new THREE.Vector3(Math.cos(a) * p.orbit, 0, Math.sin(a) * p.orbit));
-    }
-    var mat = new THREE.LineBasicMaterial({ color: GC[p.g], transparent: true, opacity: 0.07 });
-    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), mat));
-    orbitMats.push(mat);
-  });
-
-  // ── Canvas label helper ────────────────────────────────────────────────
-  function makeCanvasLabel(text, hexColor) {
-    var c = document.createElement('canvas'); c.width = 256; c.height = 80;
-    var ctx = c.getContext('2d');
-    ctx.clearRect(0, 0, 256, 80);
-    ctx.font = '500 13px "Space Mono", monospace';
-    ctx.fillStyle = hexColor || '#cccccc';
-    ctx.textAlign = 'center';
-    var lines = text.split('\n');
-    lines.forEach(function(l, i) { ctx.fillText(l, 128, 26 + i * 20); });
-    var mesh = new THREE.Mesh(
-      new THREE.PlaneGeometry(2.8 * (text.length > 12 ? 1.2 : 1), 1.1 + (lines.length - 1) * 0.4),
-      new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false })
-    );
-    return mesh;
+  // ── Stars ───────────────────────────────────────────────────────────
+  var stars = [];
+  for (var i = 0; i < 220; i++) {
+    stars.push({
+      x: Math.random(),
+      y: Math.random(),
+      r: Math.random() * 1.1,
+      a: 0.15 + Math.random() * 0.55,
+      twinkle: Math.random() * Math.PI * 2
+    });
   }
 
-  // ── Build planet objects ───────────────────────────────────────────────
-  var pObjs = PLANETS.map(function(p) {
-    var mat = new THREE.MeshStandardMaterial({
-      color: p.col, emissive: p.emi, emissiveIntensity: 0.55,
-      roughness: 0.28, metalness: 0.80
-    });
-    var mesh = new THREE.Mesh(new THREE.SphereGeometry(p.r, 28, 28), mat);
+  // ── Camera state (2D projection of 3D rotation) ──────────────────────
+  var camTilt = 0.32;   // 0 = top-down, PI/2 = edge-on
+  var camRot  = 0;      // rotation around Y axis
+  var zoom    = 1.0;
+  var autoRot = true;
 
-    // Atmo glow
-    mesh.add(new THREE.Mesh(
-      new THREE.SphereGeometry(p.r * 1.42, 16, 16),
-      new THREE.MeshBasicMaterial({ color: p.col, transparent: true, opacity: 0.05, side: THREE.BackSide })
-    ));
-
-    // Saturn ring for ML
-    if (p.ring) {
-      var rm = new THREE.Mesh(
-        new THREE.RingGeometry(p.r * 1.65, p.r * 2.5, 64),
-        new THREE.MeshBasicMaterial({ color: p.col, transparent: true, opacity: 0.30, side: THREE.DoubleSide })
-      );
-      rm.rotation.x = Math.PI / 3.2;
-      mesh.add(rm);
-    }
-
-    // Label
-    var lm = makeCanvasLabel(p.name, labelColors[p.g]);
-    lm.position.y = p.r + 0.9;
-    mesh.add(lm);
-    mesh.userData.label = lm;
-
-    scene.add(mesh);
-    return { mesh: mesh, p: p, angle: p.ph };
+  // ── Interaction ──────────────────────────────────────────────────────
+  var drag = false, lastX = 0, lastY = 0;
+  canvas.addEventListener('mousedown', function(e) {
+    drag = true; lastX = e.clientX; lastY = e.clientY;
+    autoRot = false; canvas.style.cursor = 'grabbing';
   });
+  window.addEventListener('mouseup', function() {
+    drag = false; canvas.style.cursor = 'grab';
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!drag) return;
+    camRot  += (e.clientX - lastX) * 0.006;
+    camTilt  = Math.max(0.05, Math.min(1.3, camTilt - (e.clientY - lastY) * 0.005));
+    lastX = e.clientX; lastY = e.clientY;
+  });
+  canvas.addEventListener('wheel', function(e) {
+    zoom = Math.max(0.45, Math.min(1.9, zoom - e.deltaY * 0.0007));
+    e.preventDefault();
+  }, { passive: false });
 
-  // ── Tooltip DOM element ────────────────────────────────────────────────
+  // ── Tooltip ──────────────────────────────────────────────────────────
   var tt = document.createElement('div');
   tt.style.cssText =
     'position:absolute;pointer-events:none;display:none;' +
-    'background:rgba(2,2,10,0.97);border:1px solid #1a56db;' +
-    'padding:12px 16px;font-family:"Space Mono",monospace;' +
-    'box-shadow:0 0 30px rgba(26,86,219,0.45);z-index:200;' +
-    'max-width:260px;border-radius:0;';
+    'background:rgba(2,2,12,0.97);border:1px solid #1a56db;' +
+    'padding:11px 15px;font-family:"Space Mono",monospace;' +
+    'box-shadow:0 0 28px rgba(26,86,219,0.5);z-index:200;max-width:260px;';
   container.appendChild(tt);
 
-  // ── Raycaster ──────────────────────────────────────────────────────────
-  var raycaster = new THREE.Raycaster();
-  var mouse2 = new THREE.Vector2(-9999, -9999);
-  var hoveredIdx = -1;
-  var planetMeshes = pObjs.map(function(o) { return o.mesh; });
-
-  renderer.domElement.addEventListener('mousemove', function(e) {
+  var hoveredPlanet = null;
+  canvas.addEventListener('mousemove', function(e) {
     var rect = container.getBoundingClientRect();
-    mouse2.x =  ((e.clientX - rect.left) / W) * 2 - 1;
-    mouse2.y = -((e.clientY - rect.top)  / H) * 2 + 1;
-
-    raycaster.setFromCamera(mouse2, camera);
-    var hits = raycaster.intersectObjects(planetMeshes);
-
-    if (hits.length) {
-      var hitIdx = -1;
-      for (var i = 0; i < pObjs.length; i++) {
-        if (pObjs[i].mesh === hits[0].object) { hitIdx = i; break; }
+    var mx = e.clientX - rect.left;
+    var my = e.clientY - rect.top;
+    hoveredPlanet = null;
+    for (var i = 0; i < PLANETS.length; i++) {
+      var p = PLANETS[i];
+      if (!p._sx) continue;
+      var dx = mx - p._sx, dy = my - p._sy;
+      if (Math.sqrt(dx*dx + dy*dy) < p._sr + 6) {
+        hoveredPlanet = p;
+        break;
       }
-      if (hitIdx !== -1) {
-        if (hoveredIdx !== hitIdx) {
-          if (hoveredIdx !== -1) {
-            pObjs[hoveredIdx].mesh.material.emissiveIntensity = 0.55;
-            orbitMats[hoveredIdx].opacity = 0.07;
-          }
-          hoveredIdx = hitIdx;
-          pObjs[hitIdx].mesh.material.emissiveIntensity = 1.8;
-          orbitMats[hitIdx].opacity = 0.45;
-          renderer.domElement.style.cursor = 'pointer';
-        }
-        var p = pObjs[hitIdx].p;
-        tt.innerHTML =
-          '<div style="font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#fff;margin-bottom:8px;">' +
-          p.name.replace('\n',' ') + '</div>' +
-          '<div style="font-size:11px;color:#4a7fff;line-height:1.7;text-shadow:0 0 10px rgba(74,127,255,.7);">' +
-          p.formula + '</div>';
-        tt.style.display = 'block';
-        var tx = e.clientX - rect.left, ty = e.clientY - rect.top;
-        tt.style.left = (tx + 250 > W ? tx - 270 : tx + 14) + 'px';
-        tt.style.top  = Math.max(8, ty - 28) + 'px';
-      }
+    }
+    if (hoveredPlanet) {
+      tt.innerHTML =
+        '<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:7px;">' + hoveredPlanet.name + '</div>' +
+        '<div style="font-size:11px;color:#4a7fff;line-height:1.7;text-shadow:0 0 10px rgba(74,127,255,.6);">' + hoveredPlanet.formula + '</div>';
+      tt.style.display = 'block';
+      tt.style.left = (mx + 240 > W ? mx - 265 : mx + 14) + 'px';
+      tt.style.top  = Math.max(8, my - 30) + 'px';
+      canvas.style.cursor = 'pointer';
     } else {
-      if (hoveredIdx !== -1) {
-        pObjs[hoveredIdx].mesh.material.emissiveIntensity = 0.55;
-        orbitMats[hoveredIdx].opacity = 0.07;
-        hoveredIdx = -1;
-      }
       tt.style.display = 'none';
-      renderer.domElement.style.cursor = 'grab';
+      canvas.style.cursor = drag ? 'grabbing' : 'grab';
     }
   });
+  canvas.addEventListener('mouseleave', function() { tt.style.display = 'none'; hoveredPlanet = null; });
 
-  renderer.domElement.addEventListener('mouseleave', function() {
-    if (hoveredIdx !== -1) {
-      pObjs[hoveredIdx].mesh.material.emissiveIntensity = 0.55;
-      orbitMats[hoveredIdx].opacity = 0.07;
-      hoveredIdx = -1;
-    }
-    tt.style.display = 'none';
-  });
-
-  // ── Drag / scroll controls ─────────────────────────────────────────────
-  var dragging = false, pmx = 0, pmy = 0, autoRotate = true;
-
-  renderer.domElement.addEventListener('mousedown', function(e) {
-    dragging = true; pmx = e.clientX; pmy = e.clientY;
-    autoRotate = false;
-    renderer.domElement.style.cursor = 'grabbing';
-  });
-  window.addEventListener('mouseup', function() {
-    dragging = false;
-    renderer.domElement.style.cursor = hoveredIdx !== -1 ? 'pointer' : 'grab';
-  });
-  window.addEventListener('mousemove', function(e) {
-    if (!dragging) return;
-    camTheta -= (e.clientX - pmx) * 0.005;
-    camPhi = Math.max(0.06, Math.min(1.38, camPhi - (e.clientY - pmy) * 0.005));
-    pmx = e.clientX; pmy = e.clientY;
-  });
-  renderer.domElement.addEventListener('wheel', function(e) {
-    camR = Math.max(16, Math.min(80, camR + e.deltaY * 0.06));
-  }, { passive: true });
-
-  // ── Legend ─────────────────────────────────────────────────────────────
+  // ── Legend ───────────────────────────────────────────────────────────
   var leg = document.createElement('div');
   leg.style.cssText = 'position:absolute;bottom:14px;right:14px;display:flex;flex-direction:column;gap:5px;z-index:10;pointer-events:none;';
   [['#1a56db','Math Foundations'],['#00c896','Applied Domains'],['#9c7ef0','ML Methods']].forEach(function(item) {
     leg.insertAdjacentHTML('beforeend',
       '<div style="display:flex;align-items:center;gap:7px;">' +
-      '<span style="width:8px;height:8px;border-radius:50%;background:' + item[0] + ';display:inline-block;box-shadow:0 0 7px ' + item[0] + ';"></span>' +
+      '<span style="width:8px;height:8px;border-radius:50%;background:' + item[0] + ';display:inline-block;box-shadow:0 0 7px ' + item[0] + ';flex-shrink:0;"></span>' +
       '<span style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#555;">' + item[1] + '</span>' +
-      '</div>'
-    );
+      '</div>');
   });
   container.appendChild(leg);
 
-  // ── Render loop ────────────────────────────────────────────────────────
-  var clk = 0;
-  function loop() {
-    requestAnimationFrame(loop);
-    clk += 0.008;
+  // ── 3D projection helpers ─────────────────────────────────────────────
+  // Projects a 3D point (on the orbital plane) to 2D screen coords.
+  // orbitR = orbit radius, angle = position on orbit, tiltAmp = tilt amplitude
+  function project(orbitR, angle, tiltAmp) {
+    // 3D coords (orbital plane tilted by camTilt, rotated by camRot)
+    var x3 = Math.cos(angle + camRot) * orbitR;
+    var z3 = Math.sin(angle + camRot) * orbitR;
+    var y3 = Math.sin(angle * 0.65) * tiltAmp * 18;  // slight Y wobble
 
-    // Pulsing sun
-    sunMesh.material.emissiveIntensity = 1.4 + Math.sin(clk * 1.7) * 0.3;
-    sunMesh.rotation.y += 0.003;
-    axlLabel.lookAt(camera.position);
+    // Apply camera tilt (rotate around X axis)
+    var yp = y3 * Math.cos(camTilt) - z3 * Math.sin(camTilt);
+    var zp = y3 * Math.sin(camTilt) + z3 * Math.cos(camTilt);
 
-    // Move planets
-    pObjs.forEach(function(o) {
-      o.angle += o.p.spd * 0.008;
-      o.mesh.position.x = Math.cos(o.angle) * o.p.orbit;
-      o.mesh.position.z = Math.sin(o.angle) * o.p.orbit;
-      o.mesh.position.y = Math.sin(o.angle * 0.65 + o.p.ph) * o.p.tilt * 2.2;
-      o.mesh.rotation.y += 0.011;
-      if (o.mesh.userData.label) {
-        // Billboard: just face camera directly
-        o.mesh.userData.label.lookAt(camera.position);
-      }
+    var cx = W / 2, cy = H / 2;
+    var scale = zoom * Math.min(W, H) / 820;
+
+    // Depth for size scaling (zp range: roughly -orbitR to +orbitR)
+    var depthScale = 0.72 + 0.28 * (zp / (orbitR + 1));
+    return {
+      x: cx + x3 * scale,
+      y: cy + yp * scale,
+      depth: depthScale,
+      zp: zp
+    };
+  }
+
+  // ── Draw helpers ─────────────────────────────────────────────────────
+  function drawGlow(x, y, r, color, alpha) {
+    var grad = ctx.createRadialGradient(x, y, 0, x, y, r * 2.8);
+    grad.addColorStop(0,   color.replace(')', ',' + alpha + ')').replace('rgb', 'rgba'));
+    grad.addColorStop(0.4, color.replace(')', ',' + (alpha * 0.4) + ')').replace('rgb', 'rgba'));
+    grad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(x, y, r * 2.8, 0, Math.PI * 2);
+    ctx.fillStyle = grad; ctx.fill();
+  }
+
+  function hexToRgb(hex) {
+    var r = parseInt(hex.slice(1,3),16);
+    var g = parseInt(hex.slice(3,5),16);
+    var b = parseInt(hex.slice(5,7),16);
+    return r+','+g+','+b;
+  }
+
+  function drawOrbit(orbitR, tiltAmp, color) {
+    ctx.beginPath();
+    var first = true;
+    for (var a = 0; a <= Math.PI * 2 + 0.05; a += 0.04) {
+      var pt = project(orbitR, a - camRot, tiltAmp);
+      if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+      else ctx.lineTo(pt.x, pt.y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = color + '28';
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  }
+
+  function drawPlanet(p, pt, isHovered) {
+    var scale = Math.min(W, H) / 820;
+    var sr = p.r * scale * zoom * (0.72 + 0.28 * pt.depth);
+    sr = Math.max(3, sr);
+    p._sx = pt.x; p._sy = pt.y; p._sr = sr;
+
+    var rgb = hexToRgb(p.col);
+
+    // Glow
+    var glowR = sr * (isHovered ? 4.5 : 2.8);
+    var grad = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, glowR);
+    grad.addColorStop(0,   'rgba(' + rgb + ',' + (isHovered ? 0.55 : 0.22) + ')');
+    grad.addColorStop(0.5, 'rgba(' + rgb + ',0.06)');
+    grad.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(pt.x, pt.y, glowR, 0, Math.PI * 2);
+    ctx.fillStyle = grad; ctx.fill();
+
+    // Body
+    var bodyGrad = ctx.createRadialGradient(pt.x - sr*0.3, pt.y - sr*0.3, sr*0.05, pt.x, pt.y, sr);
+    bodyGrad.addColorStop(0, 'rgba(' + rgb + ',0.95)');
+    bodyGrad.addColorStop(0.6, 'rgba(' + rgb + ',0.7)');
+    bodyGrad.addColorStop(1, 'rgba(' + rgb + ',0.3)');
+    ctx.beginPath(); ctx.arc(pt.x, pt.y, sr, 0, Math.PI * 2);
+    ctx.fillStyle = bodyGrad; ctx.fill();
+
+    // Ring for ML planet (index 3)
+    if (p.name === 'Machine Learning') {
+      ctx.save();
+      ctx.translate(pt.x, pt.y);
+      ctx.scale(1, 0.28 + 0.15 * Math.abs(Math.sin(camTilt)));
+      ctx.beginPath();
+      ctx.arc(0, 0, sr * 2.2, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(' + rgb + ',0.35)';
+      ctx.lineWidth = sr * 0.55;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Label
+    var labelAlpha = isHovered ? 1.0 : (0.45 + 0.3 * pt.depth);
+    var fontSize = Math.max(8, 9 * scale * zoom);
+    ctx.font = fontSize + 'px "Space Mono", monospace';
+    ctx.fillStyle = 'rgba(' + rgb + ',' + labelAlpha + ')';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = p.col;
+    ctx.shadowBlur = isHovered ? 10 : 4;
+
+    // Shorten long names for label
+    var label = p.name.length > 18 ? p.name.replace(' ','\n') : p.name;
+    var lines = label.split('\n');
+    lines.forEach(function(line, i) {
+      ctx.fillText(line, pt.x, pt.y + sr + fontSize * (1.4 + i * 1.2));
+    });
+    ctx.shadowBlur = 0;
+  }
+
+  // ── Main render loop ─────────────────────────────────────────────────
+  var t = 0;
+  var sunPulse = 0;
+  var raf;
+
+  function draw() {
+    raf = requestAnimationFrame(draw);
+    t += 0.012;
+    sunPulse += 0.04;
+    if (autoRot) camRot += 0.0006;
+
+    // Advance planet angles
+    PLANETS.forEach(function(p) { p.angle += p.spd; });
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    ctx.fillStyle = '#020206';
+    ctx.fillRect(0, 0, W, H);
+
+    // Stars
+    stars.forEach(function(s) {
+      s.twinkle += 0.02;
+      var a = s.a * (0.6 + 0.4 * Math.sin(s.twinkle));
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(150,170,255,' + a + ')';
+      ctx.fill();
     });
 
-    if (autoRotate) camTheta += 0.0007;
-    updateCamera();
-    renderer.render(scene, camera);
-  }
-  loop();
+    // Compute all planet screen positions
+    var pts = PLANETS.map(function(p) {
+      return project(p.orbit * zoom * Math.min(W,H)/820, p.angle, p.tilt);
+    });
 
-  // ── Resize ─────────────────────────────────────────────────────────────
+    // Draw orbit ellipses (back to front by zp)
+    PLANETS.forEach(function(p, i) {
+      drawOrbit(p.orbit * zoom * Math.min(W,H)/820, p.tilt, p.col);
+    });
+
+    // Sort planets back-to-front
+    var order = PLANETS.map(function(_, i) { return i; });
+    order.sort(function(a, b) { return pts[a].zp - pts[b].zp; });
+
+    // Sun at centre
+    var cx = W/2, cy = H/2;
+    var sunR = 28 * zoom * Math.min(W,H)/820;
+    sunR = Math.max(12, sunR);
+    var pulse = 0.85 + 0.15 * Math.sin(sunPulse);
+
+    // Sun outer glow
+    var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR * 5);
+    sg.addColorStop(0,   'rgba(26,86,219,' + (0.35 * pulse) + ')');
+    sg.addColorStop(0.4, 'rgba(26,86,219,0.08)');
+    sg.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.arc(cx, cy, sunR * 5, 0, Math.PI * 2);
+    ctx.fillStyle = sg; ctx.fill();
+
+    // Sun body
+    var sunG = ctx.createRadialGradient(cx - sunR*0.3, cy - sunR*0.3, sunR*0.1, cx, cy, sunR);
+    sunG.addColorStop(0, 'rgba(120,160,255,1)');
+    sunG.addColorStop(0.5, 'rgba(26,86,219,' + pulse + ')');
+    sunG.addColorStop(1, 'rgba(10,40,140,0.8)');
+    ctx.beginPath(); ctx.arc(cx, cy, sunR, 0, Math.PI * 2);
+    ctx.fillStyle = sunG; ctx.fill();
+
+    // AXL label on sun
+    var lSize = Math.max(14, 22 * zoom * Math.min(W,H)/820);
+    ctx.font = 'bold ' + lSize + 'px monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#1a56db';
+    ctx.shadowBlur = 18;
+    ctx.fillText('AXL', cx, cy + lSize * 0.38);
+    ctx.shadowBlur = 0;
+
+    // Draw planets back-to-front
+    order.forEach(function(i) {
+      drawPlanet(PLANETS[i], pts[i], PLANETS[i] === hoveredPlanet);
+    });
+  }
+
+  draw();
+
+  // Resize handling
   window.addEventListener('resize', function() {
-    var nW = container.clientWidth;
-    camera.aspect = nW / H;
-    camera.updateProjectionMatrix();
-    renderer.setSize(nW, H);
+    resize();
+  });
+
+  // Visibility — pause when hidden
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) cancelAnimationFrame(raf);
+    else draw();
   });
 }
 
-// ── Bootstrap Three.js then build ──────────────────────────────────────
-// Waits until the container has real pixel width before building,
-// so Three.js renderer never gets size(0, H).
-function waitForSizeAndBuild() {
+// ── Init ─────────────────────────────────────────────────────────────────
+function initGalaxy() {
   var container = document.getElementById('research-graph');
   if (!container) return;
+  if (container.dataset.galaxyBuilt) return;
+
+  // Set height on container if not already set via CSS
+  if (!container.style.height && container.offsetHeight < 50) {
+    container.style.height = '540px';
+  }
 
   var built = false;
   function tryBuild() {
-    if (built) return;
+    if (built || container.dataset.galaxyBuilt) return;
     var w = container.getBoundingClientRect().width || container.offsetWidth;
-    if (w > 10) {
+    var h = container.getBoundingClientRect().height || container.offsetHeight;
+    if (w > 10 && h > 10) {
       built = true;
       buildGalaxy();
     }
   }
 
-  // Try immediately
   tryBuild();
   if (built) return;
 
-  // Use ResizeObserver if available (fires as soon as element gets painted dimensions)
   if (typeof ResizeObserver !== 'undefined') {
-    var ro = new ResizeObserver(function() {
-      tryBuild();
-      if (built) ro.disconnect();
-    });
+    var ro = new ResizeObserver(function() { tryBuild(); if (built) ro.disconnect(); });
     ro.observe(container);
-    // Fallback: also disconnect after 5s to avoid orphaned observer
-    setTimeout(function() { ro.disconnect(); }, 5000);
-    return;
-  }
-
-  // Fallback: poll
-  var attempts = 0;
-  var poll = setInterval(function() {
-    attempts++;
-    tryBuild();
-    if (built || attempts > 80) clearInterval(poll);
-  }, 80);
-}
-
-function loadThreeAndBuild() {
-  if (!document.getElementById('research-graph')) return;
-  if (typeof THREE !== 'undefined') {
-    waitForSizeAndBuild();
-    return;
-  }
-  var s = document.createElement('script');
-  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-  s.onload  = waitForSizeAndBuild;
-  s.onerror = function() { console.warn('[AXL] Three.js CDN failed'); };
-  document.head.appendChild(s);
-}
-
-// Also use IntersectionObserver to trigger on scroll-into-view
-function initGalaxy() {
-  var container = document.getElementById('research-graph');
-  if (!container) return;
-
-  // Load Three.js right away (non-blocking)
-  if (typeof THREE === 'undefined') {
-    var s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-    s.onload = function() {
-      // Once loaded, wait for real dimensions then build
-      waitForSizeAndBuild();
-    };
-    s.onerror = function() { console.warn('[AXL] Three.js CDN failed'); };
-    document.head.appendChild(s);
+    setTimeout(function() { ro.disconnect(); }, 6000);
   } else {
-    waitForSizeAndBuild();
+    var n = 0;
+    var iv = setInterval(function() {
+      tryBuild(); n++;
+      if (built || n > 80) clearInterval(iv);
+    }, 80);
   }
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initGalaxy);
+  document.addEventListener('DOMContentLoaded', function() { setTimeout(initGalaxy, 50); });
 } else {
-  // Small delay lets the browser complete layout so clientWidth is valid
-  setTimeout(initGalaxy, 0);
+  setTimeout(initGalaxy, 50);
 }
