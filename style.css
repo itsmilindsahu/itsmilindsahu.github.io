@@ -379,3 +379,13 @@ body.on-dark .cursor-ring { border-color: white; }
   .certs-grid-dark { grid-template-columns: repeat(2,1fr); }
   .interests-grid { grid-template-columns: 1fr; }
 }
+
+/* ── CURSOR always visible on any bg ── */
+.cursor {
+  mix-blend-mode: difference;
+  background: white !important;
+}
+.cursor-ring {
+  mix-blend-mode: difference;
+  border-color: white !important;
+}
