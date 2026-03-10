@@ -121,17 +121,10 @@
 <!-- RESEARCH -->
 <section id="research">
   <div class="container">
-    <p class="section-label"><span class="num">02</span> Research Interests</p>
-    <div class="interests-grid">
-      <div class="interest-item fade-in"><div class="interest-num">01</div><div class="interest-title">Mathematical Economics</div><div class="interest-symbol">∀ε</div></div>
-      <div class="interest-item fade-in stagger-1"><div class="interest-num">02</div><div class="interest-title">Optimization Theory</div><div class="interest-symbol">min∫</div></div>
-      <div class="interest-item fade-in stagger-2"><div class="interest-num">03</div><div class="interest-title">Probability & Stochastic Processes</div><div class="interest-symbol">P(Ω)</div></div>
-      <div class="interest-item fade-in stagger-3"><div class="interest-num">04</div><div class="interest-title">Game Theory</div><div class="interest-symbol">Nash</div></div>
-      <div class="interest-item fade-in stagger-4"><div class="interest-num">05</div><div class="interest-title">Energy Systems Analytics</div><div class="interest-symbol">ΔE</div></div>
-      <div class="interest-item fade-in stagger-5"><div class="interest-num">06</div><div class="interest-title">Machine Learning</div><div class="interest-symbol">∇θ</div></div>
-    </div>
+    <p class="section-label"><span class="num">02</span> Research Graph</p>
+    <div class="graph-hint">Drag nodes · Hover for formulas</div>
+    <div id="research-graph"></div>
 
-    <!-- Certs inside dark section -->
     <p class="section-label" style="margin-top:72px;"><span class="num">—</span> Certificates & Awards</p>
     <div class="certs-grid-dark">
       <div class="cert-dark-item fade-in">
@@ -162,18 +155,49 @@
 <section id="axl-preview">
   <div class="container">
     <p class="section-label"><span class="num">03</span> Research Identity</p>
-    <div class="axl-single fade-in">
-      <div class="axl-name">AX<span>L</span></div>
-      <div class="axl-tagline">Theory <span class="arrow">→</span> Algorithms <span class="arrow">→</span> Intelligence</div>
-      <p class="axl-desc">Axiom Labs is my independent computational research identity — building at the intersection of rigorous mathematics and deployable systems. Every project starts from axioms, not assumptions.</p>
-      <div class="axl-pillars">
-        <span class="axl-pill">Algorithms</span>
-        <span class="axl-pill">Optimization</span>
-        <span class="axl-pill">Machine Learning</span>
-        <span class="axl-pill">Energy Analytics</span>
-        <span class="axl-pill">Policy Systems</span>
+    <div class="axl-stack-layout fade-in">
+
+      <div class="axl-stack-left">
+        <div class="axl-name">AX<span>L</span></div>
+        <div class="axl-collective">Axiom Labs · Computational Research Collective</div>
+        <div class="axl-tagline">Theory <span class="arrow">→</span> Algorithms <span class="arrow">→</span> Intelligence</div>
+        <p class="axl-desc">Axiom Labs is my independent computational research identity — building at the intersection of rigorous mathematics and deployable systems. Every project starts from axioms, not assumptions.</p>
+        <a href="axiom-labs.html" class="btn btn-primary" style="margin-top:8px;">Explore AXL →</a>
       </div>
-      <a href="axiom-labs.html" class="btn btn-primary">Explore AXL →</a>
+
+      <div class="axl-stack-right">
+
+        <div class="axl-stack-block">
+          <div class="axl-stack-title">Research Focus</div>
+          <div class="axl-stack-items">
+            <span class="axl-tag axl-tag-core">Quantitative Systems</span>
+            <span class="axl-tag axl-tag-core">Optimization</span>
+            <span class="axl-tag axl-tag-core">Machine Learning</span>
+            <span class="axl-tag axl-tag-core">Energy Systems Analytics</span>
+          </div>
+        </div>
+
+        <div class="axl-stack-block">
+          <div class="axl-stack-title">ML Methods</div>
+          <div class="axl-stack-items">
+            <span class="axl-tag axl-tag-ml">Random Forest</span>
+            <span class="axl-tag axl-tag-ml">LSTM Networks</span>
+            <span class="axl-tag axl-tag-ml">Time-Series Forecasting</span>
+            <span class="axl-tag axl-tag-ml">Anomaly Detection</span>
+          </div>
+        </div>
+
+        <div class="axl-stack-block">
+          <div class="axl-stack-title">Mathematical Foundations</div>
+          <div class="axl-stack-items">
+            <span class="axl-tag axl-tag-math">Linear Algebra</span>
+            <span class="axl-tag axl-tag-math">Optimization Theory</span>
+            <span class="axl-tag axl-tag-math">Probability</span>
+            <span class="axl-tag axl-tag-math">Statistical Inference</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
@@ -250,6 +274,7 @@
 </footer>
 
 <button class="theme-toggle" title="Toggle dark/light">◑</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
