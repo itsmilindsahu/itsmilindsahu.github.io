@@ -297,3 +297,85 @@ body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
   .gallery-grid,.certs-grid{grid-template-columns:1fr 1fr;}
   .footer-bottom{flex-direction:column;gap:6px;}
 }
+
+/* ── AXL single (no duplicate logo) ── */
+.axl-single { max-width: 680px; }
+.axl-single .axl-name { font-family:var(--font-display); font-size:80px; line-height:1; letter-spacing:5px; margin-bottom:8px; }
+.axl-single .axl-name span { color:var(--accent); }
+
+/* ── RESEARCH section — more vibrant ── */
+#research {
+  background: var(--black);
+  position: relative;
+}
+#research::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(26,86,219,.06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(26,86,219,.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+#research .container { position: relative; z-index: 1; }
+.interest-item {
+  background: #0d0d0b;
+  border: 1px solid #1a1a18;
+  padding: 32px 24px;
+  transition: background .2s, border-color .3s;
+  position: relative;
+  overflow: hidden;
+}
+.interests-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; background:transparent; border:none; }
+.interest-item:hover { background: #111; border-color: var(--accent); }
+.interest-item::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--accent); transform:scaleX(0); transition:transform .3s; }
+.interest-item:hover::after { transform:scaleX(1); }
+.interest-num { font-size:9px; color:var(--accent); letter-spacing:3px; margin-bottom:9px; }
+.interest-title { font-size:13px; font-weight:700; color:var(--white); line-height:1.4; }
+.interest-symbol { font-family:var(--font-display); font-size:38px; color:#222; margin-top:10px; transition:color .3s; }
+.interest-item:hover .interest-symbol { color:rgba(26,86,219,.35); }
+
+/* ── CERTS inside dark research section ── */
+.certs-grid-dark {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.cert-dark-item {
+  border: 1px solid #1e1e1c;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .2s, transform .15s;
+  background: #0a0a08;
+}
+.cert-dark-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+.cert-dark-img { width:100%; aspect-ratio:16/11; overflow:hidden; }
+.cert-dark-img img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s; }
+.cert-dark-item:hover .cert-dark-img img { transform:scale(1.04); }
+.cert-dark-label {
+  padding: 8px 10px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #444;
+  border-top: 1px solid #1a1a18;
+  line-height: 1.4;
+}
+
+/* ── WHITE CURSOR on dark backgrounds ── */
+/* hero is dark */
+#hero ~ * .cursor,
+.cursor { mix-blend-mode: difference; }
+
+/* Simpler approach — detect via JS class */
+body.on-dark .cursor { background: white; }
+body.on-dark .cursor-ring { border-color: white; }
+
+@media(max-width:960px) {
+  .certs-grid-dark { grid-template-columns: repeat(3,1fr); }
+  .interests-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:640px) {
+  .certs-grid-dark { grid-template-columns: repeat(2,1fr); }
+  .interests-grid { grid-template-columns: 1fr; }
+}
