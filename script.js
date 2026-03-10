@@ -100,412 +100,243 @@ filterBtns.forEach(btn => {
 });
 
 
-// ══════════════════════════════════════════════════════════════════════════
-//  3D RESEARCH GALAXY  ·  Three.js r128
-//  AXL sun at centre · research domains orbit as glowing planets
-//  Drag to rotate · Scroll to zoom · Hover for tooltip + formula
-// ══════════════════════════════════════════════════════════════════════════
 
-// ══════════════════════════════════════════════════════════════════════════
-//  3D-STYLE RESEARCH GALAXY  ·  Pure Canvas 2D  ·  Zero dependencies
-//  AXL sun at centre · research domains orbit as glowing planets
-//  Drag to rotate view · Scroll to zoom · Hover for formula tooltip
-// ══════════════════════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════════
+//  RESEARCH GALAXY  ·  Canvas 2D  ·  No dependencies
+// ══════════════════════════════════════════════════════════════════════
 function buildGalaxy() {
-  var container = document.getElementById('research-graph');
-  if (!container) return;
+  var el = document.getElementById('research-graph');
+  if (!el || el._built) return;
+  el._built = true;
+  el.innerHTML = '';
 
-  // Prevent double-init
-  if (container.dataset.galaxyBuilt) return;
-  container.dataset.galaxyBuilt = '1';
+  // ── Canvas setup ──────────────────────────────────────────────────
+  var cv = document.createElement('canvas');
+  // Do NOT set CSS width/height — let JS own all dimensions
+  cv.style.display = 'block';
+  el.appendChild(cv);
 
-  container.innerHTML = '';
-  container.style.position = 'relative';
-  container.style.overflow  = 'hidden';
-  container.style.background = '#020206';
-  container.style.cursor    = 'grab';
+  var ctx = cv.getContext('2d');
+  var W = 900, H = 540;
 
-  var canvas = document.createElement('canvas');
-  canvas.style.cssText = 'display:block;width:100%;height:100%;';
-  container.appendChild(canvas);
-
-  // Update hint text
-  var hint = container.previousElementSibling;
-  if (hint && hint.classList && hint.classList.contains('graph-hint'))
-    hint.textContent = 'Drag to rotate · Scroll to zoom · Hover planets';
-
-  var W, H, dpr;
-  function resize() {
-    dpr = window.devicePixelRatio || 1;
-    W = container.offsetWidth  || 900;
-    H = container.offsetHeight || 540;
-    canvas.width  = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width  = W + 'px';
-    canvas.style.height = H + 'px';
+  function setSize() {
+    W = el.offsetWidth || 900;
+    H = el.offsetHeight || 540;
+    cv.width  = W;   // raw pixels — no DPR scaling to keep math simple
+    cv.height = H;
+    cv.style.width  = W + 'px';
+    cv.style.height = H + 'px';
   }
-  resize();
+  setSize();
 
-  var ctx = canvas.getContext('2d');
-
-  // ── Planet data ──────────────────────────────────────────────────────
-  var PLANETS = [
-    // Inner ring — blue (Math foundations)
-    { name:'Quantitative Mathematics', formula:'∀ε>0, ∃δ: |f(x)−L| < ε',  col:'#1a56db', r:14, orbit:90,  spd:0.0035, ph:0,    tilt:0.18, g:0 },
-    { name:'Optimization Theory',      formula:'min f(x)  s.t. g(x) ≤ 0',  col:'#2b6ff5', r:10, orbit:115, spd:0.0024, ph:2.09, tilt:0.08, g:0 },
-    { name:'Statistics',               formula:'Var(X) = E[X²] − (E[X])²', col:'#4a8fff', r:8,  orbit:140, spd:0.0018, ph:4.18, tilt:0.25, g:0 },
-    // Middle ring — green (Applied domains)
-    { name:'Machine Learning',         formula:'∇_θ L → θ* = argmin L(θ)', col:'#00c896', r:16, orbit:185, spd:0.0013, ph:1.05, tilt:0.12, g:1 },
-    { name:'Energy Systems Analytics', formula:'ΔE = P·Δt  |  NILM≡f(V,I)',col:'#00e0a8', r:11, orbit:225, spd:0.0009, ph:3.67, tilt:0.20, g:1 },
-    // Outer ring — purple (ML Methods)
-    { name:'Random Forest',            formula:'ŷ = (1/T) Σᵢ hᵢ(x)',       col:'#9c7ef0', r:8,  orbit:265, spd:0.0007, ph:0.52, tilt:0.38, g:2 },
-    { name:'LSTM Networks',            formula:'cₜ = fₜ⊙cₜ₋₁ + iₜ⊙c̃ₜ',   col:'#b090ff', r:7,  orbit:298, spd:0.0006, ph:2.81, tilt:0.18, g:2 },
-    { name:'Time-Series Modeling',     formula:'Xₜ = μ + Σφᵢ Xₜ₋ᵢ + εₜ',  col:'#7c5fe6', r:7,  orbit:328, spd:0.0005, ph:5.14, tilt:0.30, g:2 },
-    { name:'Anomaly Detection',        formula:'score(x) = −log P(x|θ)',    col:'#a07af8', r:6,  orbit:356, spd:0.0004, ph:1.88, tilt:0.10, g:2 },
+  // ── Data ──────────────────────────────────────────────────────────
+  var P = [
+    {n:'Quant Mathematics', f:'∀ε>0, ∃δ: |f(x)−L|<ε',        c:'#1a56db', r:13, o:90,  s:.0035, ph:0,    t:.18},
+    {n:'Optimization',      f:'min f(x) s.t. g(x)≤0',         c:'#3a7fff', r:10, o:118, s:.0024, ph:2.1,  t:.08},
+    {n:'Statistics',        f:'Var(X)=E[X²]−(E[X])²',         c:'#5a9fff', r:8,  o:145, s:.0018, ph:4.2,  t:.22},
+    {n:'Machine Learning',  f:'∇θ L→θ*=argmin L(θ)',           c:'#00c896', r:16, o:188, s:.0013, ph:1.0,  t:.12, ring:true},
+    {n:'Energy Analytics',  f:'ΔE=P·Δt | NILM≡f(V,I)',         c:'#00e0a8', r:11, o:228, s:.0009, ph:3.7,  t:.20},
+    {n:'Random Forest',     f:'ŷ=(1/T)Σhᵢ(x)',                 c:'#9c7ef0', r:8,  o:268, s:.0007, ph:0.5,  t:.35},
+    {n:'LSTM Networks',     f:'cₜ=fₜ⊙cₜ₋₁+iₜ⊙c̃ₜ',            c:'#b090ff', r:7,  o:300, s:.0006, ph:2.8,  t:.18},
+    {n:'Time-Series',       f:'Xₜ=μ+ΣφᵢXₜ₋ᵢ+εₜ',              c:'#7c5fe6', r:7,  o:330, s:.0005, ph:5.1,  t:.28},
+    {n:'Anomaly Detection', f:'score(x)=−log P(x|θ)',           c:'#a07af8', r:6,  o:358, s:.0004, ph:1.9,  t:.10},
   ];
+  P.forEach(function(p){p.a=p.ph;});
 
-  // Angles start at defined phase
-  PLANETS.forEach(function(p) { p.angle = p.ph; });
+  // Stars
+  var stars=[];
+  for(var i=0;i<180;i++) stars.push({x:Math.random(),y:Math.random(),r:.3+Math.random()*.9,b:Math.random()*Math.PI*2});
 
-  // ── Stars ───────────────────────────────────────────────────────────
-  var stars = [];
-  for (var i = 0; i < 220; i++) {
-    stars.push({
-      x: Math.random(),
-      y: Math.random(),
-      r: Math.random() * 1.1,
-      a: 0.15 + Math.random() * 0.55,
-      twinkle: Math.random() * Math.PI * 2
-    });
-  }
+  // ── Camera ────────────────────────────────────────────────────────
+  var tilt=.32, rot=0, zoom=1, auto=true;
+  var drag=false, dx=0, dy=0;
 
-  // ── Camera state (2D projection of 3D rotation) ──────────────────────
-  var camTilt = 0.32;   // 0 = top-down, PI/2 = edge-on
-  var camRot  = 0;      // rotation around Y axis
-  var zoom    = 1.0;
-  var autoRot = true;
-
-  // ── Interaction ──────────────────────────────────────────────────────
-  var drag = false, lastX = 0, lastY = 0;
-  canvas.addEventListener('mousedown', function(e) {
-    drag = true; lastX = e.clientX; lastY = e.clientY;
-    autoRot = false; canvas.style.cursor = 'grabbing';
+  cv.addEventListener('mousedown',function(e){drag=true;dx=e.clientX;dy=e.clientY;auto=false;cv.style.cursor='grabbing';});
+  window.addEventListener('mouseup',function(){drag=false;cv.style.cursor='grab';});
+  window.addEventListener('mousemove',function(e){
+    if(!drag)return;
+    rot+=(e.clientX-dx)*.006; dx=e.clientX;
+    tilt=Math.max(.05,Math.min(1.3,tilt-(e.clientY-dy)*.005)); dy=e.clientY;
   });
-  window.addEventListener('mouseup', function() {
-    drag = false; canvas.style.cursor = 'grab';
-  });
-  window.addEventListener('mousemove', function(e) {
-    if (!drag) return;
-    camRot  += (e.clientX - lastX) * 0.006;
-    camTilt  = Math.max(0.05, Math.min(1.3, camTilt - (e.clientY - lastY) * 0.005));
-    lastX = e.clientX; lastY = e.clientY;
-  });
-  canvas.addEventListener('wheel', function(e) {
-    zoom = Math.max(0.45, Math.min(1.9, zoom - e.deltaY * 0.0007));
-    e.preventDefault();
-  }, { passive: false });
+  cv.addEventListener('wheel',function(e){zoom=Math.max(.4,Math.min(2,zoom-e.deltaY*.0007));e.preventDefault();},{passive:false});
+  cv.style.cursor='grab';
 
-  // ── Tooltip ──────────────────────────────────────────────────────────
-  var tt = document.createElement('div');
-  tt.style.cssText =
-    'position:absolute;pointer-events:none;display:none;' +
-    'background:rgba(2,2,12,0.97);border:1px solid #1a56db;' +
-    'padding:11px 15px;font-family:"Space Mono",monospace;' +
-    'box-shadow:0 0 28px rgba(26,86,219,0.5);z-index:200;max-width:260px;';
-  container.appendChild(tt);
+  // ── Tooltip ───────────────────────────────────────────────────────
+  var tt=document.createElement('div');
+  tt.style.cssText='position:absolute;display:none;pointer-events:none;background:rgba(2,2,12,.97);border:1px solid #1a56db;padding:11px 15px;font-family:"Space Mono",monospace;font-size:10px;box-shadow:0 0 24px rgba(26,86,219,.5);z-index:200;max-width:250px;';
+  el.appendChild(tt);
 
-  var hoveredPlanet = null;
-  canvas.addEventListener('mousemove', function(e) {
-    var rect = container.getBoundingClientRect();
-    var mx = e.clientX - rect.left;
-    var my = e.clientY - rect.top;
-    hoveredPlanet = null;
-    for (var i = 0; i < PLANETS.length; i++) {
-      var p = PLANETS[i];
-      if (!p._sx) continue;
-      var dx = mx - p._sx, dy = my - p._sy;
-      if (Math.sqrt(dx*dx + dy*dy) < p._sr + 6) {
-        hoveredPlanet = p;
-        break;
-      }
+  var hov=null;
+  cv.addEventListener('mousemove',function(e){
+    var r=el.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
+    hov=null;
+    for(var i=0;i<P.length;i++){
+      var p=P[i];
+      if(!p.sx)continue;
+      var d=Math.sqrt((mx-p.sx)*(mx-p.sx)+(my-p.sy)*(my-p.sy));
+      if(d<p.sr+8){hov=p;break;}
     }
-    if (hoveredPlanet) {
-      tt.innerHTML =
-        '<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:7px;">' + hoveredPlanet.name + '</div>' +
-        '<div style="font-size:11px;color:#4a7fff;line-height:1.7;text-shadow:0 0 10px rgba(74,127,255,.6);">' + hoveredPlanet.formula + '</div>';
-      tt.style.display = 'block';
-      tt.style.left = (mx + 240 > W ? mx - 265 : mx + 14) + 'px';
-      tt.style.top  = Math.max(8, my - 30) + 'px';
-      canvas.style.cursor = 'pointer';
+    if(hov){
+      tt.innerHTML='<div style="font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:6px;">'+hov.n+'</div><div style="color:#5a9fff;line-height:1.7;">'+hov.f+'</div>';
+      tt.style.display='block';
+      tt.style.left=(mx+245>W?mx-255:mx+12)+'px';
+      tt.style.top=Math.max(4,my-28)+'px';
+      cv.style.cursor='pointer';
     } else {
-      tt.style.display = 'none';
-      canvas.style.cursor = drag ? 'grabbing' : 'grab';
+      tt.style.display='none';
+      cv.style.cursor=drag?'grabbing':'grab';
     }
   });
-  canvas.addEventListener('mouseleave', function() { tt.style.display = 'none'; hoveredPlanet = null; });
+  cv.addEventListener('mouseleave',function(){tt.style.display='none';hov=null;});
 
-  // ── Legend ───────────────────────────────────────────────────────────
-  var leg = document.createElement('div');
-  leg.style.cssText = 'position:absolute;bottom:14px;right:14px;display:flex;flex-direction:column;gap:5px;z-index:10;pointer-events:none;';
-  [['#1a56db','Math Foundations'],['#00c896','Applied Domains'],['#9c7ef0','ML Methods']].forEach(function(item) {
-    leg.insertAdjacentHTML('beforeend',
-      '<div style="display:flex;align-items:center;gap:7px;">' +
-      '<span style="width:8px;height:8px;border-radius:50%;background:' + item[0] + ';display:inline-block;box-shadow:0 0 7px ' + item[0] + ';flex-shrink:0;"></span>' +
-      '<span style="font-family:\'Space Mono\',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#555;">' + item[1] + '</span>' +
-      '</div>');
+  // ── Legend ────────────────────────────────────────────────────────
+  var lg=document.createElement('div');
+  lg.style.cssText='position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:5px;pointer-events:none;z-index:10;';
+  [['#1a56db','Math Foundations'],['#00c896','Applied Domains'],['#9c7ef0','ML Methods']].forEach(function(x){
+    lg.insertAdjacentHTML('beforeend','<div style="display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:'+x[0]+';box-shadow:0 0 6px '+x[0]+';flex-shrink:0;display:inline-block;"></span><span style="font-family:monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#444;">'+x[1]+'</span></div>');
   });
-  container.appendChild(leg);
+  el.appendChild(lg);
 
-  // ── 3D projection helpers ─────────────────────────────────────────────
-  // Projects a 3D point (on the orbital plane) to 2D screen coords.
-  // orbitR = orbit radius, angle = position on orbit, tiltAmp = tilt amplitude
-  function project(orbitR, angle, tiltAmp) {
-    // 3D coords (orbital plane tilted by camTilt, rotated by camRot)
-    var x3 = Math.cos(angle + camRot) * orbitR;
-    var z3 = Math.sin(angle + camRot) * orbitR;
-    var y3 = Math.sin(angle * 0.65) * tiltAmp * 18;  // slight Y wobble
+  // ── Hint ──────────────────────────────────────────────────────────
+  var hint=el.previousElementSibling;
+  if(hint&&hint.classList.contains('graph-hint')) hint.textContent='Drag to rotate · Scroll to zoom · Hover planets';
 
-    // Apply camera tilt (rotate around X axis)
-    var yp = y3 * Math.cos(camTilt) - z3 * Math.sin(camTilt);
-    var zp = y3 * Math.sin(camTilt) + z3 * Math.cos(camTilt);
-
-    var cx = W / 2, cy = H / 2;
-    var scale = zoom * Math.min(W, H) / 820;
-
-    // Depth for size scaling (zp range: roughly -orbitR to +orbitR)
-    var depthScale = 0.72 + 0.28 * (zp / (orbitR + 1));
-    return {
-      x: cx + x3 * scale,
-      y: cy + yp * scale,
-      depth: depthScale,
-      zp: zp
-    };
+  // ── Helpers ───────────────────────────────────────────────────────
+  function proj(orb,angle,t2){
+    var x3=Math.cos(angle+rot)*orb;
+    var z3=Math.sin(angle+rot)*orb;
+    var y3=Math.sin(angle*.65)*t2*16;
+    var yp=y3*Math.cos(tilt)-z3*Math.sin(tilt);
+    var zp=y3*Math.sin(tilt)+z3*Math.cos(tilt);
+    var sc=zoom*Math.min(W,H)/800;
+    return {x:W/2+x3*sc, y:H/2+yp*sc, z:zp, d:.7+.3*(zp/(orb+1))};
   }
 
-  // ── Draw helpers ─────────────────────────────────────────────────────
-  function drawGlow(x, y, r, color, alpha) {
-    var grad = ctx.createRadialGradient(x, y, 0, x, y, r * 2.8);
-    grad.addColorStop(0,   color.replace(')', ',' + alpha + ')').replace('rgb', 'rgba'));
-    grad.addColorStop(0.4, color.replace(')', ',' + (alpha * 0.4) + ')').replace('rgb', 'rgba'));
-    grad.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.beginPath(); ctx.arc(x, y, r * 2.8, 0, Math.PI * 2);
-    ctx.fillStyle = grad; ctx.fill();
+  function rgb(hex){
+    return parseInt(hex.slice(1,3),16)+','+parseInt(hex.slice(3,5),16)+','+parseInt(hex.slice(5,7),16);
   }
 
-  function hexToRgb(hex) {
-    var r = parseInt(hex.slice(1,3),16);
-    var g = parseInt(hex.slice(3,5),16);
-    var b = parseInt(hex.slice(5,7),16);
-    return r+','+g+','+b;
+  function circle(x,y,r,fill){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();}
+
+  function glow(x,y,r,col,a){
+    var g=ctx.createRadialGradient(x,y,0,x,y,r);
+    g.addColorStop(0,'rgba('+col+','+a+')');
+    g.addColorStop(.5,'rgba('+col+','+(a*.15)+')');
+    g.addColorStop(1,'rgba('+col+',0)');
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
   }
 
-  function drawOrbit(orbitR, tiltAmp, color) {
-    ctx.beginPath();
-    var first = true;
-    for (var a = 0; a <= Math.PI * 2 + 0.05; a += 0.04) {
-      var pt = project(orbitR, a - camRot, tiltAmp);
-      if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
-      else ctx.lineTo(pt.x, pt.y);
-    }
-    ctx.closePath();
-    ctx.strokeStyle = color + '28';
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-  }
+  // ── Main loop ─────────────────────────────────────────────────────
+  var tick=0;
+  function draw(){
+    requestAnimationFrame(draw);
+    tick+=.014;
+    if(auto) rot+=.0006;
+    P.forEach(function(p){p.a+=p.s;});
 
-  function drawPlanet(p, pt, isHovered) {
-    var scale = Math.min(W, H) / 820;
-    var sr = p.r * scale * zoom * (0.72 + 0.28 * pt.depth);
-    sr = Math.max(3, sr);
-    p._sx = pt.x; p._sy = pt.y; p._sr = sr;
-
-    var rgb = hexToRgb(p.col);
-
-    // Glow
-    var glowR = sr * (isHovered ? 4.5 : 2.8);
-    var grad = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, glowR);
-    grad.addColorStop(0,   'rgba(' + rgb + ',' + (isHovered ? 0.55 : 0.22) + ')');
-    grad.addColorStop(0.5, 'rgba(' + rgb + ',0.06)');
-    grad.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.beginPath(); ctx.arc(pt.x, pt.y, glowR, 0, Math.PI * 2);
-    ctx.fillStyle = grad; ctx.fill();
-
-    // Body
-    var bodyGrad = ctx.createRadialGradient(pt.x - sr*0.3, pt.y - sr*0.3, sr*0.05, pt.x, pt.y, sr);
-    bodyGrad.addColorStop(0, 'rgba(' + rgb + ',0.95)');
-    bodyGrad.addColorStop(0.6, 'rgba(' + rgb + ',0.7)');
-    bodyGrad.addColorStop(1, 'rgba(' + rgb + ',0.3)');
-    ctx.beginPath(); ctx.arc(pt.x, pt.y, sr, 0, Math.PI * 2);
-    ctx.fillStyle = bodyGrad; ctx.fill();
-
-    // Ring for ML planet (index 3)
-    if (p.name === 'Machine Learning') {
-      ctx.save();
-      ctx.translate(pt.x, pt.y);
-      ctx.scale(1, 0.28 + 0.15 * Math.abs(Math.sin(camTilt)));
-      ctx.beginPath();
-      ctx.arc(0, 0, sr * 2.2, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(' + rgb + ',0.35)';
-      ctx.lineWidth = sr * 0.55;
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    // Label
-    var labelAlpha = isHovered ? 1.0 : (0.45 + 0.3 * pt.depth);
-    var fontSize = Math.max(8, 9 * scale * zoom);
-    ctx.font = fontSize + 'px "Space Mono", monospace';
-    ctx.fillStyle = 'rgba(' + rgb + ',' + labelAlpha + ')';
-    ctx.textAlign = 'center';
-    ctx.shadowColor = p.col;
-    ctx.shadowBlur = isHovered ? 10 : 4;
-
-    // Shorten long names for label
-    var label = p.name.length > 18 ? p.name.replace(' ','\n') : p.name;
-    var lines = label.split('\n');
-    lines.forEach(function(line, i) {
-      ctx.fillText(line, pt.x, pt.y + sr + fontSize * (1.4 + i * 1.2));
-    });
-    ctx.shadowBlur = 0;
-  }
-
-  // ── Main render loop ─────────────────────────────────────────────────
-  var t = 0;
-  var sunPulse = 0;
-  var raf;
-
-  function draw() {
-    raf = requestAnimationFrame(draw);
-    t += 0.012;
-    sunPulse += 0.04;
-    if (autoRot) camRot += 0.0006;
-
-    // Advance planet angles
-    PLANETS.forEach(function(p) { p.angle += p.spd; });
-
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.clearRect(0, 0, W, H);
-
-    // Background
-    ctx.fillStyle = '#020206';
-    ctx.fillRect(0, 0, W, H);
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#020206';
+    ctx.fillRect(0,0,W,H);
 
     // Stars
-    stars.forEach(function(s) {
-      s.twinkle += 0.02;
-      var a = s.a * (0.6 + 0.4 * Math.sin(s.twinkle));
+    stars.forEach(function(s){
+      s.b+=.018;
+      var a=.12+.25*Math.sin(s.b);
+      ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(160,180,255,'+a+')';ctx.fill();
+    });
+
+    // Orbit rings
+    P.forEach(function(p){
+      var sc=zoom*Math.min(W,H)/800;
+      var orb=p.o*sc;
       ctx.beginPath();
-      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(150,170,255,' + a + ')';
-      ctx.fill();
+      for(var a=0;a<=Math.PI*2+.05;a+=.04){
+        var pt=proj(p.o,a-rot,p.t);
+        a<.04?ctx.moveTo(pt.x,pt.y):ctx.lineTo(pt.x,pt.y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle='rgba('+rgb(p.c)+',.12)';
+      ctx.lineWidth=.7;ctx.stroke();
     });
 
-    // Compute all planet screen positions
-    var pts = PLANETS.map(function(p) {
-      return project(p.orbit * zoom * Math.min(W,H)/820, p.angle, p.tilt);
-    });
+    // Compute positions
+    var pts=P.map(function(p){return proj(p.o,p.a,p.t);});
 
-    // Draw orbit ellipses (back to front by zp)
-    PLANETS.forEach(function(p, i) {
-      drawOrbit(p.orbit * zoom * Math.min(W,H)/820, p.tilt, p.col);
-    });
+    // Depth sort
+    var idx=P.map(function(_,i){return i;});
+    idx.sort(function(a,b){return pts[a].z-pts[b].z;});
 
-    // Sort planets back-to-front
-    var order = PLANETS.map(function(_, i) { return i; });
-    order.sort(function(a, b) { return pts[a].zp - pts[b].zp; });
+    // Sun
+    var cx=W/2, cy=H/2;
+    var sr=Math.max(14,26*zoom*Math.min(W,H)/800);
+    var pulse=.85+.15*Math.sin(tick*2.8);
+    glow(cx,cy,sr*5,'26,86,219',.28*pulse);
+    var sg=ctx.createRadialGradient(cx-sr*.3,cy-sr*.3,sr*.05,cx,cy,sr);
+    sg.addColorStop(0,'rgba(130,170,255,1)');
+    sg.addColorStop(.55,'rgba(26,86,219,'+pulse+')');
+    sg.addColorStop(1,'rgba(8,30,110,.85)');
+    circle(cx,cy,sr,sg);
+    ctx.font='bold '+Math.max(13,Math.round(sr*.72))+'px monospace';
+    ctx.fillStyle='rgba(255,255,255,.95)';ctx.textAlign='center';
+    ctx.shadowColor='#1a56db';ctx.shadowBlur=14;
+    ctx.fillText('AXL',cx,cy+Math.max(13,Math.round(sr*.72))*.36);
+    ctx.shadowBlur=0;
 
-    // Sun at centre
-    var cx = W/2, cy = H/2;
-    var sunR = 28 * zoom * Math.min(W,H)/820;
-    sunR = Math.max(12, sunR);
-    var pulse = 0.85 + 0.15 * Math.sin(sunPulse);
+    // Planets
+    idx.forEach(function(i){
+      var p=P[i], pt=pts[i];
+      var sc=Math.min(W,H)/800;
+      var pr=Math.max(4, p.r*sc*zoom*(.72+.28*pt.d));
+      p.sx=pt.x; p.sy=pt.y; p.sr=pr;
+      var c=rgb(p.c), isH=(p===hov);
 
-    // Sun outer glow
-    var sg = ctx.createRadialGradient(cx, cy, 0, cx, cy, sunR * 5);
-    sg.addColorStop(0,   'rgba(26,86,219,' + (0.35 * pulse) + ')');
-    sg.addColorStop(0.4, 'rgba(26,86,219,0.08)');
-    sg.addColorStop(1,   'rgba(0,0,0,0)');
-    ctx.beginPath(); ctx.arc(cx, cy, sunR * 5, 0, Math.PI * 2);
-    ctx.fillStyle = sg; ctx.fill();
+      glow(pt.x,pt.y,pr*(isH?5:3),c,isH?.5:.18);
 
-    // Sun body
-    var sunG = ctx.createRadialGradient(cx - sunR*0.3, cy - sunR*0.3, sunR*0.1, cx, cy, sunR);
-    sunG.addColorStop(0, 'rgba(120,160,255,1)');
-    sunG.addColorStop(0.5, 'rgba(26,86,219,' + pulse + ')');
-    sunG.addColorStop(1, 'rgba(10,40,140,0.8)');
-    ctx.beginPath(); ctx.arc(cx, cy, sunR, 0, Math.PI * 2);
-    ctx.fillStyle = sunG; ctx.fill();
+      var bg=ctx.createRadialGradient(pt.x-pr*.3,pt.y-pr*.3,pr*.05,pt.x,pt.y,pr);
+      bg.addColorStop(0,'rgba('+c+',.95)');
+      bg.addColorStop(.6,'rgba('+c+',.7)');
+      bg.addColorStop(1,'rgba('+c+',.25)');
+      circle(pt.x,pt.y,pr,bg);
 
-    // AXL label on sun
-    var lSize = Math.max(14, 22 * zoom * Math.min(W,H)/820);
-    ctx.font = 'bold ' + lSize + 'px monospace';
-    ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.textAlign = 'center';
-    ctx.shadowColor = '#1a56db';
-    ctx.shadowBlur = 18;
-    ctx.fillText('AXL', cx, cy + lSize * 0.38);
-    ctx.shadowBlur = 0;
+      if(p.ring){
+        ctx.save();ctx.translate(pt.x,pt.y);
+        ctx.scale(1,.3+.12*Math.abs(Math.sin(tilt)));
+        ctx.beginPath();ctx.arc(0,0,pr*2.1,0,Math.PI*2);
+        ctx.strokeStyle='rgba('+c+',.35)';ctx.lineWidth=pr*.6;ctx.stroke();
+        ctx.restore();
+      }
 
-    // Draw planets back-to-front
-    order.forEach(function(i) {
-      drawPlanet(PLANETS[i], pts[i], PLANETS[i] === hoveredPlanet);
+      var la=isH?1:(.4+.35*pt.d);
+      var fs=Math.max(7,8*sc*zoom);
+      ctx.font=fs+'px "Space Mono",monospace';
+      ctx.fillStyle='rgba('+c+','+la+')';ctx.textAlign='center';
+      ctx.shadowColor=p.c;ctx.shadowBlur=isH?8:3;
+      ctx.fillText(p.n,pt.x,pt.y+pr+fs*1.5);
+      ctx.shadowBlur=0;
     });
   }
 
   draw();
 
-  // Resize handling
-  window.addEventListener('resize', function() {
-    resize();
-  });
-
-  // Visibility — pause when hidden
-  document.addEventListener('visibilitychange', function() {
-    if (document.hidden) cancelAnimationFrame(raf);
-    else draw();
-  });
+  window.addEventListener('resize',function(){setSize();});
 }
 
-// ── Init ─────────────────────────────────────────────────────────────────
-function initGalaxy() {
-  var container = document.getElementById('research-graph');
-  if (!container) return;
-  if (container.dataset.galaxyBuilt) return;
-
-  // Set height on container if not already set via CSS
-  if (!container.style.height && container.offsetHeight < 50) {
-    container.style.height = '540px';
-  }
-
-  var built = false;
-  function tryBuild() {
-    if (built || container.dataset.galaxyBuilt) return;
-    var w = container.getBoundingClientRect().width || container.offsetWidth;
-    var h = container.getBoundingClientRect().height || container.offsetHeight;
-    if (w > 10 && h > 10) {
-      built = true;
+function initGalaxy(){
+  var el=document.getElementById('research-graph');
+  if(!el||el._built) return;
+  // Force explicit height so offsetHeight is never 0
+  el.style.height='540px';
+  // Give browser one frame to apply styles, then build
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
       buildGalaxy();
-    }
-  }
-
-  tryBuild();
-  if (built) return;
-
-  if (typeof ResizeObserver !== 'undefined') {
-    var ro = new ResizeObserver(function() { tryBuild(); if (built) ro.disconnect(); });
-    ro.observe(container);
-    setTimeout(function() { ro.disconnect(); }, 6000);
-  } else {
-    var n = 0;
-    var iv = setInterval(function() {
-      tryBuild(); n++;
-      if (built || n > 80) clearInterval(iv);
-    }, 80);
-  }
+    });
+  });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function() { setTimeout(initGalaxy, 50); });
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', initGalaxy);
 } else {
-  setTimeout(initGalaxy, 50);
+  initGalaxy();
 }
