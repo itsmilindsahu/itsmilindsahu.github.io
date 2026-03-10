@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AXL — Axiom Labs</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
+  <style>
+    .axl-hero-full { min-height:100vh; background:var(--black); display:flex; align-items:center; position:relative; overflow:hidden; }
+    .axl-hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px); background-size:48px 48px; }
+    .axl-hero-glow { position:absolute; top:50%; left:50%; width:700px; height:700px; transform:translate(-50%,-50%); background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 65%); pointer-events:none; }
+    .axl-hero-inner { position:relative; z-index:1; max-width:var(--max-w); margin:0 auto; padding:0 48px; width:100%; }
+    .axl-big-svg { width:160px; height:160px; margin-bottom:36px; }
+    .axl-big-name { font-family:var(--font-display); font-size:clamp(80px,14vw,160px); line-height:.85; color:var(--white); letter-spacing:4px; margin-bottom:12px; }
+    .axl-big-name span { color:var(--accent); }
+    .axl-full-name { font-size:11px; letter-spacing:8px; text-transform:uppercase; color:#333; margin-bottom:28px; }
+    .axl-big-tag { font-family:var(--font-display); font-size:26px; color:#444; letter-spacing:4px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:40px; }
+    .axl-big-tag .arr { color:var(--accent); }
+    .axl-pillars-dark { display:flex; flex-wrap:wrap; gap:8px; }
+    .axl-pill-dark { padding:7px 16px; border:1px solid #222; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#555; transition:all .2s; }
+    .axl-pill-dark:hover { border-color:var(--accent); color:var(--accent); }
+    nav.dark-nav { background:rgba(13,13,11,.96) !important; border-bottom-color:#1a1a18 !important; }
+    nav.dark-nav .name-full { color:var(--white) !important; }
+    nav.dark-nav .nav-links a { color:#555 !important; }
+    nav.dark-nav .nav-links a:hover, nav.dark-nav .nav-links a.active { color:var(--white) !important; }
+    nav.dark-nav .hamburger span { background:var(--white) !important; }
+    .mission-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--light-grey); }
+    .mission-card { background:var(--white); padding:40px 32px; transition:background .2s; }
+    .mission-card:hover { background:var(--off-white); }
+    .mission-icon { font-family:var(--font-display); font-size:48px; color:var(--accent); margin-bottom:16px; }
+    .mission-title { font-size:15px; font-weight:700; margin-bottom:12px; }
+    .mission-desc { font-size:12px; color:var(--dark-grey); line-height:1.85; }
+    .timeline { position:relative; padding-left:32px; }
+    .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:1px; background:var(--light-grey); }
+    .timeline-item { position:relative; margin-bottom:40px; }
+    .timeline-item::before { content:''; position:absolute; left:-36px; top:6px; width:9px; height:9px; background:var(--accent); border-radius:50%; }
+    .timeline-date { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+    .timeline-event { font-size:15px; font-weight:700; margin-bottom:6px; }
+    .timeline-detail { font-size:12px; color:var(--dark-grey); }
+    @media(max-width:640px){.axl-hero-inner{padding:0 20px;}.mission-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="cursor"></div><div class="cursor-ring"></div>
+<nav class="dark-nav">
+  <a href="index.html" class="nav-logo">
+    <div class="axl-badge"><svg viewBox="0 0 22 22" fill="none"><path d="M2 18 L8 4 L14 18" stroke="white" stroke-width="2" fill="none" stroke-linecap="square"/><line x1="4.5" y1="13" x2="11.5" y2="13" stroke="white" stroke-width="2"/><line x1="15" y1="4" x2="20" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/><line x1="20" y1="4" x2="15" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/></svg></div>
+    <span class="name-full" style="color:white">MILIND <span>SAHU</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="axiom-labs.html" class="active">AXL</a></li>
+    <li><a href="index.html#research">Research</a></li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<main>
+<div class="axl-hero-full">
+  <div class="axl-hero-grid"></div>
+  <div class="axl-hero-glow"></div>
+  <div class="axl-hero-inner">
+    <svg class="axl-big-svg" viewBox="0 0 160 160" fill="none">
+      <rect width="160" height="160" fill="#0a0a08"/>
+      <line x1="0" y1="20" x2="160" y2="20" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="40" x2="160" y2="40" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="60" x2="160" y2="60" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="80" x2="160" y2="80" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="100" x2="160" y2="100" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="120" x2="160" y2="120" stroke="#111" stroke-width="1"/>
+      <line x1="0" y1="140" x2="160" y2="140" stroke="#111" stroke-width="1"/>
+      <line x1="20" y1="0" x2="20" y2="160" stroke="#111" stroke-width="1"/>
+      <line x1="40" y1="0" x2="40" y2="160" stroke="#111" stroke-width="1"/>
+      <line x1="60" y1="0" x2="60" y2="160" stroke="#111" stroke-width="1"/>
+      <line x1="80" y1="0" x2="80" y2="160" stroke="#111" stroke-width="1"/>
+      <line x1="100" y1="0" x2="100" y2="160" stroke="#111" stroke-width="1"/>
+      <line x1="120" y1="0" x2="120" y2="160" stroke="#111" stroke-width="1"/>
+      <line x1="140" y1="0" x2="140" y2="160" stroke="#111" stroke-width="1"/>
+      <rect x="10" y="10" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="28" y="10" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="0"  y="28" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="46" y="28" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="0"  y="46" width="64" height="18" fill="#e8e8e4"/>
+      <rect x="0"  y="64" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="46" y="64" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="70" y="10" width="18" height="18" fill="#1a56db"/>
+      <rect x="106" y="10" width="18" height="18" fill="#1a56db"/>
+      <rect x="80" y="28" width="18" height="18" fill="#1a56db"/>
+      <rect x="96" y="28" width="18" height="18" fill="#1a56db"/>
+      <rect x="88" y="46" width="18" height="18" fill="#1a56db"/>
+      <rect x="80" y="64" width="18" height="18" fill="#1a56db"/>
+      <rect x="96" y="64" width="18" height="18" fill="#1a56db"/>
+      <rect x="70" y="82" width="18" height="18" fill="#1a56db"/>
+      <rect x="106" y="82" width="18" height="18" fill="#1a56db"/>
+      <rect x="124" y="10" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="124" y="28" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="124" y="46" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="124" y="64" width="18" height="18" fill="#e8e8e4"/>
+      <rect x="124" y="82" width="36" height="18" fill="#e8e8e4"/>
+      <circle cx="4" cy="4" r="2.5" fill="#1a56db"/>
+      <circle cx="156" cy="4" r="2.5" fill="#1a56db"/>
+      <circle cx="4" cy="156" r="2.5" fill="#1a56db"/>
+      <circle cx="156" cy="156" r="2.5" fill="#1a56db"/>
+    </svg>
+    <div class="axl-big-name fade-in">AX<span>L</span></div>
+    <div class="axl-full-name fade-in stagger-1">Axiom Labs</div>
+    <div class="axl-big-tag fade-in stagger-2">
+      <span>Theory</span><span class="arr">→</span><span>Algorithms</span><span class="arr">→</span><span>Intelligence</span>
+    </div>
+    <div class="axl-pillars-dark fade-in stagger-3">
+      <span class="axl-pill-dark">Algorithms</span>
+      <span class="axl-pill-dark">Optimization</span>
+      <span class="axl-pill-dark">Machine Learning</span>
+      <span class="axl-pill-dark">Energy Analytics</span>
+      <span class="axl-pill-dark">Policy Systems</span>
+    </div>
+  </div>
+</div>
+
+<section id="about">
+  <div class="container">
+    <p class="section-label"><span class="num">01</span> What is AXL</p>
+    <div class="about-layout">
+      <div class="about-text fade-in">
+        <p><strong>Axiom Labs (AXL)</strong> is an independent computational research identity — a one-person research collective operating at the intersection of pure mathematics, algorithms, and applied systems.</p>
+        <p>The name reflects a core principle: <strong>build from axioms</strong>. Every system should have a rigorous theoretical foundation before implementation. No shortcuts, no duct tape.</p>
+        <p>AXL is the identity under which I compete in national hackathons, develop independent research projects, and publish technical work. It allows me to maintain a <strong>coherent research identity</strong> across institutions, competitions, and collaborators.</p>
+        <p>Currently focused on: energy systems analytics, optimization for policy design, and machine learning with mathematical guarantees.</p>
+      </div>
+      <div class="about-right fade-in stagger-2">
+        <div class="stat-box"><div class="stat-num">4+</div><div class="stat-label">Projects Under AXL</div></div>
+        <div class="stat-box"><div class="stat-num">3×</div><div class="stat-label">National Prizes</div></div>
+        <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Theory First</div></div>
+        <div class="stat-box"><div class="stat-num" style="font-size:32px;color:var(--accent)">2025</div><div class="stat-label">Established</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--off-white)">
+  <div class="container">
+    <p class="section-label"><span class="num">02</span> Research Pillars</p>
+    <div class="mission-grid">
+      <div class="mission-card fade-in"><div class="mission-icon">∑</div><div class="mission-title">Algorithms & Complexity</div><p class="mission-desc">Designing efficient algorithms with provable guarantees. Not just "it works" but "it works because..."</p></div>
+      <div class="mission-card fade-in stagger-1"><div class="mission-icon">min</div><div class="mission-title">Optimization Theory</div><p class="mission-desc">Convex and non-convex optimization for real-world systems — energy, infrastructure, logistics.</p></div>
+      <div class="mission-card fade-in stagger-2"><div class="mission-icon">∇θ</div><div class="mission-title">Machine Learning</div><p class="mission-desc">ML with mathematical foundations — not black-box models but systems you can reason about.</p></div>
+      <div class="mission-card fade-in stagger-3"><div class="mission-icon">ΔE</div><div class="mission-title">Energy Systems Analytics</div><p class="mission-desc">Computational tools for energy monitoring, disaggregation, and policy optimization.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <p class="section-label"><span class="num">03</span> AXL Track Record</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;">
+      <div class="timeline fade-in">
+        <div class="timeline-item"><div class="timeline-date">2025 · IIES</div><div class="timeline-event">🥉 NILM Energy Monitoring</div><div class="timeline-detail">3rd Prize — National Energy Analytics Challenge. IISERs · IISc · NISER · CEBS.</div></div>
+        <div class="timeline-item"><div class="timeline-date">2026 · IIT Hyderabad</div><div class="timeline-event">🥈 TRACEWASTE</div><div class="timeline-detail">2nd Prize — Eco Champion Hackathon. Elan & nVision 2026.</div></div>
+        <div class="timeline-item"><div class="timeline-date">2025 · Solo</div><div class="timeline-event">🏅 EcoFusion — Rank 5</div><div class="timeline-detail">Hack Beyond Limits. 1000+ participants. Solo project under AXL.</div></div>
+      </div>
+      <div class="timeline fade-in stagger-2">
+        <div class="timeline-item"><div class="timeline-date">2025 · National</div><div class="timeline-event">🏆 HEV Optimization — Top 100</div><div class="timeline-detail">CodeSynthesis National Challenge. 4000+ teams.</div></div>
+        <div class="timeline-item"><div class="timeline-date">2026 · IIT Kanpur</div><div class="timeline-event">⭐ EcoCraft — Round 3</div><div class="timeline-detail">Policy Conclave '26. Environmental policy analysis.</div></div>
+        <div class="timeline-item"><div class="timeline-date">Ongoing</div><div class="timeline-event">→ Next Project</div><div class="timeline-detail">Mathematical Economics + Optimization. In progress.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--black)">
+  <div class="container" style="text-align:center;padding-top:80px;padding-bottom:80px;">
+    <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;margin-bottom:20px;">AXL — Axiom Labs</p>
+    <h2 style="font-family:var(--font-display);font-size:clamp(48px,7vw,90px);letter-spacing:4px;color:white;margin-bottom:12px;">THEORY FIRST<span style="color:var(--accent)">.</span></h2>
+    <p style="font-size:13px;color:#444;max-width:480px;margin:0 auto 36px;line-height:1.9;">Every system built under AXL starts with a mathematical foundation. Axioms → Proofs → Code → Systems.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="projects.html" class="btn" style="border:1px solid #222;color:#555;background:transparent;">View Projects</a>
+      <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-primary">GitHub →</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" fill="#0d0d0b"/><path d="M4 36 L16 8 L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/><line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/><line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/><line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/></svg><div class="logo-text">AX<span>L</span></div></div>
+        <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link">GitHub</a>
+        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link">LinkedIn</a>
+        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link">Email</a>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span></div>
+  </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
