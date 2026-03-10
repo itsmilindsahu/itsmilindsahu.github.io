@@ -6,37 +6,36 @@
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
   <style>
-    .axl-hero-full { min-height:100vh; background:var(--black); display:flex; align-items:center; position:relative; overflow:hidden; }
-    .axl-hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px); background-size:48px 48px; }
-    .axl-hero-glow { position:absolute; top:50%; left:50%; width:700px; height:700px; transform:translate(-50%,-50%); background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 65%); pointer-events:none; }
-    .axl-hero-inner { position:relative; z-index:1; max-width:var(--max-w); margin:0 auto; padding:0 48px; width:100%; }
-    .axl-big-svg { width:160px; height:160px; margin-bottom:36px; }
-    .axl-big-name { font-family:var(--font-display); font-size:clamp(80px,14vw,160px); line-height:.85; color:var(--white); letter-spacing:4px; margin-bottom:12px; }
-    .axl-big-name span { color:var(--accent); }
-    .axl-full-name { font-size:16px; letter-spacing:8px; text-transform:uppercase; color:#777; margin-bottom:28px; }
-    .axl-big-tag { font-family:var(--font-display); font-size:26px; color:#444; letter-spacing:4px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:40px; }
-    .axl-big-tag .arr { color:var(--accent); }
-    .axl-pillars-dark { display:flex; flex-wrap:wrap; gap:8px; }
-    .axl-pill-dark { padding:7px 16px; border:1px solid #222; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#555; transition:all .2s; }
-    .axl-pill-dark:hover { border-color:var(--accent); color:var(--accent); }
-    nav.dark-nav { background:rgba(13,13,11,.96) !important; border-bottom-color:#1a1a18 !important; }
-    nav.dark-nav .name-full { color:var(--white) !important; }
-    nav.dark-nav .nav-links a { color:#555 !important; }
-    nav.dark-nav .nav-links a:hover, nav.dark-nav .nav-links a.active { color:var(--white) !important; }
-    nav.dark-nav .hamburger span { background:var(--white) !important; }
-    .mission-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--light-grey); }
-    .mission-card { background:var(--white); padding:40px 32px; transition:background .2s; }
-    .mission-card:hover { background:var(--off-white); }
-    .mission-icon { font-family:var(--font-display); font-size:48px; color:var(--accent); margin-bottom:16px; }
-    .mission-title { font-size:15px; font-weight:700; margin-bottom:12px; }
-    .mission-desc { font-size:12px; color:var(--dark-grey); line-height:1.85; }
-    .timeline { position:relative; padding-left:32px; }
-    .timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:1px; background:var(--light-grey); }
-    .timeline-item { position:relative; margin-bottom:40px; }
-    .timeline-item::before { content:''; position:absolute; left:-36px; top:6px; width:9px; height:9px; background:var(--accent); border-radius:50%; }
-    .timeline-date { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
-    .timeline-event { font-size:15px; font-weight:700; margin-bottom:6px; }
-    .timeline-detail { font-size:12px; color:var(--dark-grey); }
+    .axl-hero-full{min-height:100vh;background:var(--black);display:flex;align-items:center;position:relative;overflow:hidden;}
+    .axl-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);background-size:48px 48px;}
+    .axl-hero-glow{position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 65%);pointer-events:none;}
+    .axl-hero-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;}
+    .axl-big-name{font-family:var(--font-display);font-size:clamp(80px,14vw,160px);line-height:.85;color:var(--white);letter-spacing:4px;margin-bottom:12px;}
+    .axl-big-name span{color:var(--accent);}
+    .axl-full-name{font-size:16px;letter-spacing:8px;text-transform:uppercase;color:#777;margin-bottom:28px;}
+    .axl-big-tag{font-family:var(--font-display);font-size:26px;color:#444;letter-spacing:4px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:40px;}
+    .axl-big-tag .arr{color:var(--accent);}
+    .axl-pillars-dark{display:flex;flex-wrap:wrap;gap:8px;}
+    .axl-pill-dark{padding:7px 16px;border:1px solid #222;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#555;transition:all .2s;}
+    .axl-pill-dark:hover{border-color:var(--accent);color:var(--accent);}
+    nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
+    nav.dark-nav .name-full{color:var(--white)!important;}
+    nav.dark-nav .nav-links a{color:#555!important;}
+    nav.dark-nav .nav-links a:hover,nav.dark-nav .nav-links a.active{color:var(--white)!important;}
+    nav.dark-nav .hamburger span{background:var(--white)!important;}
+    .mission-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--light-grey);}
+    .mission-card{background:var(--white);padding:40px 32px;transition:background .2s;}
+    .mission-card:hover{background:var(--off-white);}
+    .mission-icon{font-family:var(--font-display);font-size:48px;color:var(--accent);margin-bottom:16px;}
+    .mission-title{font-size:15px;font-weight:700;margin-bottom:12px;}
+    .mission-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;}
+    .timeline{position:relative;padding-left:32px;}
+    .timeline::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--light-grey);}
+    .timeline-item{position:relative;margin-bottom:40px;}
+    .timeline-item::before{content:'';position:absolute;left:-36px;top:6px;width:9px;height:9px;background:var(--accent);border-radius:50%;}
+    .timeline-date{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+    .timeline-event{font-size:15px;font-weight:700;margin-bottom:6px;}
+    .timeline-detail{font-size:12px;color:var(--dark-grey);}
     @media(max-width:640px){.axl-hero-inner{padding:0 20px;}.mission-grid{grid-template-columns:1fr;}}
   </style>
 </head>
@@ -64,14 +63,10 @@
   <div class="axl-hero-inner">
     <div class="axl-big-name fade-in">AX<span>L</span></div>
     <div class="axl-full-name fade-in stagger-1">— Axiom Labs</div>
-    <div class="axl-big-tag fade-in stagger-2">
-      <span>Theory</span><span class="arr">→</span><span>Algorithms</span><span class="arr">→</span><span>Intelligence</span>
-    </div>
+    <div class="axl-big-tag fade-in stagger-2"><span>Theory</span><span class="arr">→</span><span>Algorithms</span><span class="arr">→</span><span>Intelligence</span></div>
     <div class="axl-pillars-dark fade-in stagger-3">
-      <span class="axl-pill-dark">Algorithms</span>
-      <span class="axl-pill-dark">Optimization</span>
-      <span class="axl-pill-dark">Machine Learning</span>
-      <span class="axl-pill-dark">Energy Analytics</span>
+      <span class="axl-pill-dark">Algorithms</span><span class="axl-pill-dark">Optimization</span>
+      <span class="axl-pill-dark">Machine Learning</span><span class="axl-pill-dark">Energy Analytics</span>
       <span class="axl-pill-dark">Policy Systems</span>
     </div>
   </div>
@@ -89,8 +84,8 @@
       </div>
       <div class="about-right fade-in stagger-2">
         <div class="stat-box"><div class="stat-num">4+</div><div class="stat-label">Projects Under AXL</div></div>
-        <div class="stat-box"><div class="stat-num">3×</div><div class="stat-label">National Prizes</div></div>
-        <div class="stat-box"><div class="stat-num">∞</div><div class="stat-label">Theory First</div></div>
+        <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">National Prizes Won</div></div>
+        <div class="stat-box"><div class="stat-num">₹23K</div><div class="stat-label">Total Prize Money</div></div>
         <div class="stat-box"><div class="stat-num" style="font-size:32px;color:var(--accent)">2025</div><div class="stat-label">Established</div></div>
       </div>
     </div>
@@ -115,7 +110,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;">
       <div class="timeline fade-in">
         <div class="timeline-item"><div class="timeline-date">2025 · IIES</div><div class="timeline-event">🥉 NILM Energy Monitoring</div><div class="timeline-detail">3rd Prize — Inter IISER Entrepreneurship Summit. IISERs · IISc · NISER · CEBS.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIT Hyderabad</div><div class="timeline-event">🥈 TRACEWASTE</div><div class="timeline-detail">2nd Prize — Eco Champion Hackathon. Elan & nVision 2026.</div></div>
+        <div class="timeline-item"><div class="timeline-date">2026 · IIT Hyderabad</div><div class="timeline-event">🥈 TRACEWASTE</div><div class="timeline-detail">2nd Prize — Eco Champion Hackathon. Elan &amp; nVision 2026.</div></div>
         <div class="timeline-item"><div class="timeline-date">2025 · Solo</div><div class="timeline-event">🏅 EcoFusion — Rank 5</div><div class="timeline-detail">Hack Beyond Limits. 1000+ participants. Solo project under AXL.</div></div>
       </div>
       <div class="timeline fade-in stagger-2">
@@ -129,110 +124,58 @@
 
 <section id="projects" style="background:var(--white)">
   <div class="container">
-    <p class="section-label" style="margin-bottom:40px;"><span class="num">03</span> AXL Projects</p>
+    <p class="section-label" style="margin-bottom:40px;"><span class="num">04</span> AXL Projects</p>
     <div class="projects-grid">
-
       <article class="project-card">
-        <div class="project-img-wrap">
-          <img src="nilm.jpg" alt="NILM">
-          <div class="project-img-overlay"></div>
-          <div class="project-img-badge">🥉 3rd Prize · Inter IISER Entrepreneurship Summit</div>
-        </div>
+        <div class="project-img-wrap"><img src="nilm.jpg" alt="NILM"><div class="project-img-overlay"></div><div class="project-img-badge">🥉 3rd Prize · Inter IISER Entrepreneurship Summit</div></div>
         <div class="project-body">
           <div class="project-category">Energy · ML · IoT</div>
           <div class="project-title">NILM-Based Smart Energy Monitoring System</div>
           <p class="project-desc">Non-Intrusive Load Monitoring framework for appliance-level energy disaggregation. Random Forest anomaly detection + LSTM load prediction. Smart plug with MQTT + FastAPI backend.</p>
-          <div class="method-tags">
-            <span class="mtag mtag-ml">Random Forest</span>
-            <span class="mtag mtag-ml">LSTM Networks</span>
-            <span class="mtag mtag-ml">Time-Series Modeling</span>
-            <span class="mtag mtag-energy">Energy Analytics</span>
-            <span class="mtag mtag-math">Anomaly Detection</span>
-          </div>
+          <div class="method-tags"><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-ml">LSTM Networks</span><span class="mtag mtag-ml">Time-Series Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Anomaly Detection</span></div>
           <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
         </div>
       </article>
-
       <article class="project-card">
-        <div class="project-img-wrap">
-          <img src="tracewaste.jpg" alt="TRACEWASTE">
-          <div class="project-img-overlay"></div>
-          <div class="project-img-badge">🥈 2nd Prize · IIT Hyderabad Eco Champion</div>
-        </div>
+        <div class="project-img-wrap"><img src="tracewaste.jpg" alt="TRACEWASTE"><div class="project-img-overlay"></div><div class="project-img-badge">🥈 2nd Prize · IIT Hyderabad Eco Champion</div></div>
         <div class="project-body">
           <div class="project-category">Policy · Sustainability</div>
           <div class="project-title">TRACEWASTE — Proof-Based Waste Traceability</div>
           <p class="project-desc">Verification-first framework for post-collection waste accountability using QR-linked batch proofs, geotagging, and timestamped logs to close accountability gaps in waste management.</p>
-          <div class="method-tags">
-            <span class="mtag mtag-policy">Systems Design</span>
-            <span class="mtag mtag-policy">Policy Analysis</span>
-            <span class="mtag mtag-math">Statistical Modeling</span>
-            <span class="mtag mtag-policy">Geo-Verification</span>
-          </div>
+          <div class="method-tags"><span class="mtag mtag-policy">Systems Design</span><span class="mtag mtag-policy">Policy Analysis</span><span class="mtag mtag-math">Statistical Modeling</span><span class="mtag mtag-policy">Geo-Verification</span></div>
           <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="project-link">LinkedIn →</a></div>
         </div>
       </article>
-
       <article class="project-card">
-        <div class="project-img-wrap">
-          <div class="project-img-placeholder"><div class="big-letter">EF</div><div class="sub">Optical Energy Monitor</div></div>
-          <div class="project-img-overlay"></div>
-          <div class="project-img-badge">🏅 Rank 5 · Hack Beyond Limits — 1000+ Teams</div>
-        </div>
+        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">EF</div><div class="sub">Optical Energy Monitor</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🏅 Rank 5 · Hack Beyond Limits — 1000+ Teams</div></div>
         <div class="project-body">
           <div class="project-category">Energy · Sensing · Solo</div>
           <div class="project-title">EcoFusion — Optical Energy Monitoring System</div>
           <p class="project-desc">Optical sensing-based system for appliance-level energy inference. Modeled consumption behavior using time-series patterns and cost analytics. Competed solo — Ranked 5th out of 1000+ participants.</p>
-          <div class="method-tags">
-            <span class="mtag mtag-ml">Time-Series Modeling</span>
-            <span class="mtag mtag-energy">Energy Analytics</span>
-            <span class="mtag mtag-math">Signal Processing</span>
-            <span class="mtag mtag-ml">Anomaly Detection</span>
-          </div>
+          <div class="method-tags"><span class="mtag mtag-ml">Time-Series Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Signal Processing</span><span class="mtag mtag-ml">Anomaly Detection</span></div>
           <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
         </div>
       </article>
-
       <article class="project-card">
-        <div class="project-img-wrap">
-          <div class="project-img-placeholder"><div class="big-letter">HEV</div><div class="sub">Hybrid EV Optimization</div></div>
-          <div class="project-img-overlay"></div>
-          <div class="project-img-badge">🏆 Top 100 · CodeSynthesis — 4000+ Teams</div>
-        </div>
+        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">HEV</div><div class="sub">Hybrid EV Optimization</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🏆 Top 100 · CodeSynthesis — 4000+ Teams</div></div>
         <div class="project-body">
           <div class="project-category">Systems · Optimization · ML</div>
           <div class="project-title">Hybrid Electric Vehicle Optimization</div>
           <p class="project-desc">OBD-II telemetry pipelines for hybrid efficiency analysis. Rule-based hybrid mode switching strategies to maximize energy recovery and minimize fuel consumption.</p>
-          <div class="method-tags">
-            <span class="mtag mtag-math">Optimization Theory</span>
-            <span class="mtag mtag-ml">Random Forest</span>
-            <span class="mtag mtag-energy">Energy Systems</span>
-            <span class="mtag mtag-math">Linear Algebra</span>
-          </div>
+          <div class="method-tags"><span class="mtag mtag-math">Optimization Theory</span><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-energy">Energy Systems</span><span class="mtag mtag-math">Linear Algebra</span></div>
           <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">Repository →</a></div>
         </div>
       </article>
-
       <article class="project-card">
-        <div class="project-img-wrap">
-          <div class="project-img-placeholder"><div class="big-letter">EC</div><div class="sub">Policy Analysis</div></div>
-          <div class="project-img-overlay"></div>
-          <div class="project-img-badge">⭐ Round 3 · IIT Kanpur Policy Conclave 26</div>
-        </div>
+        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">EC</div><div class="sub">Policy Analysis</div></div><div class="project-img-overlay"></div><div class="project-img-badge">⭐ Round 3 · IIT Kanpur Policy Conclave 26</div></div>
         <div class="project-body">
           <div class="project-category">Policy · Sustainability</div>
           <div class="project-title">EcoCraft Policy Challenge</div>
           <p class="project-desc">Competed in the EcoCraft Policy Challenge at IIT Kanpur Policy Conclave 2026. Reached Round 3 with proposals at the intersection of environmental policy and computational analysis.</p>
-          <div class="method-tags">
-            <span class="mtag mtag-policy">Policy Analysis</span>
-            <span class="mtag mtag-math">Statistical Inference</span>
-            <span class="mtag mtag-policy">Optimization</span>
-            <span class="mtag mtag-policy">Quantitative Systems</span>
-          </div>
+          <div class="method-tags"><span class="mtag mtag-policy">Policy Analysis</span><span class="mtag mtag-math">Statistical Inference</span><span class="mtag mtag-policy">Optimization</span><span class="mtag mtag-policy">Quantitative Systems</span></div>
           <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="project-link">LinkedIn →</a></div>
         </div>
       </article>
-
     </div>
   </div>
 </section>
