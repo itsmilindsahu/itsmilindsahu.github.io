@@ -397,8 +397,12 @@
             <input id="f-desc"  class="adm-inp" placeholder="What this covers...">
           </div>
           <div>
-            <div class="adm-lbl">Google Drive PDF Link</div>
+            <div class="adm-lbl">Question Set — Google Drive Link</div>
             <input id="f-link"  class="adm-inp" placeholder="https://drive.google.com/file/d/...">
+          </div>
+          <div>
+            <div class="adm-lbl">Solution Set — Google Drive Link</div>
+            <input id="f-sol"   class="adm-inp" placeholder="https://drive.google.com/file/d/...">
           </div>
         </div>
         <button class="adm-btn" onclick="addTutorial()">+ Add</button>
@@ -682,9 +686,10 @@ function renderGrid(){
       <div class="tut-sem">${t.semester||''}</div>
       <div class="tut-title">${t.topic}</div>
       <p class="tut-desc">${t.desc||''}</p>
-      ${t.link
-        ?`<a href="${t.link}" target="_blank" class="tut-btn">Open PDF ↗</a>`
-        :`<span class="tut-btn soon">Coming Soon</span>`}
+      ${t.link||t.sol ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+        ${t.link?`<a href="${t.link}" target="_blank" class="tut-btn">Questions ↗</a>`:''}
+        ${t.sol ?`<a href="${t.sol}"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);" onmouseover="this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)';" onmouseout="this.style.background='transparent';this.style.color='var(--dark-grey)';this.style.borderColor='var(--light-grey)';">Solutions ↗</a>`:''}
+      </div>` : `<span class="tut-btn soon">Coming Soon</span>`}
     </div>`).join('');
 }
 renderGrid();
@@ -731,11 +736,12 @@ function addTutorial(){
   const top=document.getElementById('f-topic').value.trim();
   const dsc=document.getElementById('f-desc').value.trim();
   const lnk=document.getElementById('f-link').value.trim();
+  const sol=document.getElementById('f-sol').value.trim();
   if(!top){alert('Topic is required.');return;}
   const tuts=loadT();
-  tuts.push({id:Date.now(),semester:sem,topic:top,desc:dsc,link:lnk});
+  tuts.push({id:Date.now(),semester:sem,topic:top,desc:dsc,link:lnk,sol:sol});
   saveT(tuts);
-  ['f-sem','f-topic','f-desc','f-link'].forEach(id=>document.getElementById(id).value='');
+  ['f-sem','f-topic','f-desc','f-link','f-sol'].forEach(id=>document.getElementById(id).value='');
   renderGrid(); renderAdmList();
 }
 function deleteTutorial(id){
