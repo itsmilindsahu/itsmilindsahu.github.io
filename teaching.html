@@ -336,6 +336,43 @@
 
 
 <!-- ═══════════════════════════════════════════
+     SECTION 0 — SESSIONS (PHOTOS FIRST)
+════════════════════════════════════════════ -->
+<section id="sessions" style="background:var(--black);padding:0;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;">
+    <div style="position:relative;overflow:hidden;height:420px;">
+      <img src="teaching-img1.jpg" alt="MB Learners — Vector Calculus Session"
+           style="width:100%;height:100%;object-fit:cover;display:block;opacity:.85;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:28px 32px;">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">MB Learners · IISER Tirupati</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:white;letter-spacing:2px;">Vector Calculus Session</div>
+        <div style="font-size:11px;color:#666;margin-top:4px;">Line Integrals · Spherical &amp; Cylindrical Systems</div>
+      </div>
+    </div>
+    <div style="position:relative;overflow:hidden;height:420px;">
+      <img src="teaching-img2.jpg" alt="MB Learners — Mathematics Tutorial"
+           style="width:100%;height:100%;object-fit:cover;display:block;opacity:.85;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);"></div>
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:28px 32px;">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">MB Learners · IISER Tirupati</div>
+        <div style="font-family:var(--font-display);font-size:22px;color:white;letter-spacing:2px;">Mathematics Tutorial</div>
+        <div style="font-size:11px;color:#666;margin-top:4px;">Sets · Functions · Continuity &amp; Countability</div>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:var(--max-w);margin:0 auto;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid #111;">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;">
+      Peer Learning · 30+ Students · IISER Tirupati · 2024–Present
+    </div>
+    <a href="#mb-learners" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;">
+      Read More About MB Learners →
+    </a>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════
      SECTION 1 — TUTORIALS
 ════════════════════════════════════════════ -->
 <section id="tutorials" class="section-light">
@@ -605,88 +642,94 @@
 
 
 <!-- ═══════════════════════════════════════════
-     SECTION 4 — LECTURE NOTES
+     SECTION 4 — LECTURE NOTES (DYNAMIC)
 ════════════════════════════════════════════ -->
 <section id="lecture-notes" class="section-white">
   <div class="container">
     <p class="section-label"><span class="num">04</span> Lecture Notes</p>
-    <div style="max-width:640px;margin-bottom:48px;">
+    <div style="max-width:640px;margin-bottom:48px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
       <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;">
-        Curated notes from courses, tutorials, and independent study. Each set is written to be
-        self-contained and usable as a standalone reference.
+        Semester-wise notes and PDFs. Click a semester to browse topics.
       </p>
+      <button id="admin-toggle-btn" onclick="toggleAdminPanel()"
+        style="padding:7px 16px;background:transparent;border:1px solid var(--light-grey);
+               font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+               color:var(--mid-grey);cursor:pointer;transition:all .2s;"
+        onmouseover="this.style.borderColor='var(--black)';this.style.color='var(--black)';"
+        onmouseout="this.style.borderColor='var(--light-grey)';this.style.color='var(--mid-grey)';">
+        ⚙ Admin
+      </button>
     </div>
-    <div class="notes-grid">
 
-      <div class="note-card fade-in">
-        <div class="note-icon">∇</div>
-        <div class="note-subject">Mathematics · IISER Tirupati</div>
-        <div class="note-title">Vector Calculus Notes</div>
-        <p class="note-desc">
-          Concepts from multivariable calculus used in physics and biology. Covers line integrals,
-          surface integrals, Green's, Stokes', and the Divergence Theorem.
-        </p>
-        <div class="note-status">Status: In preparation</div>
-        <button class="note-btn" disabled>Coming Soon</button>
-      </div>
+    <!-- ── ADMIN PANEL (hidden by default) ── -->
+    <div id="admin-panel" style="display:none;background:#0d0d0b;border:1px solid #1e1e1c;padding:32px;margin-bottom:48px;position:relative;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);"></div>
 
-      <div class="note-card fade-in stagger-1">
-        <div class="note-icon">λ</div>
-        <div class="note-subject">Mathematics · Linear Algebra</div>
-        <div class="note-title">Linear Algebra & Eigenspaces</div>
-        <p class="note-desc">
-          From vector spaces to diagonalization. Emphasizes geometric intuition alongside
-          algebraic formalism. Includes proofs of major theorems.
-        </p>
-        <div class="note-status">Status: In preparation</div>
-        <button class="note-btn" disabled>Coming Soon</button>
-      </div>
-
-      <div class="note-card fade-in stagger-2">
-        <div class="note-icon">ε</div>
-        <div class="note-subject">Real Analysis</div>
-        <div class="note-title">Sequences, Series & Continuity</div>
-        <p class="note-desc">
-          Rigorous treatment of limits and continuity. Each ε-δ proof written in full with
-          intuitive motivation. Suitable for first-year BS-MS students.
-        </p>
-        <div class="note-status">Status: In preparation</div>
-        <button class="note-btn" disabled>Coming Soon</button>
-      </div>
-
-      <div class="note-card fade-in stagger-3">
-        <div class="note-icon">∂</div>
-        <div class="note-subject">Differential Equations</div>
-        <div class="note-title">ODE Methods & Applications</div>
-        <p class="note-desc">
-          First and second order ODEs with applications to biological models. Includes
-          Euler's method, exact equations, and Laplace transforms.
-        </p>
-        <div class="note-status">Status: In preparation</div>
-        <button class="note-btn" disabled>Coming Soon</button>
-      </div>
-
-      <div class="note-card fade-in">
-        <div class="note-icon">∑</div>
-        <div class="note-subject">Probability & Statistics</div>
-        <div class="note-title">Probability Theory Primer</div>
-        <p class="note-desc">
-          Foundations of probability, distributions, and statistical inference. Written for
-          students applying probability to machine learning and biological data analysis.
-        </p>
-        <div class="note-status">Status: Planned</div>
-        <button class="note-btn" disabled>Coming Soon</button>
-      </div>
-
-      <!-- placeholder -->
-      <div class="note-card fade-in stagger-1" style="border:2px dashed var(--light-grey);background:transparent;justify-content:center;align-items:center;text-align:center;min-height:180px;">
-        <div style="color:var(--mid-grey);font-size:12px;letter-spacing:2px;text-transform:uppercase;">
-          <div style="font-family:var(--font-display);font-size:40px;margin-bottom:8px;color:var(--light-grey);">+</div>
-          More Notes<br>Added Regularly
+      <!-- LOGIN -->
+      <div id="admin-login">
+        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#444;margin-bottom:20px;">Admin Access</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input id="admin-pw" type="password" placeholder="Enter password"
+            style="padding:10px 16px;background:#080808;border:1px solid #222;color:white;
+                   font-family:var(--font-mono);font-size:12px;outline:none;width:240px;"
+            onkeydown="if(event.key==='Enter')checkAdminPw()">
+          <button onclick="checkAdminPw()"
+            style="padding:10px 20px;background:var(--accent);color:white;border:none;
+                   font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">
+            Unlock →
+          </button>
         </div>
+        <div id="admin-pw-err" style="color:#e05;font-size:11px;margin-top:10px;display:none;">Incorrect password.</div>
       </div>
 
-    </div><!-- /notes-grid -->
+      <!-- PANEL CONTENT (shown after login) -->
+      <div id="admin-content" style="display:none;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">Note Manager</div>
+          <button onclick="lockAdmin()"
+            style="padding:5px 12px;background:transparent;border:1px solid #333;color:#555;
+                   font-family:var(--font-mono);font-size:9px;letter-spacing:1px;cursor:pointer;">
+            Lock
+          </button>
+        </div>
+
+        <!-- ADD FORM -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">Semester</div>
+            <input id="f-sem" placeholder="e.g. Semester 1" style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">Topic / Subject</div>
+            <input id="f-topic" placeholder="e.g. Vector Calculus" style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">Description</div>
+            <input id="f-desc" placeholder="Short description" style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">PDF Link (Google Drive / any URL)</div>
+            <input id="f-link" placeholder="https://drive.google.com/..." style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
+          </div>
+        </div>
+        <button onclick="addNote()"
+          style="padding:10px 24px;background:var(--accent);color:white;border:none;
+                 font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:28px;">
+          + Add Note
+        </button>
+
+        <!-- EXISTING NOTES LIST -->
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#333;margin-bottom:12px;">Existing Notes</div>
+        <div id="admin-notes-list"></div>
+      </div>
+    </div><!-- /admin-panel -->
+
+    <!-- ── SEMESTER TABS ── -->
+    <div id="semester-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px;"></div>
+
+    <!-- ── NOTES DISPLAY ── -->
+    <div id="notes-display" class="notes-grid"></div>
+
   </div>
 </section>
 
@@ -856,43 +899,216 @@
 <button class="theme-toggle" title="Toggle dark/light mode">◑</button>
 <script src="script.js"></script>
 <script>
-/* ── PAGE VIEW COUNTER ── */
+/* ══════════════════════════════════════════
+   PAGE VIEW COUNTER
+══════════════════════════════════════════ */
 (function(){
   const KEY = 'teaching_page_views';
   const BASE = 429;
   let stored = parseInt(localStorage.getItem(KEY), 10);
-  if (isNaN(stored) || stored < BASE) { stored = BASE; }
+  if (isNaN(stored) || stored < BASE) stored = BASE;
   stored += 1;
   localStorage.setItem(KEY, stored);
-
-  function formatNum(n) {
-    return n.toLocaleString();
-  }
-
-  const el = document.getElementById('view-num');
+  const el  = document.getElementById('view-num');
   const fel = document.getElementById('footer-views');
-
-  /* Animated count-up */
-  const start = Math.max(BASE, stored - 60);
-  const end = stored;
-  const duration = 1200;
-  const startTime = performance.now();
-
-  function tick(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = Math.round(start + (end - start) * eased);
-    if (el) el.textContent = formatNum(current);
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      if (el) el.textContent = formatNum(end);
-      if (fel) fel.textContent = 'Page Views: ' + formatNum(end);
+  const start = Math.max(BASE, stored - 60), end = stored;
+  const t0 = performance.now();
+  function tick(now){
+    const p = Math.min((now-t0)/1200,1), e = 1-Math.pow(1-p,3);
+    const cur = Math.round(start+(end-start)*e);
+    if(el)  el.textContent  = cur.toLocaleString();
+    if(p<1){ requestAnimationFrame(tick); }
+    else {
+      if(el)  el.textContent  = end.toLocaleString();
+      if(fel) fel.textContent = 'Page Views: '+end.toLocaleString();
     }
   }
   requestAnimationFrame(tick);
 })();
+
+/* ══════════════════════════════════════════
+   NOTES MANAGER
+   Storage key: 'axl_notes'  →  JSON array
+   Each note: { id, semester, topic, desc, link }
+══════════════════════════════════════════ */
+const NOTES_KEY   = 'axl_notes';
+const ADMIN_KEY   = 'axl_admin_unlocked';
+/* ⚠️  Change this password to whatever you want */
+const ADMIN_PASS  = 'iiser2025';
+
+/* ── helpers ── */
+function loadNotes(){ return JSON.parse(localStorage.getItem(NOTES_KEY)||'[]'); }
+function saveNotes(arr){ localStorage.setItem(NOTES_KEY, JSON.stringify(arr)); }
+
+/* ── derive math icon from topic name ── */
+function iconFor(topic){
+  const t = topic.toLowerCase();
+  if(t.includes('calculus')||t.includes('vector')) return '∇';
+  if(t.includes('linear')||t.includes('matrix')||t.includes('eigen')) return 'λ';
+  if(t.includes('analysis')||t.includes('real')) return 'ε';
+  if(t.includes('diff')||t.includes('ode')) return '∂';
+  if(t.includes('prob')||t.includes('stat')) return '∑';
+  if(t.includes('physics')) return 'Φ';
+  if(t.includes('bio')) return '∮';
+  if(t.includes('topology')) return 'τ';
+  return '∫';
+}
+
+/* ── render semester tabs ── */
+function renderTabs(notes, activeSem){
+  const sems = [...new Set(notes.map(n=>n.semester))];
+  const tabEl = document.getElementById('semester-tabs');
+  if(!tabEl) return;
+  if(sems.length===0){
+    tabEl.innerHTML = '<div style="font-size:12px;color:var(--mid-grey);letter-spacing:2px;text-transform:uppercase;">No notes yet. Add some via the Admin panel.</div>';
+    return;
+  }
+  tabEl.innerHTML = sems.map(s=>`
+    <button onclick="selectSemester('${s}')"
+      style="padding:8px 18px;background:${s===activeSem?'var(--black)':'transparent'};
+             color:${s===activeSem?'var(--white)':'var(--dark-grey)'};
+             border:1px solid ${s===activeSem?'var(--black)':'var(--light-grey)'};
+             font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+             text-transform:uppercase;cursor:pointer;transition:all .2s;">
+      ${s}
+    </button>`).join('');
+}
+
+/* ── render notes grid for a semester ── */
+function renderNotes(notes, sem){
+  const el = document.getElementById('notes-display');
+  if(!el) return;
+  const filtered = notes.filter(n=>n.semester===sem);
+  if(filtered.length===0){
+    el.innerHTML = '<div style="font-size:12px;color:var(--mid-grey);padding:24px 0;">No notes for this semester yet.</div>';
+    return;
+  }
+  el.innerHTML = filtered.map(n=>`
+    <div class="note-card">
+      <div class="note-icon">${iconFor(n.topic)}</div>
+      <div class="note-subject">${n.semester} · IISER Tirupati</div>
+      <div class="note-title">${n.topic}</div>
+      <p class="note-desc">${n.desc||'—'}</p>
+      ${n.link
+        ? `<a href="${n.link}" target="_blank" class="note-btn note-btn-ready">Download PDF ↗</a>`
+        : `<button class="note-btn" disabled>Coming Soon</button>`
+      }
+    </div>`).join('');
+}
+
+/* ── select semester tab ── */
+let _activeSem = null;
+function selectSemester(sem){
+  _activeSem = sem;
+  const notes = loadNotes();
+  renderTabs(notes, sem);
+  renderNotes(notes, sem);
+}
+
+/* ── initial render ── */
+function initNotes(){
+  const notes = loadNotes();
+  const sems  = [...new Set(notes.map(n=>n.semester))];
+  const first = sems[0]||null;
+  _activeSem  = first;
+  renderTabs(notes, first);
+  if(first) renderNotes(notes, first);
+  else document.getElementById('notes-display').innerHTML='';
+}
+initNotes();
+
+/* ══════════════════════════════════════════
+   ADMIN PANEL
+══════════════════════════════════════════ */
+function toggleAdminPanel(){
+  const panel = document.getElementById('admin-panel');
+  const open  = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : 'block';
+  if(!open){ // just opened
+    const unlocked = sessionStorage.getItem(ADMIN_KEY)==='1';
+    document.getElementById('admin-login').style.display   = unlocked ? 'none' : 'block';
+    document.getElementById('admin-content').style.display = unlocked ? 'block': 'none';
+    if(unlocked) renderAdminList();
+  }
+}
+
+function checkAdminPw(){
+  const val = document.getElementById('admin-pw').value;
+  if(val === ADMIN_PASS){
+    sessionStorage.setItem(ADMIN_KEY,'1');
+    document.getElementById('admin-login').style.display   = 'none';
+    document.getElementById('admin-content').style.display = 'block';
+    document.getElementById('admin-pw-err').style.display  = 'none';
+    renderAdminList();
+  } else {
+    document.getElementById('admin-pw-err').style.display  = 'block';
+    document.getElementById('admin-pw').value = '';
+  }
+}
+
+function lockAdmin(){
+  sessionStorage.removeItem(ADMIN_KEY);
+  document.getElementById('admin-panel').style.display    = 'none';
+}
+
+function addNote(){
+  const sem   = document.getElementById('f-sem').value.trim();
+  const topic = document.getElementById('f-topic').value.trim();
+  const desc  = document.getElementById('f-desc').value.trim();
+  const link  = document.getElementById('f-link').value.trim();
+  if(!sem||!topic){ alert('Semester and Topic are required.'); return; }
+  const notes = loadNotes();
+  notes.push({ id: Date.now(), semester:sem, topic, desc, link });
+  saveNotes(notes);
+  /* clear fields */
+  ['f-sem','f-topic','f-desc','f-link'].forEach(id=>document.getElementById(id).value='');
+  renderAdminList();
+  /* refresh public view */
+  const sems = [...new Set(notes.map(n=>n.semester))];
+  if(!_activeSem || !sems.includes(_activeSem)) _activeSem = sems[0];
+  renderTabs(notes, _activeSem);
+  renderNotes(notes, _activeSem);
+}
+
+function deleteNote(id){
+  if(!confirm('Delete this note?')) return;
+  const notes = loadNotes().filter(n=>n.id!==id);
+  saveNotes(notes);
+  renderAdminList();
+  const sems = [...new Set(notes.map(n=>n.semester))];
+  if(!sems.includes(_activeSem)) _activeSem = sems[0]||null;
+  renderTabs(notes, _activeSem);
+  if(_activeSem) renderNotes(notes, _activeSem);
+  else document.getElementById('notes-display').innerHTML='';
+}
+
+function renderAdminList(){
+  const notes = loadNotes();
+  const el    = document.getElementById('admin-notes-list');
+  if(!el) return;
+  if(notes.length===0){
+    el.innerHTML='<div style="color:#444;font-size:12px;">No notes added yet.</div>';
+    return;
+  }
+  el.innerHTML = notes.map(n=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;
+                padding:10px 14px;background:#080808;border:1px solid #181816;
+                margin-bottom:4px;gap:12px;flex-wrap:wrap;">
+      <div>
+        <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);">${n.semester}</span>
+        <span style="font-size:12px;color:white;margin-left:12px;">${n.topic}</span>
+        ${n.link ? '<span style="font-size:9px;color:#555;margin-left:8px;">has link</span>' : ''}
+      </div>
+      <button onclick="deleteNote(${n.id})"
+        style="padding:4px 12px;background:transparent;border:1px solid #333;
+               color:#555;font-family:var(--font-mono);font-size:9px;cursor:pointer;
+               letter-spacing:1px;transition:all .2s;"
+        onmouseover="this.style.borderColor='#e05';this.style.color='#e05';"
+        onmouseout="this.style.borderColor='#333';this.style.color='#555';">
+        Delete
+      </button>
+    </div>`).join('');
+}
 </script>
 </body>
 </html>
