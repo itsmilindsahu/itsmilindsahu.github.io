@@ -1,288 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teaching & Research Portfolio — Milind Sahu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching & Research — Milind Sahu</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
-  <!-- MathJax -->
   <script>
     MathJax = {
-      tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
-      startup: { typeset: true }
+      tex: { inlineMath:[['$','$']], displayMath:[['$$','$$']] },
+      options: { skipHtmlTags:['script','noscript','style','textarea'] }
     };
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous" defer></script>
   <style>
-    /* ── PAGE HERO ── */
-    .teach-hero {
-      min-height: 52vh;
-      background: var(--black);
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .teach-hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(26,86,219,.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(26,86,219,.07) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-    .teach-hero-glow {
-      position: absolute; top: 50%; left: 30%;
-      width: 600px; height: 600px;
-      transform: translate(-50%,-50%);
-      background: radial-gradient(circle, rgba(26,86,219,.14) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .teach-hero-inner {
-      position: relative; z-index: 1;
-      max-width: var(--max-w); margin: 0 auto;
-      padding: 0 48px; width: 100%;
-    }
-    .teach-eyebrow {
-      font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 16px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .teach-eyebrow::before { content:''; display:block; width:28px; height:1px; background:var(--accent); }
-    .teach-title {
-      font-family: var(--font-display);
-      font-size: clamp(52px, 8vw, 100px);
-      line-height: .88; color: var(--white);
-      letter-spacing: 3px; margin-bottom: 20px;
-    }
-    .teach-title span { color: var(--accent); }
-    .teach-subtitle {
-      font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
-      color: #555; max-width: 600px; line-height: 1.9;
-    }
 
-    /* ── NAV override for dark pages ── */
-    nav.dark-nav { background: rgba(13,13,11,.96)!important; border-bottom-color: #1a1a18!important; }
-    nav.dark-nav .name-full { color: var(--white)!important; }
-    nav.dark-nav .nav-links a { color: #555!important; }
+    /* ── NAV DARK ── */
+    nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
+    nav.dark-nav .name-full{color:#fff!important;}
+    nav.dark-nav .nav-links a{color:#666!important;}
     nav.dark-nav .nav-links a:hover,
-    nav.dark-nav .nav-links a.active { color: var(--white)!important; }
-    nav.dark-nav .hamburger span { background: var(--white)!important; }
+    nav.dark-nav .nav-links a.active{color:#fff!important;}
+    nav.dark-nav .hamburger span{background:#fff!important;}
 
-    /* ── SECTION WRAPPERS ── */
-    .section-light { background: var(--off-white); }
-    .section-white { background: var(--white); }
-    .section-dark  { background: #080808; }
+    /* ── HERO ── */
+    .th-hero{
+      min-height:56vh;background:var(--black);
+      display:flex;align-items:center;position:relative;overflow:hidden;
+    }
+    .th-grid{
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);
+      background-size:48px 48px;
+    }
+    .th-glow{
+      position:absolute;top:50%;left:25%;width:640px;height:640px;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle,rgba(26,86,219,.13) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .th-inner{
+      position:relative;z-index:1;
+      max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;
+    }
+    .th-eyebrow{
+      font-size:10px;letter-spacing:4px;text-transform:uppercase;
+      color:var(--accent);margin-bottom:16px;
+      display:flex;align-items:center;gap:12px;
+    }
+    .th-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent);}
+    .th-h1{
+      font-family:var(--font-display);
+      font-size:clamp(56px,9vw,110px);
+      line-height:.88;color:#fff;letter-spacing:3px;margin-bottom:20px;
+    }
+    .th-h1 span{color:var(--accent);}
+    .th-sub{
+      font-size:12px;letter-spacing:3px;text-transform:uppercase;
+      color:#666;max-width:560px;line-height:2;
+    }
+    .th-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px;}
+    .th-pill{
+      padding:8px 18px;background:transparent;border:1px solid #222;
+      font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;color:#666;transition:all .2s;text-decoration:none;
+    }
+    .th-pill:hover{border-color:var(--accent);color:var(--accent);}
 
-    /* ── TUTORIAL CARDS ── */
-    .tutorials-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2px; background: var(--light-grey);
+    /* ── PHOTO STRIP ── */
+    .photo-strip{display:grid;grid-template-columns:1fr 1fr;background:var(--black);}
+    .photo-strip-item{position:relative;overflow:hidden;height:400px;}
+    .photo-strip-item img{
+      width:100%;height:100%;object-fit:cover;
+      display:block;opacity:.8;transition:opacity .4s,transform .5s;
     }
-    .tutorial-card {
-      background: var(--white);
-      padding: 30px 28px;
-      display: flex; flex-direction: column; gap: 10px;
-      transition: background .2s;
-      position: relative;
+    .photo-strip-item:hover img{opacity:1;transform:scale(1.03);}
+    .ps-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 52%);
     }
-    .tutorial-card::before {
-      content: ''; position: absolute; top: 0; left: 0;
-      width: 3px; height: 0; background: var(--accent);
-      transition: height .3s;
+    .ps-cap{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;}
+    .ps-tag{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--accent);margin-bottom:6px;
     }
-    .tutorial-card:hover { background: var(--off-white); }
-    .tutorial-card:hover::before { height: 100%; }
-    .tutorial-num {
-      font-family: var(--font-display); font-size: 40px;
-      color: var(--light-grey); line-height: 1;
+    .ps-title{
+      font-family:var(--font-display);font-size:20px;
+      color:#fff;letter-spacing:2px;
     }
-    .tutorial-topic {
-      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--accent);
+    .ps-detail{font-size:11px;color:#777;margin-top:4px;}
+    .ps-bar{
+      background:var(--black);border-top:1px solid #111;
+      padding:18px 48px;display:flex;align-items:center;
+      justify-content:space-between;flex-wrap:wrap;gap:12px;
     }
-    .tutorial-title { font-size: 15px; font-weight: 700; color: var(--black); }
-    .tutorial-desc { font-size: 12px; color: var(--dark-grey); line-height: 1.85; flex: 1; }
-    .tutorial-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 9px 18px; background: var(--black); color: var(--white);
-      border: 1px solid var(--black); font-family: var(--font-mono);
-      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      transition: all .2s; align-self: flex-start; margin-top: 4px;
+    .ps-bar span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;}
+    .ps-bar a{
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;
     }
-    .tutorial-btn:hover { background: var(--accent); border-color: var(--accent); }
-    .tutorial-btn-ghost {
-      background: transparent; color: var(--dark-grey); border-color: var(--light-grey);
+
+    /* ── SECTION LABEL ── */
+    .sec-lbl{
+      font-size:10px;letter-spacing:4px;text-transform:uppercase;
+      color:var(--mid-grey);display:flex;align-items:center;gap:12px;margin-bottom:48px;
     }
-    .tutorial-btn-ghost:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+    .sec-lbl::before{content:'';width:32px;height:1px;background:var(--mid-grey);}
+    .sec-lbl .num{color:var(--accent);}
+
+    /* ── TUTORIALS ── */
+    #tutorials{background:var(--off-white);}
+    .tut-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:2px;background:var(--light-grey);
+    }
+    .tut-card{
+      background:var(--white);padding:28px 24px;
+      display:flex;flex-direction:column;gap:10px;
+      position:relative;transition:background .2s;
+    }
+    .tut-card::before{
+      content:'';position:absolute;top:0;left:0;
+      width:0;height:3px;background:var(--accent);transition:width .3s;
+    }
+    .tut-card:hover{background:#f9f9f6;}
+    .tut-card:hover::before{width:100%;}
+    .tut-num{
+      font-family:var(--font-display);font-size:36px;
+      color:var(--light-grey);line-height:1;
+    }
+    .tut-sem{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);
+    }
+    .tut-title{font-size:14px;font-weight:700;color:var(--black);}
+    .tut-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;flex:1;}
+    .tut-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:8px 16px;background:var(--black);color:#fff;
+      border:1px solid var(--black);font-family:var(--font-mono);
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      transition:all .2s;align-self:flex-start;margin-top:4px;text-decoration:none;
+    }
+    .tut-btn:hover{background:var(--accent);border-color:var(--accent);}
+    .tut-btn.soon{
+      background:transparent;color:var(--mid-grey);
+      border-color:var(--light-grey);cursor:default;pointer-events:none;
+    }
+
+    /* ── ADMIN ZONE ── */
+    #admin-zone{
+      display:none;background:#0a0a08;border:1px solid #1e1e1c;
+      padding:32px;margin-top:40px;position:relative;
+    }
+    #admin-zone::before{
+      content:'';position:absolute;top:0;left:0;right:0;
+      height:2px;background:linear-gradient(90deg,var(--accent),transparent);
+    }
+    .adm-lbl{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-bottom:6px;
+    }
+    .adm-inp{
+      width:100%;padding:9px 12px;background:#080808;
+      border:1px solid #1e1e1c;color:#fff;
+      font-family:var(--font-mono);font-size:12px;outline:none;
+      transition:border-color .2s;
+    }
+    .adm-inp:focus{border-color:var(--accent);}
+    .adm-inp::placeholder{color:#2a2a28;}
+    .adm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    .adm-btn{
+      padding:10px 24px;background:var(--accent);color:#fff;border:none;
+      font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;cursor:pointer;transition:background .2s;
+    }
+    .adm-btn:hover{background:var(--accent-2);}
+    .adm-btn.sm{
+      padding:4px 12px;background:transparent;color:#555;
+      border:1px solid #333;font-size:9px;
+    }
+    .adm-btn.sm:hover{border-color:#e04;color:#e04;}
+    .adm-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 14px;background:#080808;border:1px solid #161614;
+      margin-bottom:3px;flex-wrap:wrap;gap:8px;
+    }
+    .adm-row-info{font-size:12px;color:#ccc;}
+    .adm-row-sem{
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--accent);margin-right:10px;
+    }
+
+    /* ── PATTERNS ── */
+    #patterns{background:var(--white);}
+    .pat-wrap{position:relative;max-width:520px;margin-bottom:32px;}
+    .pat-sel{
+      width:100%;padding:14px 44px 14px 18px;
+      background:var(--off-white);border:1px solid var(--light-grey);
+      border-left:3px solid var(--accent);
+      font-family:var(--font-mono);font-size:12px;color:var(--black);
+      appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;
+    }
+    .pat-arrow{
+      position:absolute;right:16px;top:50%;transform:translateY(-50%);
+      color:var(--accent);font-size:12px;pointer-events:none;
+    }
+    .pat-box{
+      background:var(--off-white);border:1px solid var(--light-grey);
+      border-left:3px solid var(--accent);
+      padding:32px 36px;display:none;
+    }
+    .pat-box.on{display:block;}
+    .pat-tag{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--accent);margin-bottom:10px;
+    }
+    .pat-title{font-size:17px;font-weight:700;color:var(--black);margin-bottom:12px;}
+    .pat-desc{font-size:13px;color:var(--dark-grey);line-height:1.9;margin-bottom:20px;}
+    .pat-formula{
+      background:var(--white);border:1px solid var(--light-grey);
+      padding:20px 24px;overflow-x:auto;color:var(--black);
+    }
 
     /* ── MB LEARNERS ── */
-    .mb-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
-    .mb-text p { font-size: 13px; color: var(--dark-grey); margin-bottom: 16px; line-height: 1.95; }
-    .mb-text p strong { color: var(--black); }
-    .mb-text blockquote {
-      border-left: 3px solid var(--accent); padding: 14px 20px;
-      background: var(--white); margin: 24px 0;
-      font-size: 13px; color: var(--dark-grey); font-style: italic;
-      line-height: 1.85;
+    #mb-learners{background:var(--off-white);}
+    .mb-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start;}
+    .mb-text p{font-size:13px;color:var(--dark-grey);margin-bottom:16px;line-height:1.95;}
+    .mb-text p strong{color:var(--black);}
+    .mb-quote{
+      border-left:3px solid var(--accent);padding:14px 20px;
+      background:var(--white);margin:24px 0;
+      font-size:13px;color:var(--dark-grey);font-style:italic;line-height:1.85;
     }
-    .mb-features { display: flex; flex-direction: column; gap: 2px; }
-    .mb-feature {
-      background: var(--white); padding: 22px 24px;
-      border-left: 3px solid transparent; transition: border-color .2s;
+    .mb-feats{display:flex;flex-direction:column;gap:2px;}
+    .mb-feat{
+      background:var(--white);padding:20px 22px;
+      border-left:3px solid transparent;transition:border-color .2s;
     }
-    .mb-feature:hover { border-left-color: var(--accent); }
-    .mb-feature-icon { font-family: var(--font-display); font-size: 32px; color: var(--accent); line-height: 1; margin-bottom: 8px; }
-    .mb-feature-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-    .mb-feature-desc { font-size: 12px; color: var(--dark-grey); line-height: 1.8; }
-    .mb-stat-row { display: flex; gap: 2px; background: var(--light-grey); margin-top: 32px; }
-    .mb-stat { background: var(--black); padding: 22px 28px; flex: 1; text-align: center; }
-    .mb-stat-num { font-family: var(--font-display); font-size: 48px; color: var(--white); line-height: 1; }
-    .mb-stat-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #444; margin-top: 4px; }
+    .mb-feat:hover{border-left-color:var(--accent);}
+    .mb-feat-icon{
+      font-family:var(--font-display);font-size:30px;
+      color:var(--accent);line-height:1;margin-bottom:8px;
+    }
+    .mb-feat-title{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--black);}
+    .mb-feat-desc{font-size:12px;color:var(--dark-grey);line-height:1.8;}
+    .mb-stats{display:flex;gap:2px;background:var(--light-grey);margin-top:28px;}
+    .mb-stat{background:var(--black);padding:20px 24px;flex:1;text-align:center;}
+    .mb-stat-n{font-family:var(--font-display);font-size:44px;color:#fff;line-height:1;}
+    .mb-stat-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-top:4px;}
 
-    /* ── TEACHING GALLERY ── */
-    .teach-gallery {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px; margin-top: 40px;
+    /* ── FOOTER VIEWS BAR ── */
+    .pv-bar{
+      background:var(--black);padding:36px 48px;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:16px;border-top:1px solid #111;
     }
-    .teach-gallery-item { position: relative; overflow: hidden; background: var(--black); }
-    .teach-gallery-item img {
-      width: 100%; height: 280px; object-fit: cover;
-      display: block; transition: transform .5s, opacity .3s;
-      opacity: .9;
+    .pv-lbl{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;}
+    .pv-num{
+      font-family:var(--font-display);font-size:48px;
+      color:#fff;letter-spacing:4px;line-height:1;
     }
-    .teach-gallery-item:hover img { transform: scale(1.04); opacity: 1; }
-    .teach-gallery-caption {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(transparent, rgba(0,0,0,.85));
-      padding: 20px 16px 14px;
-      font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
-      color: rgba(255,255,255,.7);
-    }
-
-    /* ── MATH PATTERNS ── */
-    .patterns-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2px; background: var(--light-grey);
-    }
-    .pattern-card {
-      background: var(--off-white); padding: 28px 26px;
-      transition: background .2s; position: relative;
-    }
-    .pattern-card:hover { background: var(--white); }
-    .pattern-tag {
-      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 10px;
-    }
-    .pattern-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
-    .pattern-desc { font-size: 12px; color: var(--dark-grey); line-height: 1.85; margin-bottom: 14px; }
-    .pattern-formula {
-      background: var(--white); border: 1px solid var(--light-grey);
-      padding: 14px 18px; font-size: 13px; color: var(--black);
-      border-left: 3px solid var(--accent);
-      overflow-x: auto;
-    }
-
-    /* ── LECTURE NOTES ── */
-    .notes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 2px; background: var(--light-grey);
-    }
-    .note-card {
-      background: var(--white); padding: 26px 24px;
-      display: flex; flex-direction: column; gap: 8px;
-      transition: background .2s;
-    }
-    .note-card:hover { background: var(--off-white); }
-    .note-icon {
-      font-family: var(--font-display); font-size: 36px;
-      color: var(--accent); line-height: 1;
-    }
-    .note-subject {
-      font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-      color: var(--mid-grey);
-    }
-    .note-title { font-size: 14px; font-weight: 700; color: var(--black); }
-    .note-desc { font-size: 12px; color: var(--dark-grey); line-height: 1.8; flex: 1; }
-    .note-status {
-      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--mid-grey); padding: 4px 0;
-    }
-    .note-btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 16px; background: transparent; color: var(--dark-grey);
-      border: 1px solid var(--light-grey); font-family: var(--font-mono);
-      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      transition: all .2s; align-self: flex-start; cursor: pointer;
-    }
-    .note-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
-    .note-btn-ready {
-      background: var(--black); color: var(--white); border-color: var(--black);
-    }
-    .note-btn-ready:hover { background: var(--accent); border-color: var(--accent); }
-
-    /* ── RESEARCH INTERESTS ── */
-    .research-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
-    .research-text p { font-size: 13px; color: var(--dark-grey); margin-bottom: 16px; line-height: 1.95; }
-    .research-text p strong { color: var(--black); }
-    .research-areas { display: flex; flex-direction: column; gap: 2px; }
-    .research-area {
-      background: var(--off-white); padding: 20px 22px;
-      border-left: 3px solid var(--light-grey);
-      transition: border-color .2s, background .2s;
-      display: flex; align-items: flex-start; gap: 16px;
-    }
-    .research-area:hover { border-left-color: var(--accent); background: var(--white); }
-    .research-area-num {
-      font-family: var(--font-display); font-size: 28px;
-      color: var(--accent); line-height: 1; flex-shrink: 0; width: 32px;
-    }
-    .research-area-body {}
-    .research-area-title { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
-    .research-area-desc { font-size: 12px; color: var(--dark-grey); line-height: 1.75; }
-
-    /* ── PAGE ANALYTICS ── */
-    .analytics-bar {
-      background: var(--black); padding: 48px 0; text-align: center;
-    }
-    .analytics-inner { max-width: var(--max-w); margin: 0 auto; padding: 0 48px; }
-    .analytics-label {
-      font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
-      color: #333; margin-bottom: 16px;
-    }
-    .analytics-counter {
-      font-family: var(--font-display); font-size: clamp(48px, 8vw, 88px);
-      color: var(--white); letter-spacing: 6px; line-height: 1;
-    }
-    .analytics-counter span { color: var(--accent); }
-    .analytics-sublabel {
-      font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-      color: #333; margin-top: 12px;
-    }
+    .pv-num span{color:var(--accent);}
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .teach-hero-inner { padding: 0 20px; }
-      .mb-layout { grid-template-columns: 1fr; gap: 40px; }
-      .research-layout { grid-template-columns: 1fr; gap: 40px; }
-      .teach-gallery { grid-template-columns: 1fr; }
-      .tutorial-card { padding: 22px 18px; }
-      .container { padding: 0 20px; }
+    @media(max-width:900px){
+      .tut-grid{grid-template-columns:repeat(2,1fr);}
+      .mb-grid{grid-template-columns:1fr;gap:40px;}
+      .photo-strip{grid-template-columns:1fr;}
     }
-
-    /* ── COMING SOON BADGE ── */
-    .badge-soon {
-      display: inline-block; padding: 3px 10px;
-      background: #f0f0ec; border: 1px solid var(--light-grey);
-      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--mid-grey); margin-left: 8px; vertical-align: middle;
-    }
-    .badge-live {
-      background: rgba(26,86,219,.08); border-color: var(--accent);
-      color: var(--accent);
+    @media(max-width:600px){
+      .tut-grid{grid-template-columns:1fr;}
+      .th-inner,.ps-bar{padding-left:20px;padding-right:20px;}
+      .pv-bar{padding:24px 20px;}
+      .adm-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -299,7 +290,7 @@
         <line x1="20" y1="4" x2="15" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/>
       </svg>
     </div>
-    <span class="name-full" style="color:white">MILIND <span>SAHU</span></span>
+    <span class="name-full" style="color:#fff">MILIND <span>SAHU</span></span>
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -314,559 +305,243 @@
 
 <main>
 
-<!-- ═══════════════════════════════════════════
-     HERO
-════════════════════════════════════════════ -->
-<div class="teach-hero">
-  <div class="teach-hero-grid"></div>
-  <div class="teach-hero-glow"></div>
-  <div class="teach-hero-inner">
-    <div class="teach-eyebrow fade-in">Teaching &amp; Research Portfolio</div>
-    <h1 class="teach-title fade-in stagger-1">TEACHING<br><span>&amp; THEORY</span></h1>
-    <p class="teach-subtitle fade-in stagger-2">
-      Tutorials · Peer Learning · Mathematical Insights · Lecture Notes · Research Interests
-    </p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:32px;" class="fade-in stagger-3">
-      <a href="#tutorials" class="btn btn-primary">View Tutorials →</a>
-      <a href="#mb-learners" class="btn btn-ghost">MB Learners</a>
-      <a href="#research-interests" class="btn btn-ghost">Research</a>
+<!-- ══ HERO ══ -->
+<div class="th-hero">
+  <div class="th-grid"></div>
+  <div class="th-glow"></div>
+  <div class="th-inner">
+    <div class="th-eyebrow fade-in">Teaching &amp; Research Portfolio</div>
+    <h1 class="th-h1 fade-in stagger-1">TEACHING<br><span>&amp; THEORY</span></h1>
+    <p class="th-sub fade-in stagger-2">Tutorials · Mathematical Patterns · Peer Learning</p>
+    <div class="th-pills fade-in stagger-3">
+      <a href="#tutorials"  class="th-pill">Tutorials</a>
+      <a href="#patterns"   class="th-pill">Math Patterns</a>
+      <a href="#mb-learners"class="th-pill">MB Learners</a>
     </div>
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════
-     SECTION 0 — SESSIONS (PHOTOS FIRST)
-════════════════════════════════════════════ -->
-<section id="sessions" style="background:var(--black);padding:0;">
-  <div style="display:grid;grid-template-columns:1fr 1fr;">
-    <div style="position:relative;overflow:hidden;height:420px;">
-      <img src="teaching-img1.jpg" alt="MB Learners — Vector Calculus Session"
-           style="width:100%;height:100%;object-fit:cover;display:block;opacity:.85;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);"></div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:28px 32px;">
-        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">MB Learners · IISER Tirupati</div>
-        <div style="font-family:var(--font-display);font-size:22px;color:white;letter-spacing:2px;">Vector Calculus Session</div>
-        <div style="font-size:11px;color:#666;margin-top:4px;">Line Integrals · Spherical &amp; Cylindrical Systems</div>
-      </div>
-    </div>
-    <div style="position:relative;overflow:hidden;height:420px;">
-      <img src="teaching-img2.jpg" alt="MB Learners — Mathematics Tutorial"
-           style="width:100%;height:100%;object-fit:cover;display:block;opacity:.85;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);"></div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:28px 32px;">
-        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">MB Learners · IISER Tirupati</div>
-        <div style="font-family:var(--font-display);font-size:22px;color:white;letter-spacing:2px;">Mathematics Tutorial</div>
-        <div style="font-size:11px;color:#666;margin-top:4px;">Sets · Functions · Continuity &amp; Countability</div>
-      </div>
+<!-- ══ PHOTO STRIP ══ -->
+<div class="photo-strip">
+  <div class="photo-strip-item">
+    <img src="teaching-img1.jpg" alt="Vector Calculus session">
+    <div class="ps-overlay"></div>
+    <div class="ps-cap">
+      <div class="ps-tag">MB Learners · IISER Tirupati</div>
+      <div class="ps-title">Vector Calculus Session</div>
+      <div class="ps-detail">Line Integrals · Spherical &amp; Cylindrical Systems</div>
     </div>
   </div>
-  <div style="max-width:var(--max-w);margin:0 auto;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;border-top:1px solid #111;">
-    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;">
-      Peer Learning · 30+ Students · IISER Tirupati · 2024–Present
+  <div class="photo-strip-item">
+    <img src="teaching-img2.jpg" alt="Mathematics tutorial">
+    <div class="ps-overlay"></div>
+    <div class="ps-cap">
+      <div class="ps-tag">MB Learners · IISER Tirupati</div>
+      <div class="ps-title">Mathematics Tutorial</div>
+      <div class="ps-detail">Sets · Functions · Continuity &amp; Countability</div>
     </div>
-    <a href="#mb-learners" style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;">
-      Read More About MB Learners →
-    </a>
   </div>
-</section>
+</div>
+<div class="ps-bar">
+  <span>Peer Learning · 30+ Students · 2024–Present</span>
+  <a href="#mb-learners">About MB Learners →</a>
+</div>
 
 
-<!-- ═══════════════════════════════════════════
-     SECTION 1 — TUTORIALS
-════════════════════════════════════════════ -->
-<section id="tutorials" class="section-light">
+<!-- ══════════════════════════════════
+     01 — TUTORIALS
+═════════════════════════════════════ -->
+<section id="tutorials">
   <div class="container">
-    <p class="section-label"><span class="num">01</span> Tutorials</p>
-    <div style="max-width:640px;margin-bottom:48px;">
-      <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;">
-        Step-by-step tutorial sessions covering topics in mathematics, scientific computing, and interdisciplinary methods.
-        New sessions added regularly — subscribe for updates.
-      </p>
-    </div>
-    <div class="tutorials-grid">
+    <p class="sec-lbl"><span class="num">01</span> Tutorials &amp; Study Resources</p>
+    <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;max-width:640px;margin-bottom:48px;">
+      PDF notes and study resources — open directly in your browser, no login needed.
+    </p>
 
-      <div class="tutorial-card fade-in">
-        <div class="tutorial-num">01</div>
-        <div class="tutorial-topic">Multivariable Calculus</div>
-        <div class="tutorial-title">Vector Calculus Crash Course</div>
-        <p class="tutorial-desc">
-          Line integrals, surface integrals, divergence, curl, and Stokes' theorem.
-          Built for students who need a rigorous but intuitive foundation for physics and biology courses.
-        </p>
-        <a href="https://youtube.com/@itsmilindsahu" target="_blank" class="tutorial-btn">Watch Tutorial →</a>
-      </div>
+    <div id="tut-grid" class="tut-grid"></div>
 
-      <div class="tutorial-card fade-in stagger-1">
-        <div class="tutorial-num">02</div>
-        <div class="tutorial-topic">Linear Algebra</div>
-        <div class="tutorial-title">Matrices, Eigenvalues & Applications</div>
-        <p class="tutorial-desc">
-          Matrix operations, eigenvalue decomposition, and their applications in systems of equations,
-          Markov chains, and principal component analysis. Designed for interdisciplinary learners.
-        </p>
-        <a href="https://youtube.com/@itsmilindsahu" target="_blank" class="tutorial-btn">Watch Tutorial →</a>
-      </div>
-
-      <div class="tutorial-card fade-in stagger-2">
-        <div class="tutorial-num">03</div>
-        <div class="tutorial-topic">Real Analysis</div>
-        <div class="tutorial-title">Sequences, Limits & Continuity</div>
-        <p class="tutorial-desc">
-          Rigorous treatment of convergence, ε-δ definitions, and continuity. Proofs broken down
-          step-by-step with visual intuition. Especially useful for BS-MS first-year students.
-        </p>
-        <a href="https://youtube.com/@itsmilindsahu" target="_blank" class="tutorial-btn">Watch Tutorial →</a>
-      </div>
-
-      <div class="tutorial-card fade-in stagger-3">
-        <div class="tutorial-num">04</div>
-        <div class="tutorial-topic">Scientific Computing</div>
-        <div class="tutorial-title">Python for Mathematical Modeling</div>
-        <p class="tutorial-desc">
-          Using NumPy, SciPy, and Matplotlib to model and simulate mathematical systems.
-          From differential equations to optimization — all with working code examples.
-        </p>
-        <a href="https://github.com/itsmilindsahu" target="_blank" class="tutorial-btn">View Code →</a>
-      </div>
-
-      <div class="tutorial-card fade-in">
-        <div class="tutorial-num">05</div>
-        <div class="tutorial-topic">Differential Equations</div>
-        <div class="tutorial-title">ODE Methods & Biological Models</div>
-        <p class="tutorial-desc">
-          Solving first and second order ODEs, with applications to population dynamics, pharmacokinetics,
-          and ecological modeling. Bridge between pure math and life sciences.
-        </p>
-        <a href="https://youtube.com/@itsmilindsahu" target="_blank" class="tutorial-btn">Watch Tutorial →</a>
-      </div>
-
-      <!-- PLACEHOLDER — add more tutorials here -->
-      <div class="tutorial-card fade-in stagger-1" style="border:2px dashed var(--light-grey);background:transparent;justify-content:center;align-items:center;text-align:center;min-height:200px;">
-        <div style="color:var(--mid-grey);font-size:12px;letter-spacing:2px;text-transform:uppercase;">
-          <div style="font-family:var(--font-display);font-size:48px;margin-bottom:8px;color:var(--light-grey);">+</div>
-          More Tutorials<br>Coming Soon
+    <!-- ADMIN PANEL — only appears at teaching.html#admin -->
+    <div id="admin-zone">
+      <div id="adm-login">
+        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#666;margin-bottom:20px;">
+          Admin Access
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <input id="adm-pw" type="password" placeholder="Password" class="adm-inp"
+            style="width:220px;" onkeydown="if(event.key==='Enter')verifyAdmin()">
+          <button class="adm-btn" onclick="verifyAdmin()">Unlock →</button>
+        </div>
+        <div id="adm-err" style="color:#e04;font-size:11px;margin-top:10px;display:none;">
+          Incorrect password.
         </div>
       </div>
 
-    </div><!-- /tutorials-grid -->
+      <div id="adm-panel" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">
+            Tutorial Manager
+          </span>
+          <button class="adm-btn sm" onclick="lockAdmin()">Lock &amp; Close</button>
+        </div>
+        <div class="adm-grid">
+          <div>
+            <div class="adm-lbl">Semester</div>
+            <input id="f-sem"   class="adm-inp" placeholder="e.g. Semester 1">
+          </div>
+          <div>
+            <div class="adm-lbl">Subject / Topic</div>
+            <input id="f-topic" class="adm-inp" placeholder="e.g. Vector Calculus">
+          </div>
+          <div>
+            <div class="adm-lbl">Short Description</div>
+            <input id="f-desc"  class="adm-inp" placeholder="What this covers...">
+          </div>
+          <div>
+            <div class="adm-lbl">Google Drive PDF Link</div>
+            <input id="f-link"  class="adm-inp" placeholder="https://drive.google.com/file/d/...">
+          </div>
+        </div>
+        <button class="adm-btn" onclick="addTutorial()">+ Add</button>
+        <div id="adm-list" style="margin-top:20px;"></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════
-     SECTION 2 — MB LEARNERS
-════════════════════════════════════════════ -->
-<section id="mb-learners" class="section-white">
+<!-- ══════════════════════════════════
+     02 — MATHEMATICAL PATTERNS
+═════════════════════════════════════ -->
+<section id="patterns">
   <div class="container">
-    <p class="section-label"><span class="num">02</span> Teaching Initiative</p>
-    <div class="mb-layout">
+    <p class="sec-lbl"><span class="num">02</span> Mathematical Patterns &amp; Insights</p>
+    <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;max-width:640px;margin-bottom:36px;">
+      Structural patterns, proof techniques, and insights collected during coursework.
+      Select a topic from the dropdown.
+    </p>
+
+    <div class="pat-wrap">
+      <select class="pat-sel" id="pat-sel" onchange="showPat(this.value)">
+        <option value="">— Select a topic —</option>
+        <option value="conservative">Vector Calculus · Conservative Fields</option>
+        <option value="triangular">Linear Algebra · Triangular Eigenvalues</option>
+        <option value="squeeze">Real Analysis · Squeeze Theorem</option>
+        <option value="separation">Differential Equations · Separation of Variables</option>
+        <option value="divergence">Multivariable · Divergence Theorem</option>
+        <option value="ranknullity">Linear Algebra · Rank–Nullity Theorem</option>
+        <option value="stokes">Multivariable · Stokes' Theorem</option>
+        <option value="taylor">Calculus · Taylor Series</option>
+        <option value="integrating">ODE · Integrating Factor</option>
+      </select>
+      <div class="pat-arrow">▾</div>
+    </div>
+
+    <div class="pat-box" id="pat-box">
+      <div class="pat-tag"  id="pat-tag"></div>
+      <div class="pat-title"id="pat-title"></div>
+      <p  class="pat-desc"  id="pat-desc"></p>
+      <div class="pat-formula" id="pat-formula"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     03 — MB LEARNERS
+═════════════════════════════════════ -->
+<section id="mb-learners">
+  <div class="container">
+    <p class="sec-lbl"><span class="num">03</span> Teaching Initiative</p>
+    <div class="mb-grid">
 
       <div class="mb-text fade-in">
-        <h2 style="font-family:var(--font-display);font-size:clamp(36px,5vw,56px);line-height:.9;letter-spacing:2px;margin-bottom:24px;">
+        <h2 style="font-family:var(--font-display);font-size:clamp(38px,5vw,60px);
+                   line-height:.9;letter-spacing:2px;margin-bottom:20px;color:var(--black);">
           MB LEARNERS<span style="color:var(--accent)">.</span>
         </h2>
-        <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;">
-          Peer Learning Initiative · IISER Tirupati
+        <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;
+                  color:var(--accent);margin-bottom:20px;">
+          Peer Learning · IISER Tirupati
         </p>
         <p>
-          IISER courses can be brutal — especially interdisciplinary ones. <strong>MB Learners is a peer-learning group</strong>
-          where we trade skills to survive the semester together.
+          IISER courses can be brutal — especially interdisciplinary ones.
+          <strong>MB Learners is a peer-learning group</strong> where we trade skills
+          to survive the semester together.
         </p>
         <p>
-          We are not a coaching centre. We are simply a group of students who realized that
+          We are not a coaching centre. We are a group of students who realized that
           <strong>"Math people need help with Biology, and Bio people need help with Math."</strong>
         </p>
         <p>
-          The initiative runs informal tutorial sessions, shares proof shortcuts, and breaks down
-          mathematically heavy topics into approachable, step-by-step explanations.
+          The initiative runs informal tutorial sessions, shares proof shortcuts,
+          and breaks down mathematically heavy topics into approachable explanations.
         </p>
-        <blockquote>
-          "If you're at IISER Tirupati and struggling with a subject, there's always a seat here."
-        </blockquote>
-
-        <!-- Gallery -->
-        <div class="teach-gallery">
-          <div class="teach-gallery-item">
-            <img src="teaching-img1.jpg" alt="MB Learners tutorial session — Vector Calculus">
-            <div class="teach-gallery-caption">Vector Calculus Session · MB Learners</div>
-          </div>
-          <div class="teach-gallery-item">
-            <img src="teaching-img2.jpg" alt="MB Learners tutorial session — Mathematics Tutorial">
-            <div class="teach-gallery-caption">Mathematics Tutorial · IISER Tirupati</div>
-          </div>
+        <div class="mb-quote">
+          "If you're at IISER Tirupati and struggling with a subject,
+          there's always a seat here."
         </div>
-
-      </div><!-- /mb-text -->
+      </div>
 
       <div class="fade-in stagger-2">
-        <div class="mb-features">
-          <div class="mb-feature">
-            <div class="mb-feature-icon">⇄</div>
-            <div class="mb-feature-title">Skill Swap</div>
-            <p class="mb-feature-desc">
-              We break down difficult topics like Vector Calculus, Linear Algebra, and Matrices
-              for students who struggle with mathematics-heavy courses.
-            </p>
+        <div class="mb-feats">
+          <div class="mb-feat">
+            <div class="mb-feat-icon">⇄</div>
+            <div class="mb-feat-title">Skill Swap</div>
+            <p class="mb-feat-desc">Breaking down Vector Calculus, Linear Algebra, and Matrices for students who struggle with mathematics-heavy courses.</p>
           </div>
-          <div class="mb-feature">
-            <div class="mb-feature-icon">∅</div>
-            <div class="mb-feature-title">No Gatekeeping</div>
-            <p class="mb-feature-desc">
-              We simplify proofs, share shortcuts, and run informal sessions to clarify concepts
-              that often remain confusing even after formal lectures.
-            </p>
+          <div class="mb-feat">
+            <div class="mb-feat-icon">∅</div>
+            <div class="mb-feat-title">No Gatekeeping</div>
+            <p class="mb-feat-desc">Proofs simplified, shortcuts shared — concepts that stay confusing long after formal lectures.</p>
           </div>
-          <div class="mb-feature">
-            <div class="mb-feature-icon">∪</div>
-            <div class="mb-feature-title">Community Support</div>
-            <p class="mb-feature-desc">
-              More than 30+ students have already benefited from this collaborative
-              learning environment spanning multiple disciplines.
-            </p>
+          <div class="mb-feat">
+            <div class="mb-feat-icon">∪</div>
+            <div class="mb-feat-title">Community Support</div>
+            <p class="mb-feat-desc">30+ students across disciplines have benefited from this collaborative learning environment.</p>
           </div>
         </div>
-
-        <div class="mb-stat-row">
+        <div class="mb-stats">
           <div class="mb-stat">
-            <div class="mb-stat-num">30<span style="color:var(--accent)">+</span></div>
-            <div class="mb-stat-label">Students Helped</div>
+            <div class="mb-stat-n">30<span style="color:var(--accent)">+</span></div>
+            <div class="mb-stat-l">Students</div>
           </div>
           <div class="mb-stat">
-            <div class="mb-stat-num" style="color:var(--accent)">MB</div>
-            <div class="mb-stat-label">Math × Biology</div>
+            <div class="mb-stat-n" style="color:var(--accent)">MB</div>
+            <div class="mb-stat-l">Math × Bio</div>
           </div>
           <div class="mb-stat">
-            <div class="mb-stat-num">∞</div>
-            <div class="mb-stat-label">Open Sessions</div>
-          </div>
-        </div>
-
-      </div>
-    </div><!-- /mb-layout -->
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════
-     SECTION 3 — MATHEMATICAL PATTERNS
-════════════════════════════════════════════ -->
-<section id="math-patterns" class="section-light">
-  <div class="container">
-    <p class="section-label"><span class="num">03</span> Theory &amp; Mathematical Patterns</p>
-    <div style="max-width:640px;margin-bottom:48px;">
-      <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;">
-        A living document of problem-solving patterns, mathematical insights, and
-        structural observations collected during coursework and self-study.
-      </p>
-    </div>
-    <div class="patterns-grid">
-
-      <div class="pattern-card fade-in">
-        <div class="pattern-tag">Vector Calculus</div>
-        <div class="pattern-title">Conservative Vector Fields</div>
-        <p class="pattern-desc">
-          A vector field <strong>F</strong> is conservative if and only if its curl vanishes everywhere.
-          This guarantees path-independence of line integrals and the existence of a potential function φ.
-        </p>
-        <div class="pattern-formula">
-          $$ \nabla \times \mathbf{F} = \mathbf{0} \iff \mathbf{F} = \nabla\varphi $$
-        </div>
-      </div>
-
-      <div class="pattern-card fade-in stagger-1">
-        <div class="pattern-tag">Linear Algebra</div>
-        <div class="pattern-title">Triangular Matrix Eigenvalues</div>
-        <p class="pattern-desc">
-          For any upper or lower triangular matrix, the eigenvalues are exactly the diagonal entries.
-          The characteristic polynomial factors immediately, making computation trivial.
-        </p>
-        <div class="pattern-formula">
-          $$ \det(A - \lambda I) = \prod_{i=1}^{n}(a_{ii} - \lambda) $$
-        </div>
-      </div>
-
-      <div class="pattern-card fade-in stagger-2">
-        <div class="pattern-tag">Real Analysis</div>
-        <div class="pattern-title">Squeeze Theorem Pattern</div>
-        <p class="pattern-desc">
-          When a limit is hard to compute directly, bound the sequence above and below by two sequences
-          converging to the same limit. The target sequence is squeezed to the same value.
-        </p>
-        <div class="pattern-formula">
-          $$ g(x) \leq f(x) \leq h(x),\; \lim g = \lim h = L \implies \lim f = L $$
-        </div>
-      </div>
-
-      <div class="pattern-card fade-in stagger-3">
-        <div class="pattern-tag">Differential Equations</div>
-        <div class="pattern-title">Separation of Variables</div>
-        <p class="pattern-desc">
-          If a first-order ODE can be written so all y-terms are on one side and all x-terms on the other,
-          integrate both sides independently to obtain the general solution.
-        </p>
-        <div class="pattern-formula">
-          $$ \frac{dy}{dx} = f(x)g(y) \;\Rightarrow\; \int \frac{dy}{g(y)} = \int f(x)\,dx $$
-        </div>
-      </div>
-
-      <div class="pattern-card fade-in">
-        <div class="pattern-tag">Multivariable Calculus</div>
-        <div class="pattern-title">Divergence Theorem</div>
-        <p class="pattern-desc">
-          The total flux of a vector field through a closed surface equals the volume integral of its divergence.
-          Converts hard surface integrals into often-simpler volume integrals.
-        </p>
-        <div class="pattern-formula">
-          $$ \oiint_S \mathbf{F} \cdot d\mathbf{S} = \iiint_V (\nabla \cdot \mathbf{F})\, dV $$
-        </div>
-      </div>
-
-      <div class="pattern-card fade-in stagger-1">
-        <div class="pattern-tag">Linear Algebra</div>
-        <div class="pattern-title">Rank–Nullity Theorem</div>
-        <p class="pattern-desc">
-          For any linear map T: V → W, the dimension of the domain equals the rank plus the nullity.
-          A fundamental structural constraint on all linear transformations.
-        </p>
-        <div class="pattern-formula">
-          $$ \dim V = \operatorname{rank}(T) + \operatorname{nullity}(T) $$
-        </div>
-      </div>
-
-      <!-- add more pattern-card blocks here -->
-
-    </div><!-- /patterns-grid -->
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════
-     SECTION 4 — LECTURE NOTES (DYNAMIC)
-════════════════════════════════════════════ -->
-<section id="lecture-notes" class="section-white">
-  <div class="container">
-    <p class="section-label"><span class="num">04</span> Lecture Notes</p>
-    <div style="max-width:640px;margin-bottom:48px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;">
-      <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;">
-        Semester-wise notes and PDFs. Click a semester to browse topics.
-      </p>
-      <button id="admin-toggle-btn" onclick="toggleAdminPanel()"
-        style="padding:7px 16px;background:transparent;border:1px solid var(--light-grey);
-               font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
-               color:var(--mid-grey);cursor:pointer;transition:all .2s;"
-        onmouseover="this.style.borderColor='var(--black)';this.style.color='var(--black)';"
-        onmouseout="this.style.borderColor='var(--light-grey)';this.style.color='var(--mid-grey)';">
-        ⚙ Admin
-      </button>
-    </div>
-
-    <!-- ── ADMIN PANEL (hidden by default) ── -->
-    <div id="admin-panel" style="display:none;background:#0d0d0b;border:1px solid #1e1e1c;padding:32px;margin-bottom:48px;position:relative;">
-      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);"></div>
-
-      <!-- LOGIN -->
-      <div id="admin-login">
-        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#444;margin-bottom:20px;">Admin Access</div>
-        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-          <input id="admin-pw" type="password" placeholder="Enter password"
-            style="padding:10px 16px;background:#080808;border:1px solid #222;color:white;
-                   font-family:var(--font-mono);font-size:12px;outline:none;width:240px;"
-            onkeydown="if(event.key==='Enter')checkAdminPw()">
-          <button onclick="checkAdminPw()"
-            style="padding:10px 20px;background:var(--accent);color:white;border:none;
-                   font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">
-            Unlock →
-          </button>
-        </div>
-        <div id="admin-pw-err" style="color:#e05;font-size:11px;margin-top:10px;display:none;">Incorrect password.</div>
-      </div>
-
-      <!-- PANEL CONTENT (shown after login) -->
-      <div id="admin-content" style="display:none;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
-          <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">Note Manager</div>
-          <button onclick="lockAdmin()"
-            style="padding:5px 12px;background:transparent;border:1px solid #333;color:#555;
-                   font-family:var(--font-mono);font-size:9px;letter-spacing:1px;cursor:pointer;">
-            Lock
-          </button>
-        </div>
-
-        <!-- ADD FORM -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
-          <div>
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">Semester</div>
-            <input id="f-sem" placeholder="e.g. Semester 1" style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">Topic / Subject</div>
-            <input id="f-topic" placeholder="e.g. Vector Calculus" style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">Description</div>
-            <input id="f-desc" placeholder="Short description" style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
-          </div>
-          <div>
-            <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:6px;">PDF Link (Google Drive / any URL)</div>
-            <input id="f-link" placeholder="https://drive.google.com/..." style="width:100%;padding:9px 12px;background:#080808;border:1px solid #222;color:white;font-family:var(--font-mono);font-size:12px;outline:none;">
-          </div>
-        </div>
-        <button onclick="addNote()"
-          style="padding:10px 24px;background:var(--accent);color:white;border:none;
-                 font-family:var(--font-mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-bottom:28px;">
-          + Add Note
-        </button>
-
-        <!-- EXISTING NOTES LIST -->
-        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#333;margin-bottom:12px;">Existing Notes</div>
-        <div id="admin-notes-list"></div>
-      </div>
-    </div><!-- /admin-panel -->
-
-    <!-- ── SEMESTER TABS ── -->
-    <div id="semester-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px;"></div>
-
-    <!-- ── NOTES DISPLAY ── -->
-    <div id="notes-display" class="notes-grid"></div>
-
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════
-     SECTION 5 — RESEARCH INTERESTS
-════════════════════════════════════════════ -->
-<section id="research-interests" class="section-light">
-  <div class="container">
-    <p class="section-label"><span class="num">05</span> Research &amp; Academic Interests</p>
-    <div class="research-layout">
-
-      <div class="about-text fade-in">
-        <p>
-          My academic interests lie at the intersection of <strong>pure mathematical structures</strong> and
-          their applications to complex real-world systems — particularly in biology, energy, and policy.
-        </p>
-        <p>
-          I am drawn to problems where rigorous mathematical frameworks can replace heuristic reasoning:
-          modeling biological dynamics with differential equations, applying optimization theory to resource allocation,
-          and using linear-algebraic methods to extract structure from high-dimensional data.
-        </p>
-        <p>
-          A parallel research interest is <strong>mathematical education</strong> — understanding why certain topics
-          remain systematically difficult for students, and developing more effective pedagogical approaches
-          rooted in visual and structural intuition rather than purely symbolic manipulation.
-        </p>
-        <p>
-          I am actively seeking research internship opportunities and graduate collaborations in
-          applied mathematics, mathematical biology, and scientific computing.
-        </p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;">
-          <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="btn btn-primary">Contact for Collaboration →</a>
-          <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-ghost">GitHub</a>
-        </div>
-      </div>
-
-      <div class="research-areas fade-in stagger-2">
-        <div class="research-area">
-          <div class="research-area-num">1</div>
-          <div class="research-area-body">
-            <div class="research-area-title">Applied Mathematics</div>
-            <p class="research-area-desc">
-              Optimization theory, variational methods, and mathematical modeling with
-              applications to physical and biological systems.
-            </p>
-          </div>
-        </div>
-        <div class="research-area">
-          <div class="research-area-num">2</div>
-          <div class="research-area-body">
-            <div class="research-area-title">Mathematical Modeling in Biological Systems</div>
-            <p class="research-area-desc">
-              ODE/PDE models for population dynamics, enzyme kinetics, and neural systems.
-              Bridging mathematical analysis with life-science questions.
-            </p>
-          </div>
-        </div>
-        <div class="research-area">
-          <div class="research-area-num">3</div>
-          <div class="research-area-body">
-            <div class="research-area-title">Scientific Computing</div>
-            <p class="research-area-desc">
-              Numerical methods, simulation, and algorithm design for solving large-scale
-              mathematical problems computationally.
-            </p>
-          </div>
-        </div>
-        <div class="research-area">
-          <div class="research-area-num">4</div>
-          <div class="research-area-body">
-            <div class="research-area-title">Interdisciplinary Problem Solving</div>
-            <p class="research-area-desc">
-              Energy systems analytics, policy optimization, and quantitative approaches
-              to environmental and socioeconomic challenges.
-            </p>
-          </div>
-        </div>
-        <div class="research-area">
-          <div class="research-area-num">5</div>
-          <div class="research-area-body">
-            <div class="research-area-title">Mathematical Education</div>
-            <p class="research-area-desc">
-              Developing more effective pedagogical frameworks for rigorous mathematics,
-              particularly for interdisciplinary learners at the undergraduate level.
-            </p>
+            <div class="mb-stat-n">∞</div>
+            <div class="mb-stat-l">Open Sessions</div>
           </div>
         </div>
       </div>
 
-    </div><!-- /research-layout -->
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════════
-     SECTION 6 — PAGE ANALYTICS
-════════════════════════════════════════════ -->
-<section id="analytics" style="background:var(--white);padding:0;">
-  <div class="analytics-bar">
-    <div class="analytics-inner">
-      <div class="analytics-label">Page Analytics</div>
-      <div class="analytics-counter" id="view-counter">
-        <span id="view-num">429</span>
-      </div>
-      <div class="analytics-sublabel">Total Page Views · Teaching &amp; Research Portfolio</div>
-      <div style="width:48px;height:1px;background:var(--accent);margin:20px auto 0;"></div>
     </div>
   </div>
 </section>
 
 
-<!-- ═══════════════════════════════════════════
-     CTA FOOTER BANNER
-════════════════════════════════════════════ -->
-<section style="background:var(--black);text-align:center;padding:80px 0;">
-  <div class="container">
-    <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;margin-bottom:16px;">
-      Milind Sahu · IISER Tirupati
-    </p>
-    <h2 style="font-family:var(--font-display);font-size:clamp(44px,7vw,80px);letter-spacing:4px;color:white;margin-bottom:12px;">
-      LEARN TOGETHER<span style="color:var(--accent)">.</span>
-    </h2>
-    <p style="font-size:13px;color:#444;max-width:480px;margin:0 auto 32px;line-height:1.9;">
-      Open to tutoring, collaboration, and peer learning.
-      Reach out if you're an IISER student or a researcher looking to connect.
-    </p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="btn btn-primary">Get In Touch →</a>
-      <a href="index.html" class="btn btn-ghost">Back to Home</a>
-    </div>
+<!-- ══ PAGE VIEWS BAR ══ -->
+<div class="pv-bar">
+  <div>
+    <div class="pv-lbl">Page Views</div>
+    <div class="pv-num" id="pv-num">—</div>
   </div>
-</section>
+  <div style="text-align:right;">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:6px;">
+      IISER Tirupati · 2025
+    </div>
+    <a href="mailto:milind20251175@students.iisertirupati.ac.in"
+       style="font-size:9px;letter-spacing:2px;text-transform:uppercase;
+              color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;">
+      Get In Touch →
+    </a>
+  </div>
+</div>
 
 </main>
 
-<!-- ═══════════ FOOTER ═══════════ -->
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
@@ -884,14 +559,14 @@
         <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link">GitHub</a>
+        <a href="https://github.com/itsmilindsahu"  target="_blank" class="footer-link">GitHub</a>
         <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link">LinkedIn</a>
         <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link">Email</a>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2025 Milind Sahu · IISER Tirupati</span>
-      <span id="footer-views" style="color:var(--accent);"></span>
+      <span>Teaching &amp; Research Portfolio</span>
     </div>
   </div>
 </footer>
@@ -900,49 +575,85 @@
 <script src="script.js"></script>
 <script>
 /* ══════════════════════════════════════════
-   PAGE VIEW COUNTER
+   PAGE VIEWS
 ══════════════════════════════════════════ */
 (function(){
-  const KEY = 'teaching_page_views';
-  const BASE = 429;
-  let stored = parseInt(localStorage.getItem(KEY), 10);
-  if (isNaN(stored) || stored < BASE) stored = BASE;
-  stored += 1;
-  localStorage.setItem(KEY, stored);
-  const el  = document.getElementById('view-num');
-  const fel = document.getElementById('footer-views');
-  const start = Math.max(BASE, stored - 60), end = stored;
-  const t0 = performance.now();
-  function tick(now){
-    const p = Math.min((now-t0)/1200,1), e = 1-Math.pow(1-p,3);
-    const cur = Math.round(start+(end-start)*e);
-    if(el)  el.textContent  = cur.toLocaleString();
-    if(p<1){ requestAnimationFrame(tick); }
-    else {
-      if(el)  el.textContent  = end.toLocaleString();
-      if(fel) fel.textContent = 'Page Views: '+end.toLocaleString();
-    }
-  }
-  requestAnimationFrame(tick);
+  const K='th_views',B=429;
+  let n=parseInt(localStorage.getItem(K),10);
+  if(isNaN(n)||n<B) n=B;
+  n++; localStorage.setItem(K,n);
+  const el=document.getElementById('pv-num');
+  const s=Math.max(B,n-50),t0=performance.now();
+  (function tick(now){
+    const p=Math.min((now-t0)/900,1),e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(s+(n-s)*e).toLocaleString();
+    if(p<1) requestAnimationFrame(tick);
+  })(performance.now());
 })();
 
 /* ══════════════════════════════════════════
-   NOTES MANAGER
-   Storage key: 'axl_notes'  →  JSON array
-   Each note: { id, semester, topic, desc, link }
+   MATH PATTERNS
 ══════════════════════════════════════════ */
-const NOTES_KEY   = 'axl_notes';
-const ADMIN_KEY   = 'axl_admin_unlocked';
-/* ⚠️  Change this password to whatever you want */
-const ADMIN_PASS  = 'iiser2025';
+const P={
+  conservative:{tag:'Vector Calculus',title:'Conservative Vector Fields',
+    desc:'A vector field F is conservative iff its curl is zero everywhere. This guarantees path-independence of line integrals and the existence of a scalar potential φ with F = ∇φ.',
+    f:'$$ \\nabla \\times \\mathbf{F} = \\mathbf{0} \\iff \\mathbf{F} = \\nabla\\varphi $$'},
+  triangular:{tag:'Linear Algebra',title:'Triangular Matrix Eigenvalues',
+    desc:'For any triangular matrix, eigenvalues are exactly the diagonal entries. The characteristic polynomial factors immediately as a product of linear terms.',
+    f:'$$ \\det(A - \\lambda I) = \\prod_{i=1}^{n}(a_{ii} - \\lambda) $$'},
+  squeeze:{tag:'Real Analysis',title:'Squeeze Theorem',
+    desc:'If a function is bounded above and below by two expressions both converging to L, the middle expression also converges to L. Essential for indirect limit proofs.',
+    f:'$$ g(x) \\leq f(x) \\leq h(x),\\;\\lim g=\\lim h=L \\implies \\lim f=L $$'},
+  separation:{tag:'Differential Equations',title:'Separation of Variables',
+    desc:'Rearrange the ODE so all y-terms are on one side, all x-terms on the other, then integrate both sides independently.',
+    f:'$$ \\frac{dy}{dx}=f(x)g(y) \\;\\Rightarrow\\; \\int\\frac{dy}{g(y)}=\\int f(x)\\,dx+C $$'},
+  divergence:{tag:'Multivariable Calculus',title:'Divergence Theorem',
+    desc:'Total outward flux through a closed surface equals the volume integral of divergence. Converts surface integrals into volume integrals.',
+    f:'$$ \\oiint_S \\mathbf{F}\\cdot d\\mathbf{S} = \\iiint_V (\\nabla\\cdot\\mathbf{F})\\,dV $$'},
+  ranknullity:{tag:'Linear Algebra',title:'Rank–Nullity Theorem',
+    desc:'For any linear map T: V → W, dim(domain) = rank + nullity. A fundamental constraint on every linear transformation.',
+    f:'$$ \\dim V = \\operatorname{rank}(T) + \\operatorname{nullity}(T) $$'},
+  stokes:{tag:'Multivariable Calculus',title:"Stokes' Theorem",
+    desc:"Relates the surface integral of curl over S to the line integral around its boundary ∂S. Generalises Green's Theorem to 3D.",
+    f:'$$ \\iint_S(\\nabla\\times\\mathbf{F})\\cdot d\\mathbf{S}=\\oint_{\\partial S}\\mathbf{F}\\cdot d\\mathbf{r} $$'},
+  taylor:{tag:'Calculus',title:'Taylor Series',
+    desc:"Any smooth function near a point a can be approximated by an infinite polynomial whose coefficients encode the function's derivatives at that point.",
+    f:'$$ f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}(x-a)^n $$'},
+  integrating:{tag:'ODE · First Order',title:'Integrating Factor',
+    desc:"For y' + P(x)y = Q(x), multiply by μ = e^{∫P dx}. The left side becomes the derivative of a product and integrates cleanly.",
+    f:'$$ \\mu(x)=e^{\\int P(x)dx},\\quad \\frac{d}{dx}[\\mu y]=\\mu Q(x) $$'}
+};
 
-/* ── helpers ── */
-function loadNotes(){ return JSON.parse(localStorage.getItem(NOTES_KEY)||'[]'); }
-function saveNotes(arr){ localStorage.setItem(NOTES_KEY, JSON.stringify(arr)); }
+function showPat(k){
+  const box=document.getElementById('pat-box');
+  if(!k){box.classList.remove('on');return;}
+  const d=P[k]; if(!d) return;
+  document.getElementById('pat-tag').textContent   = d.tag;
+  document.getElementById('pat-title').textContent = d.title;
+  document.getElementById('pat-desc').textContent  = d.desc;
+  document.getElementById('pat-formula').innerHTML = d.f;
+  box.classList.add('on');
+  if(window.MathJax && MathJax.typesetPromise)
+    MathJax.typesetPromise([document.getElementById('pat-formula')]);
+}
 
-/* ── derive math icon from topic name ── */
-function iconFor(topic){
-  const t = topic.toLowerCase();
+/* ══════════════════════════════════════════
+   TUTORIALS — localStorage
+══════════════════════════════════════════ */
+/* ── SHA-256 hash of admin password (no plaintext in source) ──
+   Password = iiser2025axl
+   To change: open any browser console and run:
+     crypto.subtle.digest('SHA-256',new TextEncoder().encode('newpassword'))
+       .then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+   Then replace the hash string below. */
+const PW_HASH='aeba91eb0ea74bf51319125d7444930e7ddfd354eb3ee62564c384dfef8f46fc';
+const TK='axl_tutorials', AK='axl_adm';
+
+function loadT(){return JSON.parse(localStorage.getItem(TK)||'[]');}
+function saveT(a){localStorage.setItem(TK,JSON.stringify(a));}
+
+function icon(t){
+  t=t.toLowerCase();
   if(t.includes('calculus')||t.includes('vector')) return '∇';
   if(t.includes('linear')||t.includes('matrix')||t.includes('eigen')) return 'λ';
   if(t.includes('analysis')||t.includes('real')) return 'ε';
@@ -950,164 +661,101 @@ function iconFor(topic){
   if(t.includes('prob')||t.includes('stat')) return '∑';
   if(t.includes('physics')) return 'Φ';
   if(t.includes('bio')) return '∮';
-  if(t.includes('topology')) return 'τ';
   return '∫';
 }
 
-/* ── render semester tabs ── */
-function renderTabs(notes, activeSem){
-  const sems = [...new Set(notes.map(n=>n.semester))];
-  const tabEl = document.getElementById('semester-tabs');
-  if(!tabEl) return;
-  if(sems.length===0){
-    tabEl.innerHTML = '<div style="font-size:12px;color:var(--mid-grey);letter-spacing:2px;text-transform:uppercase;">No notes yet. Add some via the Admin panel.</div>';
+function renderGrid(){
+  const tuts=loadT(), g=document.getElementById('tut-grid');
+  if(!g) return;
+  if(!tuts.length){
+    g.innerHTML=`<div style="grid-column:1/-1;padding:48px;text-align:center;
+      border:2px dashed var(--light-grey);">
+      <div style="font-family:var(--font-display);font-size:48px;color:var(--light-grey);">∫</div>
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
+                  color:var(--mid-grey);margin-top:12px;">Study resources will appear here</div>
+    </div>`;
     return;
   }
-  tabEl.innerHTML = sems.map(s=>`
-    <button onclick="selectSemester('${s}')"
-      style="padding:8px 18px;background:${s===activeSem?'var(--black)':'transparent'};
-             color:${s===activeSem?'var(--white)':'var(--dark-grey)'};
-             border:1px solid ${s===activeSem?'var(--black)':'var(--light-grey)'};
-             font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
-             text-transform:uppercase;cursor:pointer;transition:all .2s;">
-      ${s}
-    </button>`).join('');
-}
-
-/* ── render notes grid for a semester ── */
-function renderNotes(notes, sem){
-  const el = document.getElementById('notes-display');
-  if(!el) return;
-  const filtered = notes.filter(n=>n.semester===sem);
-  if(filtered.length===0){
-    el.innerHTML = '<div style="font-size:12px;color:var(--mid-grey);padding:24px 0;">No notes for this semester yet.</div>';
-    return;
-  }
-  el.innerHTML = filtered.map(n=>`
-    <div class="note-card">
-      <div class="note-icon">${iconFor(n.topic)}</div>
-      <div class="note-subject">${n.semester} · IISER Tirupati</div>
-      <div class="note-title">${n.topic}</div>
-      <p class="note-desc">${n.desc||'—'}</p>
-      ${n.link
-        ? `<a href="${n.link}" target="_blank" class="note-btn note-btn-ready">Download PDF ↗</a>`
-        : `<button class="note-btn" disabled>Coming Soon</button>`
-      }
+  g.innerHTML=tuts.map((t,i)=>`
+    <div class="tut-card fade-in">
+      <div class="tut-num">0${i+1}</div>
+      <div class="tut-sem">${t.semester||''}</div>
+      <div class="tut-title">${t.topic}</div>
+      <p class="tut-desc">${t.desc||''}</p>
+      ${t.link
+        ?`<a href="${t.link}" target="_blank" class="tut-btn">Open PDF ↗</a>`
+        :`<span class="tut-btn soon">Coming Soon</span>`}
     </div>`).join('');
 }
+renderGrid();
 
-/* ── select semester tab ── */
-let _activeSem = null;
-function selectSemester(sem){
-  _activeSem = sem;
-  const notes = loadNotes();
-  renderTabs(notes, sem);
-  renderNotes(notes, sem);
+/* show admin only when hash = #admin */
+function checkHash(){
+  const z=document.getElementById('admin-zone');
+  if(location.hash==='#admin'){
+    z.style.display='block';
+    if(sessionStorage.getItem(AK)==='1'){
+      document.getElementById('adm-login').style.display='none';
+      document.getElementById('adm-panel').style.display='block';
+      renderAdmList();
+    }
+  } else { z.style.display='none'; }
 }
+checkHash();
+window.addEventListener('hashchange',checkHash);
 
-/* ── initial render ── */
-function initNotes(){
-  const notes = loadNotes();
-  const sems  = [...new Set(notes.map(n=>n.semester))];
-  const first = sems[0]||null;
-  _activeSem  = first;
-  renderTabs(notes, first);
-  if(first) renderNotes(notes, first);
-  else document.getElementById('notes-display').innerHTML='';
+async function sha256(s){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
 }
-initNotes();
-
-/* ══════════════════════════════════════════
-   ADMIN PANEL
-══════════════════════════════════════════ */
-function toggleAdminPanel(){
-  const panel = document.getElementById('admin-panel');
-  const open  = panel.style.display !== 'none';
-  panel.style.display = open ? 'none' : 'block';
-  if(!open){ // just opened
-    const unlocked = sessionStorage.getItem(ADMIN_KEY)==='1';
-    document.getElementById('admin-login').style.display   = unlocked ? 'none' : 'block';
-    document.getElementById('admin-content').style.display = unlocked ? 'block': 'none';
-    if(unlocked) renderAdminList();
-  }
-}
-
-function checkAdminPw(){
-  const val = document.getElementById('admin-pw').value;
-  if(val === ADMIN_PASS){
-    sessionStorage.setItem(ADMIN_KEY,'1');
-    document.getElementById('admin-login').style.display   = 'none';
-    document.getElementById('admin-content').style.display = 'block';
-    document.getElementById('admin-pw-err').style.display  = 'none';
-    renderAdminList();
+async function verifyAdmin(){
+  const h=await sha256(document.getElementById('adm-pw').value);
+  if(h===PW_HASH){
+    sessionStorage.setItem(AK,'1');
+    document.getElementById('adm-login').style.display='none';
+    document.getElementById('adm-panel').style.display='block';
+    document.getElementById('adm-err').style.display='none';
+    renderAdmList();
   } else {
-    document.getElementById('admin-pw-err').style.display  = 'block';
-    document.getElementById('admin-pw').value = '';
+    document.getElementById('adm-err').style.display='block';
+    document.getElementById('adm-pw').value='';
   }
 }
-
 function lockAdmin(){
-  sessionStorage.removeItem(ADMIN_KEY);
-  document.getElementById('admin-panel').style.display    = 'none';
+  sessionStorage.removeItem(AK);
+  history.replaceState(null,'',location.pathname);
+  document.getElementById('admin-zone').style.display='none';
 }
-
-function addNote(){
-  const sem   = document.getElementById('f-sem').value.trim();
-  const topic = document.getElementById('f-topic').value.trim();
-  const desc  = document.getElementById('f-desc').value.trim();
-  const link  = document.getElementById('f-link').value.trim();
-  if(!sem||!topic){ alert('Semester and Topic are required.'); return; }
-  const notes = loadNotes();
-  notes.push({ id: Date.now(), semester:sem, topic, desc, link });
-  saveNotes(notes);
-  /* clear fields */
+function addTutorial(){
+  const sem=document.getElementById('f-sem').value.trim();
+  const top=document.getElementById('f-topic').value.trim();
+  const dsc=document.getElementById('f-desc').value.trim();
+  const lnk=document.getElementById('f-link').value.trim();
+  if(!top){alert('Topic is required.');return;}
+  const tuts=loadT();
+  tuts.push({id:Date.now(),semester:sem,topic:top,desc:dsc,link:lnk});
+  saveT(tuts);
   ['f-sem','f-topic','f-desc','f-link'].forEach(id=>document.getElementById(id).value='');
-  renderAdminList();
-  /* refresh public view */
-  const sems = [...new Set(notes.map(n=>n.semester))];
-  if(!_activeSem || !sems.includes(_activeSem)) _activeSem = sems[0];
-  renderTabs(notes, _activeSem);
-  renderNotes(notes, _activeSem);
+  renderGrid(); renderAdmList();
 }
-
-function deleteNote(id){
-  if(!confirm('Delete this note?')) return;
-  const notes = loadNotes().filter(n=>n.id!==id);
-  saveNotes(notes);
-  renderAdminList();
-  const sems = [...new Set(notes.map(n=>n.semester))];
-  if(!sems.includes(_activeSem)) _activeSem = sems[0]||null;
-  renderTabs(notes, _activeSem);
-  if(_activeSem) renderNotes(notes, _activeSem);
-  else document.getElementById('notes-display').innerHTML='';
+function deleteTutorial(id){
+  if(!confirm('Delete this entry?')) return;
+  saveT(loadT().filter(t=>t.id!==id));
+  renderGrid(); renderAdmList();
 }
-
-function renderAdminList(){
-  const notes = loadNotes();
-  const el    = document.getElementById('admin-notes-list');
+function renderAdmList(){
+  const tuts=loadT(), el=document.getElementById('adm-list');
   if(!el) return;
-  if(notes.length===0){
-    el.innerHTML='<div style="color:#444;font-size:12px;">No notes added yet.</div>';
-    return;
-  }
-  el.innerHTML = notes.map(n=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;
-                padding:10px 14px;background:#080808;border:1px solid #181816;
-                margin-bottom:4px;gap:12px;flex-wrap:wrap;">
-      <div>
-        <span style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);">${n.semester}</span>
-        <span style="font-size:12px;color:white;margin-left:12px;">${n.topic}</span>
-        ${n.link ? '<span style="font-size:9px;color:#555;margin-left:8px;">has link</span>' : ''}
-      </div>
-      <button onclick="deleteNote(${n.id})"
-        style="padding:4px 12px;background:transparent;border:1px solid #333;
-               color:#555;font-family:var(--font-mono);font-size:9px;cursor:pointer;
-               letter-spacing:1px;transition:all .2s;"
-        onmouseover="this.style.borderColor='#e05';this.style.color='#e05';"
-        onmouseout="this.style.borderColor='#333';this.style.color='#555';">
-        Delete
-      </button>
-    </div>`).join('');
+  el.innerHTML=!tuts.length
+    ?'<p style="color:#555;font-size:12px;margin-top:16px;">No tutorials added yet.</p>'
+    :tuts.map(t=>`
+      <div class="adm-row">
+        <div class="adm-row-info">
+          <span class="adm-row-sem">${t.semester||'—'}</span>${t.topic}
+          ${t.link?'<span style="font-size:9px;color:#555;margin-left:8px;">✓ link</span>':''}
+        </div>
+        <button class="adm-btn sm" onclick="deleteTutorial(${t.id})">Delete</button>
+      </div>`).join('');
 }
 </script>
 </body>
