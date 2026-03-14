@@ -1,247 +1,768 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Milind Sahu — AXL Axiom Labs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching & Research — Milind Sahu</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
+  <script>
+    MathJax = {
+      tex: { inlineMath:[['$','$']], displayMath:[['$$','$$']] },
+      options: { skipHtmlTags:['script','noscript','style','textarea'] }
+    };
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous" defer></script>
+  <style>
+
+    /* ── NAV DARK ── */
+    nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
+    nav.dark-nav .name-full{color:#fff!important;}
+    nav.dark-nav .nav-links a{color:#666!important;}
+    nav.dark-nav .nav-links a:hover,
+    nav.dark-nav .nav-links a.active{color:#fff!important;}
+    nav.dark-nav .hamburger span{background:#fff!important;}
+
+    /* ── HERO ── */
+    .th-hero{
+      min-height:56vh;background:var(--black);
+      display:flex;align-items:center;position:relative;overflow:hidden;
+    }
+    .th-grid{
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);
+      background-size:48px 48px;
+    }
+    .th-glow{
+      position:absolute;top:50%;left:25%;width:640px;height:640px;
+      transform:translate(-50%,-50%);
+      background:radial-gradient(circle,rgba(26,86,219,.13) 0%,transparent 65%);
+      pointer-events:none;
+    }
+    .th-inner{
+      position:relative;z-index:1;
+      max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;
+    }
+    .th-eyebrow{
+      font-size:10px;letter-spacing:4px;text-transform:uppercase;
+      color:var(--accent);margin-bottom:16px;
+      display:flex;align-items:center;gap:12px;
+    }
+    .th-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent);}
+    .th-h1{
+      font-family:var(--font-display);
+      font-size:clamp(56px,9vw,110px);
+      line-height:.88;color:#fff;letter-spacing:3px;margin-bottom:20px;
+    }
+    .th-h1 span{color:var(--accent);}
+    .th-sub{
+      font-size:12px;letter-spacing:3px;text-transform:uppercase;
+      color:#666;max-width:560px;line-height:2;
+    }
+    .th-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px;}
+    .th-pill{
+      padding:8px 18px;background:transparent;border:1px solid #222;
+      font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;color:#666;transition:all .2s;text-decoration:none;
+    }
+    .th-pill:hover{border-color:var(--accent);color:var(--accent);}
+
+    /* ── PHOTO STRIP ── */
+    .photo-strip{display:grid;grid-template-columns:1fr 1fr;background:var(--black);}
+    .photo-strip-item{position:relative;overflow:hidden;height:400px;}
+    .photo-strip-item img{
+      width:100%;height:100%;object-fit:cover;
+      display:block;opacity:.8;transition:opacity .4s,transform .5s;
+    }
+    .photo-strip-item:hover img{opacity:1;transform:scale(1.03);}
+    .ps-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 52%);
+    }
+    .ps-cap{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;}
+    .ps-tag{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--accent);margin-bottom:6px;
+    }
+    .ps-title{
+      font-family:var(--font-display);font-size:20px;
+      color:#fff;letter-spacing:2px;
+    }
+    .ps-detail{font-size:11px;color:#777;margin-top:4px;}
+    .ps-bar{
+      background:var(--black);border-top:1px solid #111;
+      padding:18px 48px;display:flex;align-items:center;
+      justify-content:space-between;flex-wrap:wrap;gap:12px;
+    }
+    .ps-bar span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;}
+    .ps-bar a{
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .sec-lbl{
+      font-size:10px;letter-spacing:4px;text-transform:uppercase;
+      color:var(--mid-grey);display:flex;align-items:center;gap:12px;margin-bottom:48px;
+    }
+    .sec-lbl::before{content:'';width:32px;height:1px;background:var(--mid-grey);}
+    .sec-lbl .num{color:var(--accent);}
+
+    /* ── TUTORIALS ── */
+    #tutorials{background:var(--off-white);}
+    .tut-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:2px;background:var(--light-grey);
+    }
+    .tut-card{
+      background:var(--white);padding:28px 24px;
+      display:flex;flex-direction:column;gap:10px;
+      position:relative;transition:background .2s;
+    }
+    .tut-card::before{
+      content:'';position:absolute;top:0;left:0;
+      width:0;height:3px;background:var(--accent);transition:width .3s;
+    }
+    .tut-card:hover{background:#f9f9f6;}
+    .tut-card:hover::before{width:100%;}
+    .tut-num{
+      font-family:var(--font-display);font-size:36px;
+      color:var(--light-grey);line-height:1;
+    }
+    .tut-sem{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);
+    }
+    .tut-title{font-size:14px;font-weight:700;color:var(--black);}
+    .tut-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;flex:1;}
+    .tut-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:8px 16px;background:var(--black);color:#fff;
+      border:1px solid var(--black);font-family:var(--font-mono);
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      transition:all .2s;align-self:flex-start;margin-top:4px;text-decoration:none;
+    }
+    .tut-btn:hover{background:var(--accent);border-color:var(--accent);}
+    .tut-btn.soon{
+      background:transparent;color:var(--mid-grey);
+      border-color:var(--light-grey);cursor:default;pointer-events:none;
+    }
+
+    /* ── ADMIN ZONE ── */
+    #admin-zone{
+      display:none;background:#0a0a08;border:1px solid #1e1e1c;
+      padding:32px;margin-top:40px;position:relative;
+    }
+    #admin-zone::before{
+      content:'';position:absolute;top:0;left:0;right:0;
+      height:2px;background:linear-gradient(90deg,var(--accent),transparent);
+    }
+    .adm-lbl{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-bottom:6px;
+    }
+    .adm-inp{
+      width:100%;padding:9px 12px;background:#080808;
+      border:1px solid #1e1e1c;color:#fff;
+      font-family:var(--font-mono);font-size:12px;outline:none;
+      transition:border-color .2s;
+    }
+    .adm-inp:focus{border-color:var(--accent);}
+    .adm-inp::placeholder{color:#2a2a28;}
+    .adm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+    .adm-btn{
+      padding:10px 24px;background:var(--accent);color:#fff;border:none;
+      font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+      text-transform:uppercase;cursor:pointer;transition:background .2s;
+    }
+    .adm-btn:hover{background:var(--accent-2);}
+    .adm-btn.sm{
+      padding:4px 12px;background:transparent;color:#555;
+      border:1px solid #333;font-size:9px;
+    }
+    .adm-btn.sm:hover{border-color:#e04;color:#e04;}
+    .adm-row{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 14px;background:#080808;border:1px solid #161614;
+      margin-bottom:3px;flex-wrap:wrap;gap:8px;
+    }
+    .adm-row-info{font-size:12px;color:#ccc;}
+    .adm-row-sem{
+      font-size:9px;letter-spacing:2px;text-transform:uppercase;
+      color:var(--accent);margin-right:10px;
+    }
+
+    /* ── PATTERNS ── */
+    #patterns{background:var(--white);}
+    .pat-wrap{position:relative;max-width:520px;margin-bottom:32px;}
+    .pat-sel{
+      width:100%;padding:14px 44px 14px 18px;
+      background:var(--off-white);border:1px solid var(--light-grey);
+      border-left:3px solid var(--accent);
+      font-family:var(--font-mono);font-size:12px;color:var(--black);
+      appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;
+    }
+    .pat-arrow{
+      position:absolute;right:16px;top:50%;transform:translateY(-50%);
+      color:var(--accent);font-size:12px;pointer-events:none;
+    }
+    .pat-box{
+      background:var(--off-white);border:1px solid var(--light-grey);
+      border-left:3px solid var(--accent);
+      padding:32px 36px;display:none;
+    }
+    .pat-box.on{display:block;}
+    .pat-tag{
+      font-size:9px;letter-spacing:3px;text-transform:uppercase;
+      color:var(--accent);margin-bottom:10px;
+    }
+    .pat-title{font-size:17px;font-weight:700;color:var(--black);margin-bottom:12px;}
+    .pat-desc{font-size:13px;color:var(--dark-grey);line-height:1.9;margin-bottom:20px;}
+    .pat-formula{
+      background:var(--white);border:1px solid var(--light-grey);
+      padding:20px 24px;overflow-x:auto;color:var(--black);
+    }
+
+    /* ── MB LEARNERS ── */
+    #mb-learners{background:var(--off-white);}
+    .mb-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start;}
+    .mb-text p{font-size:13px;color:var(--dark-grey);margin-bottom:16px;line-height:1.95;}
+    .mb-text p strong{color:var(--black);}
+    .mb-quote{
+      border-left:3px solid var(--accent);padding:14px 20px;
+      background:var(--white);margin:24px 0;
+      font-size:13px;color:var(--dark-grey);font-style:italic;line-height:1.85;
+    }
+    .mb-feats{display:flex;flex-direction:column;gap:2px;}
+    .mb-feat{
+      background:var(--white);padding:20px 22px;
+      border-left:3px solid transparent;transition:border-color .2s;
+    }
+    .mb-feat:hover{border-left-color:var(--accent);}
+    .mb-feat-icon{
+      font-family:var(--font-display);font-size:30px;
+      color:var(--accent);line-height:1;margin-bottom:8px;
+    }
+    .mb-feat-title{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--black);}
+    .mb-feat-desc{font-size:12px;color:var(--dark-grey);line-height:1.8;}
+    .mb-stats{display:flex;gap:2px;background:var(--light-grey);margin-top:28px;}
+    .mb-stat{background:var(--black);padding:20px 24px;flex:1;text-align:center;}
+    .mb-stat-n{font-family:var(--font-display);font-size:44px;color:#fff;line-height:1;}
+    .mb-stat-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-top:4px;}
+
+    /* ── FOOTER VIEWS BAR ── */
+    .pv-bar{
+      background:var(--black);padding:36px 48px;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:16px;border-top:1px solid #111;
+    }
+    .pv-lbl{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;}
+    .pv-num{
+      font-family:var(--font-display);font-size:48px;
+      color:#fff;letter-spacing:4px;line-height:1;
+    }
+    .pv-num span{color:var(--accent);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .tut-grid{grid-template-columns:repeat(2,1fr);}
+      .mb-grid{grid-template-columns:1fr;gap:40px;}
+      .photo-strip{grid-template-columns:1fr;}
+    }
+    @media(max-width:600px){
+      .tut-grid{grid-template-columns:1fr;}
+      .th-inner,.ps-bar{padding-left:20px;padding-right:20px;}
+      .pv-bar{padding:24px 20px;}
+      .adm-grid{grid-template-columns:1fr;}
+    }
+  </style>
 </head>
 <body>
 <div class="cursor"></div><div class="cursor-ring"></div>
-<nav>
+
+<nav class="dark-nav">
   <a href="index.html" class="nav-logo">
-    <div class="axl-badge"><svg viewBox="0 0 22 22" fill="none"><path d="M2 18L8 4L14 18" stroke="white" stroke-width="2" fill="none" stroke-linecap="square"/><line x1="4.5" y1="13" x2="11.5" y2="13" stroke="white" stroke-width="2"/><line x1="15" y1="4" x2="20" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/><line x1="20" y1="4" x2="15" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/></svg></div>
-    <span class="name-full">MILIND <span>SAHU</span></span>
+    <div class="axl-badge">
+      <svg viewBox="0 0 22 22" fill="none">
+        <path d="M2 18L8 4L14 18" stroke="white" stroke-width="2" fill="none" stroke-linecap="square"/>
+        <line x1="4.5" y1="13" x2="11.5" y2="13" stroke="white" stroke-width="2"/>
+        <line x1="15" y1="4" x2="20" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/>
+        <line x1="20" y1="4" x2="15" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/>
+      </svg>
+    </div>
+    <span class="name-full" style="color:#fff">MILIND <span>SAHU</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="index.html">Home</a></li>
     <li><a href="index.html#about">About</a></li>
     <li><a href="projects.html">Projects</a></li>
     <li><a href="axiom-labs.html">AXL</a></li>
-    <li><a href="teaching.html">Teaching</a></li>
+    <li><a href="teaching.html" class="active">Teaching</a></li>
     <li><a href="index.html#research">Research</a></li>
-    <li><a href="index.html#gallery">Gallery</a></li>
-    <li><a href="index.html#certificates">Certs</a></li>
   </ul>
-  <button class="hamburger"><span></span><span></span><span></span></button>
+  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
 </nav>
+
 <main>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div>
-      <div class="hero-eyebrow fade-in"><span class="dot"></span>BS-MS Student · IISER Tirupati · 2025-Present</div>
-      <h1 class="hero-name fade-in stagger-1">MILIND<br><span class="accent-line">SAHU</span><span class="underscore">_</span></h1>
-      <p class="hero-subtitle fade-in stagger-2">Mathematics <span>·</span> Computing <span>·</span> Energy Systems</p>
-      <div class="hero-terminal fade-in stagger-2"><div class="terminal-body"></div></div>
-      <div class="hero-links fade-in stagger-3">
-        <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-primary">GitHub</a>
-        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="btn btn-ghost">LinkedIn</a>
-        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="btn btn-ghost">Email</a>
-        <a href="projects.html" class="btn btn-ghost">Projects →</a>
-      </div>
+<!-- ══ HERO ══ -->
+<div class="th-hero">
+  <div class="th-grid"></div>
+  <div class="th-glow"></div>
+  <div class="th-inner">
+    <div class="th-eyebrow fade-in">Teaching &amp; Research Portfolio</div>
+    <h1 class="th-h1 fade-in stagger-1">TEACHING<br><span>&amp; THEORY</span></h1>
+    <p class="th-sub fade-in stagger-2">Tutorials · Mathematical Patterns · Peer Learning</p>
+    <div class="th-pills fade-in stagger-3">
+      <a href="#tutorials"  class="th-pill">Tutorials</a>
+      <a href="#patterns"   class="th-pill">Math Patterns</a>
+      <a href="#mb-learners"class="th-pill">MB Learners</a>
     </div>
-    <div class="hero-axl-card fade-in stagger-3">
-      <div class="hero-axl-logo">
-        <div class="axl-text">AX<span>L</span></div>
-        <div class="axl-sub">AXIOM LABS</div>
-      </div>
-      <div class="axl-card-tagline">Theory <span class="arr">→</span> Algorithms <span class="arr">→</span> Intelligence</div>
-      <div class="axl-mini-stats">
-        <div class="axl-mini-stat"><div class="axl-mini-num">3×</div><div class="axl-mini-label">Prizes Won</div></div>
-        <div class="axl-mini-stat"><div class="axl-mini-num">₹23K</div><div class="axl-mini-label">Prize Money</div></div>
-        <div class="axl-mini-stat"><div class="axl-mini-num">4+</div><div class="axl-mini-label">Projects</div></div>
-        <div class="axl-mini-stat"><div class="axl-mini-num" style="color:var(--accent)">AXL</div><div class="axl-mini-label">Est. 2025</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span class="ticker-item"><strong>3rd Prize</strong><span class="sep">·</span>Inter IISER Entrepreneurship Summit</span>
-    <span class="ticker-item"><strong>2nd Prize</strong><span class="sep">·</span>IIT Hyderabad Eco Champion Hackathon</span>
-    <span class="ticker-item"><strong>Rank 5</strong><span class="sep">·</span>Hack Beyond Limits — 1000+ Teams</span>
-    <span class="ticker-item"><strong>Top 100</strong><span class="sep">·</span>CodeSynthesis National — 4000+ Teams</span>
-    <span class="ticker-item"><strong>Round 3</strong><span class="sep">·</span>IIT Kanpur EcoCraft Policy Conclave 26</span>
-    <span class="ticker-item"><strong>₹23,000</strong><span class="sep">·</span>Prize Money Won Across Competitions</span>
-    <span class="ticker-item"><strong>AXL</strong><span class="sep">·</span>Axiom Labs — Theory → Algorithms → Intelligence</span>
-    <span class="ticker-item"><strong>₹23,000</strong><span class="sep">·</span>Total Prize Money Won</span>
-    <span class="ticker-item"><strong>3rd Prize</strong><span class="sep">·</span>Inter IISER Entrepreneurship Summit</span>
-    <span class="ticker-item"><strong>2nd Prize</strong><span class="sep">·</span>IIT Hyderabad Eco Champion Hackathon</span>
-    <span class="ticker-item"><strong>Rank 5</strong><span class="sep">·</span>Hack Beyond Limits — 1000+ Teams</span>
-    <span class="ticker-item"><strong>Top 100</strong><span class="sep">·</span>CodeSynthesis National — 4000+ Teams</span>
-    <span class="ticker-item"><strong>Round 3</strong><span class="sep">·</span>IIT Kanpur EcoCraft Policy Conclave 26</span>
-    <span class="ticker-item"><strong>₹23,000</strong><span class="sep">·</span>Prize Money Won Across Competitions</span>
-    <span class="ticker-item"><strong>AXL</strong><span class="sep">·</span>Axiom Labs — Theory → Algorithms → Intelligence</span>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="container">
-    <p class="section-label"><span class="num">01</span> About</p>
-    <div class="about-layout">
-      <div class="about-text fade-in">
-        <p>I'm a <strong>first-year BS-MS student at IISER Tirupati</strong>, working at the intersection of mathematical modeling, optimization theory, and computational methods applied to real-world systems.</p>
-        <p>My work spans <strong>energy analytics, machine learning, and quantitative policy analysis</strong>. I build systems that translate rigorous theory into deployable tools — from NILM-based energy disaggregation to proof-theoretic waste traceability frameworks.</p>
-        <p>Through my research identity <strong>AXL — Axiom Labs</strong>, I compete in national hackathons at IITs and IISERs, consistently placing in the top ranks against thousands of participants.</p>
-        <div class="about-tags">
-          <span class="tag-pill">Mathematical Economics</span>
-          <span class="tag-pill">Optimization Theory</span>
-          <span class="tag-pill">Game Theory</span>
-          <span class="tag-pill">Energy Systems</span>
-          <span class="tag-pill">Machine Learning</span>
-          <span class="tag-pill">Policy Analysis</span>
-        </div>
-        <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">
-          <a href="axiom-labs.html" class="btn btn-primary">Explore AXL →</a>
-          <a href="projects.html" class="btn btn-ghost">See Projects</a>
-        </div>
-      </div>
-      <div class="about-right fade-in stagger-2">
-        <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">National Prizes Won</div></div>
-        <div class="stat-box"><div class="stat-num">₹23K</div><div class="stat-label">Total Prize Money</div></div>
-        <div class="stat-box"><div class="stat-num">5K+</div><div class="stat-label">Competitors Beaten</div></div>
-        <div class="stat-box"><div class="stat-num" style="font-size:30px;color:var(--accent)">IISER-T</div><div class="stat-label">BS-MS 2025–Present</div></div>
-      </div>
+<!-- ══ PHOTO STRIP ══ -->
+<div class="photo-strip">
+  <div class="photo-strip-item">
+    <img src="teaching-img1.jpg" alt="Vector Calculus session">
+    <div class="ps-overlay"></div>
+    <div class="ps-cap">
+      <div class="ps-tag">MB Learners · IISER Tirupati</div>
+      <div class="ps-title">Vector Calculus Session</div>
+      <div class="ps-detail">Line Integrals · Spherical &amp; Cylindrical Systems</div>
     </div>
   </div>
-</section>
-
-<!-- RESEARCH -->
-<section id="research">
-  <div class="container">
-    <p class="section-label"><span class="num">02</span> Research Galaxy</p>
-    <div class="graph-hint">Drag to rotate · Scroll to zoom · Hover planets</div>
-    <div id="research-graph"></div>
-
-    <p class="section-label" style="margin-top:72px;"><span class="num">—</span> Certificates & Awards</p>
-    <div class="certs-grid-dark">
-      <div class="cert-dark-item fade-in">
-        <div class="cert-dark-img"><img src="cert-hbl-award.jpg" alt="Rank 5 Hack Beyond Limits"></div>
-        <div class="cert-dark-label">🏅 Rank 5 · Hack Beyond Limits</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-1">
-        <div class="cert-dark-img"><img src="cert-hbl.jpg" alt="Hack Beyond Limits Participation"></div>
-        <div class="cert-dark-label">Hack Beyond Limits · Participation</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-2">
-        <div class="cert-dark-img"><img src="cert-cs1.jpg" alt="CodeSynthesis"></div>
-        <div class="cert-dark-label">CodeSynthesis · Participation</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-3">
-        <div class="cert-dark-img"><img src="cert-cs2.jpg" alt="CodeSynthesis Round 1"></div>
-        <div class="cert-dark-label">CodeSynthesis · Round 1</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-4">
-        <div class="cert-dark-img"><img src="cert-cs3.jpg" alt="CodeSynthesis Round 2"></div>
-        <div class="cert-dark-label">CodeSynthesis · Round 2</div>
-      </div>
+  <div class="photo-strip-item">
+    <img src="teaching-img2.jpg" alt="Mathematics tutorial">
+    <div class="ps-overlay"></div>
+    <div class="ps-cap">
+      <div class="ps-tag">MB Learners · IISER Tirupati</div>
+      <div class="ps-title">Mathematics Tutorial</div>
+      <div class="ps-detail">Sets · Functions · Continuity &amp; Countability</div>
     </div>
   </div>
-</section>
+</div>
+<div class="ps-bar">
+  <span>Peer Learning · 30+ Students · 2024–Present</span>
+  <a href="#mb-learners">About MB Learners →</a>
+</div>
 
-<!-- AXL -->
-<section id="axl-preview">
+
+<!-- ══════════════════════════════════
+     01 — TUTORIALS
+═════════════════════════════════════ -->
+<section id="tutorials">
   <div class="container">
-    <p class="section-label"><span class="num">03</span> Research Identity</p>
-    <div class="axl-stack-layout fade-in">
-      <div class="axl-stack-left">
-        <div class="axl-name">AX<span>L</span></div>
-        <div class="axl-collective">Axiom Labs · Computational Research Collective</div>
-        <div class="axl-tagline">Theory <span class="arrow">→</span> Algorithms <span class="arrow">→</span> Intelligence</div>
-        <p class="axl-desc">Axiom Labs is my independent computational research identity — building at the intersection of rigorous mathematics and deployable systems. Every project starts from axioms, not assumptions.</p>
-        <a href="axiom-labs.html" class="btn btn-primary" style="margin-top:8px;">Explore AXL →</a>
+    <p class="sec-lbl"><span class="num">01</span> Tutorials &amp; Study Resources</p>
+    <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;max-width:640px;margin-bottom:48px;">
+      PDF notes and study resources — open directly in your browser, no login needed.
+    </p>
+
+    <div id="tut-grid" class="tut-grid"></div>
+
+    <!-- ADMIN PANEL — only appears at teaching.html#admin -->
+    <div id="admin-zone">
+      <div id="adm-login">
+        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#666;margin-bottom:20px;">
+          Admin Access
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+          <input id="adm-pw" type="password" placeholder="Password" class="adm-inp"
+            style="width:220px;" onkeydown="if(event.key==='Enter')verifyAdmin()">
+          <button class="adm-btn" onclick="verifyAdmin()">Unlock →</button>
+        </div>
+        <div id="adm-err" style="color:#e04;font-size:11px;margin-top:10px;display:none;">
+          Incorrect password.
+        </div>
       </div>
-      <div class="axl-stack-right">
-        <div class="axl-stack-block">
-          <div class="axl-stack-title">Research Focus</div>
-          <div class="axl-stack-items">
-            <span class="axl-tag axl-tag-core">Quantitative Systems</span>
-            <span class="axl-tag axl-tag-core">Optimization</span>
-            <span class="axl-tag axl-tag-core">Machine Learning</span>
-            <span class="axl-tag axl-tag-core">Energy Systems Analytics</span>
+
+      <div id="adm-panel" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">
+            Tutorial Manager
+          </span>
+          <button class="adm-btn sm" onclick="lockAdmin()">Lock &amp; Close</button>
+        </div>
+        <div class="adm-grid">
+          <div>
+            <div class="adm-lbl">Semester</div>
+            <input id="f-sem"   class="adm-inp" placeholder="e.g. Semester 1">
+          </div>
+          <div>
+            <div class="adm-lbl">Subject / Topic</div>
+            <input id="f-topic" class="adm-inp" placeholder="e.g. Vector Calculus">
+          </div>
+          <div>
+            <div class="adm-lbl">Short Description</div>
+            <input id="f-desc"  class="adm-inp" placeholder="What this covers...">
+          </div>
+          <div>
+            <div class="adm-lbl">Question Set — Google Drive Link</div>
+            <input id="f-link"  class="adm-inp" placeholder="https://drive.google.com/file/d/...">
+          </div>
+          <div>
+            <div class="adm-lbl">Solution Set — Google Drive Link</div>
+            <input id="f-sol"   class="adm-inp" placeholder="https://drive.google.com/file/d/...">
           </div>
         </div>
-        <div class="axl-stack-block">
-          <div class="axl-stack-title">ML Methods</div>
-          <div class="axl-stack-items">
-            <span class="axl-tag axl-tag-ml">Random Forest</span>
-            <span class="axl-tag axl-tag-ml">LSTM Networks</span>
-            <span class="axl-tag axl-tag-ml">Time-Series Forecasting</span>
-            <span class="axl-tag axl-tag-ml">Anomaly Detection</span>
+        <button class="adm-btn" onclick="addTutorial()">+ Add</button>
+        <div id="adm-list" style="margin-top:20px;"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     02 — MATHEMATICAL PATTERNS
+═════════════════════════════════════ -->
+<section id="patterns">
+  <div class="container">
+    <p class="sec-lbl"><span class="num">02</span> Mathematical Patterns &amp; Insights</p>
+    <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;max-width:640px;margin-bottom:36px;">
+      Structural patterns, proof techniques, and insights collected during coursework.
+      Select a topic from the dropdown.
+    </p>
+
+    <div class="pat-wrap">
+      <select class="pat-sel" id="pat-sel" onchange="showPat(this.value)">
+        <option value="">— Select a topic —</option>
+        <option value="conservative">Vector Calculus · Conservative Fields</option>
+        <option value="triangular">Linear Algebra · Triangular Eigenvalues</option>
+        <option value="squeeze">Real Analysis · Squeeze Theorem</option>
+        <option value="separation">Differential Equations · Separation of Variables</option>
+        <option value="divergence">Multivariable · Divergence Theorem</option>
+        <option value="ranknullity">Linear Algebra · Rank–Nullity Theorem</option>
+        <option value="stokes">Multivariable · Stokes' Theorem</option>
+        <option value="taylor">Calculus · Taylor Series</option>
+        <option value="integrating">ODE · Integrating Factor</option>
+      </select>
+      <div class="pat-arrow">▾</div>
+    </div>
+
+    <div class="pat-box" id="pat-box">
+      <div class="pat-tag"  id="pat-tag"></div>
+      <div class="pat-title"id="pat-title"></div>
+      <p  class="pat-desc"  id="pat-desc"></p>
+      <div class="pat-formula" id="pat-formula"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════
+     03 — MB LEARNERS
+═════════════════════════════════════ -->
+<section id="mb-learners">
+  <div class="container">
+    <p class="sec-lbl"><span class="num">03</span> Teaching Initiative</p>
+    <div class="mb-grid">
+
+      <div class="mb-text fade-in">
+        <h2 style="font-family:var(--font-display);font-size:clamp(38px,5vw,60px);
+                   line-height:.9;letter-spacing:2px;margin-bottom:20px;color:var(--black);">
+          MB LEARNERS<span style="color:var(--accent)">.</span>
+        </h2>
+        <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;
+                  color:var(--accent);margin-bottom:20px;">
+          Peer Learning · IISER Tirupati
+        </p>
+        <p>
+          IISER courses can be brutal — especially interdisciplinary ones.
+          <strong>MB Learners is a peer-learning group</strong> where we trade skills
+          to survive the semester together.
+        </p>
+        <p>
+          We are not a coaching centre. We are a group of students who realized that
+          <strong>"Math people need help with Biology, and Bio people need help with Math."</strong>
+        </p>
+        <p>
+          The initiative runs informal tutorial sessions, shares proof shortcuts,
+          and breaks down mathematically heavy topics into approachable explanations.
+        </p>
+        <div class="mb-quote">
+          "If you're at IISER Tirupati and struggling with a subject,
+          there's always a seat here."
+        </div>
+      </div>
+
+      <div class="fade-in stagger-2">
+        <div class="mb-feats">
+          <div class="mb-feat">
+            <div class="mb-feat-icon">⇄</div>
+            <div class="mb-feat-title">Skill Swap</div>
+            <p class="mb-feat-desc">Breaking down Vector Calculus, Linear Algebra, and Matrices for students who struggle with mathematics-heavy courses.</p>
+          </div>
+          <div class="mb-feat">
+            <div class="mb-feat-icon">∅</div>
+            <div class="mb-feat-title">No Gatekeeping</div>
+            <p class="mb-feat-desc">Proofs simplified, shortcuts shared — concepts that stay confusing long after formal lectures.</p>
+          </div>
+          <div class="mb-feat">
+            <div class="mb-feat-icon">∪</div>
+            <div class="mb-feat-title">Community Support</div>
+            <p class="mb-feat-desc">30+ students across disciplines have benefited from this collaborative learning environment.</p>
           </div>
         </div>
-        <div class="axl-stack-block">
-          <div class="axl-stack-title">Mathematical Foundations</div>
-          <div class="axl-stack-items">
-            <span class="axl-tag axl-tag-math">Linear Algebra</span>
-            <span class="axl-tag axl-tag-math">Optimization Theory</span>
-            <span class="axl-tag axl-tag-math">Probability</span>
-            <span class="axl-tag axl-tag-math">Statistical Inference</span>
+        <div class="mb-stats">
+          <div class="mb-stat">
+            <div class="mb-stat-n">30<span style="color:var(--accent)">+</span></div>
+            <div class="mb-stat-l">Students</div>
+          </div>
+          <div class="mb-stat">
+            <div class="mb-stat-n" style="color:var(--accent)">MB</div>
+            <div class="mb-stat-l">Math × Bio</div>
+          </div>
+          <div class="mb-stat">
+            <div class="mb-stat-n">∞</div>
+            <div class="mb-stat-l">Open Sessions</div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- PROJECTS CTA -->
-<section id="projects" style="background:var(--black);padding:80px 0;position:relative;overflow:hidden;">
-  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(26,86,219,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.06) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
-  <div style="position:absolute;top:50%;left:50%;width:600px;height:400px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(26,86,219,.12) 0%,transparent 65%);pointer-events:none;"></div>
-  <div class="container" style="position:relative;z-index:1;text-align:center;">
-    <p class="section-label" style="justify-content:center;color:#333;margin-bottom:28px;"><span class="num">04</span> Projects</p>
-    <div style="font-family:var(--font-display);font-size:clamp(52px,8vw,96px);line-height:.9;letter-spacing:4px;color:white;margin-bottom:12px;">5 PROJECTS<span style="color:var(--accent)">.</span></div>
-    <p style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:12px;">3 Prizes · ₹23,000 Prize Money · IITs &amp; IISERs</p>
-    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:28px 0 36px;">
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Energy</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">ML / AI</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Policy</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Optimization</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Systems</span>
-    </div>
-    <a href="axiom-labs.html#projects" class="btn btn-primary" style="font-size:11px;padding:13px 32px;">View All Projects under AXL →</a>
-  </div>
-</section>
 
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="container">
-    <p class="section-label"><span class="num">05</span> Gallery</p>
-    <div class="gallery-grid">
-      <div class="gallery-item"><img src="photo1.jpg" alt="2nd Prize IIT Hyderabad"><div class="gallery-overlay">2nd Prize · IIT Hyderabad</div></div>
-      <div class="gallery-item"><img src="photo2.jpg" alt="Presentation IIES"><div class="gallery-overlay">Presentation · IIES</div></div>
-      <div class="gallery-item"><img src="photo3.jpg" alt="IISER Tirupati Team"><div class="gallery-overlay">IISER Tirupati Team</div></div>
-      <div class="gallery-item"><img src="photo4.jpg" alt="Pitched to Judges"><div class="gallery-overlay">Pitched to Judges · IIES</div></div>
-      <div class="gallery-item"><img src="photo5.jpg" alt="3rd Prize IIES"><div class="gallery-overlay">3rd Prize · IIES</div></div>
-    </div>
+<!-- ══ PAGE VIEWS BAR ══ -->
+<div class="pv-bar">
+  <div>
+    <div class="pv-lbl">Page Views</div>
+    <div class="pv-num" id="pv-num">—</div>
   </div>
-</section>
+  <div style="text-align:right;">
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:6px;">
+      IISER Tirupati · 2025
+    </div>
+    <a href="mailto:milind20251175@students.iisertirupati.ac.in"
+       style="font-size:9px;letter-spacing:2px;text-transform:uppercase;
+              color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;">
+      Get In Touch →
+    </a>
+  </div>
+</div>
 
 </main>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" fill="#0d0d0b"/><path d="M4 36L16 8L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/><line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/><line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/><line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/></svg><div class="logo-text">AX<span>L</span></div></div>
+        <div class="logo-wrap">
+          <svg viewBox="0 0 44 44" fill="none">
+            <rect width="44" height="44" fill="#0d0d0b"/>
+            <path d="M4 36 L16 8 L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/>
+            <line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/>
+            <line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/>
+            <line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/>
+          </svg>
+          <div class="logo-text">AX<span>L</span></div>
+        </div>
         <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>github.com/itsmilindsahu</a>
-        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>linkedin.com/in/itsmilindsahu</a>
-        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>milind20251175@iisertirupati.ac.in</a>
+        <a href="https://github.com/itsmilindsahu"  target="_blank" class="footer-link">GitHub</a>
+        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link">LinkedIn</a>
+        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link">Email</a>
       </div>
     </div>
-    <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span></div>
+    <div class="footer-bottom">
+      <span>© 2025 Milind Sahu · IISER Tirupati</span>
+      <span>Teaching &amp; Research Portfolio</span>
+    </div>
   </div>
 </footer>
-<button class="theme-toggle" title="Toggle dark/light">◑</button>
+
+<button class="theme-toggle" title="Toggle dark/light mode">◑</button>
 <script src="script.js"></script>
+<script>
+/* ══════════════════════════════════════════
+   PAGE VIEWS
+══════════════════════════════════════════ */
+(function(){
+  const K='th_views',B=429;
+  let n=parseInt(localStorage.getItem(K),10);
+  if(isNaN(n)||n<B) n=B;
+  n++; localStorage.setItem(K,n);
+  const el=document.getElementById('pv-num');
+  const s=Math.max(B,n-50),t0=performance.now();
+  (function tick(now){
+    const p=Math.min((now-t0)/900,1),e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(s+(n-s)*e).toLocaleString();
+    if(p<1) requestAnimationFrame(tick);
+  })(performance.now());
+})();
+
+/* ══════════════════════════════════════════
+   MATH PATTERNS
+══════════════════════════════════════════ */
+const P={
+  conservative:{tag:'Vector Calculus',title:'Conservative Vector Fields',
+    desc:'A vector field F is conservative iff its curl is zero everywhere. This guarantees path-independence of line integrals and the existence of a scalar potential φ with F = ∇φ.',
+    f:'$$ \\nabla \\times \\mathbf{F} = \\mathbf{0} \\iff \\mathbf{F} = \\nabla\\varphi $$'},
+  triangular:{tag:'Linear Algebra',title:'Triangular Matrix Eigenvalues',
+    desc:'For any triangular matrix, eigenvalues are exactly the diagonal entries. The characteristic polynomial factors immediately as a product of linear terms.',
+    f:'$$ \\det(A - \\lambda I) = \\prod_{i=1}^{n}(a_{ii} - \\lambda) $$'},
+  squeeze:{tag:'Real Analysis',title:'Squeeze Theorem',
+    desc:'If a function is bounded above and below by two expressions both converging to L, the middle expression also converges to L. Essential for indirect limit proofs.',
+    f:'$$ g(x) \\leq f(x) \\leq h(x),\\;\\lim g=\\lim h=L \\implies \\lim f=L $$'},
+  separation:{tag:'Differential Equations',title:'Separation of Variables',
+    desc:'Rearrange the ODE so all y-terms are on one side, all x-terms on the other, then integrate both sides independently.',
+    f:'$$ \\frac{dy}{dx}=f(x)g(y) \\;\\Rightarrow\\; \\int\\frac{dy}{g(y)}=\\int f(x)\\,dx+C $$'},
+  divergence:{tag:'Multivariable Calculus',title:'Divergence Theorem',
+    desc:'Total outward flux through a closed surface equals the volume integral of divergence. Converts surface integrals into volume integrals.',
+    f:'$$ \\oiint_S \\mathbf{F}\\cdot d\\mathbf{S} = \\iiint_V (\\nabla\\cdot\\mathbf{F})\\,dV $$'},
+  ranknullity:{tag:'Linear Algebra',title:'Rank–Nullity Theorem',
+    desc:'For any linear map T: V → W, dim(domain) = rank + nullity. A fundamental constraint on every linear transformation.',
+    f:'$$ \\dim V = \\operatorname{rank}(T) + \\operatorname{nullity}(T) $$'},
+  stokes:{tag:'Multivariable Calculus',title:"Stokes' Theorem",
+    desc:"Relates the surface integral of curl over S to the line integral around its boundary ∂S. Generalises Green's Theorem to 3D.",
+    f:'$$ \\iint_S(\\nabla\\times\\mathbf{F})\\cdot d\\mathbf{S}=\\oint_{\\partial S}\\mathbf{F}\\cdot d\\mathbf{r} $$'},
+  taylor:{tag:'Calculus',title:'Taylor Series',
+    desc:"Any smooth function near a point a can be approximated by an infinite polynomial whose coefficients encode the function's derivatives at that point.",
+    f:'$$ f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}(x-a)^n $$'},
+  integrating:{tag:'ODE · First Order',title:'Integrating Factor',
+    desc:"For y' + P(x)y = Q(x), multiply by μ = e^{∫P dx}. The left side becomes the derivative of a product and integrates cleanly.",
+    f:'$$ \\mu(x)=e^{\\int P(x)dx},\\quad \\frac{d}{dx}[\\mu y]=\\mu Q(x) $$'}
+};
+
+function showPat(k){
+  const box=document.getElementById('pat-box');
+  if(!k){box.classList.remove('on');return;}
+  const d=P[k]; if(!d) return;
+  document.getElementById('pat-tag').textContent   = d.tag;
+  document.getElementById('pat-title').textContent = d.title;
+  document.getElementById('pat-desc').textContent  = d.desc;
+  document.getElementById('pat-formula').innerHTML = d.f;
+  box.classList.add('on');
+  if(window.MathJax && MathJax.typesetPromise)
+    MathJax.typesetPromise([document.getElementById('pat-formula')]);
+}
+
+/* ══════════════════════════════════════════
+   TUTORIALS — localStorage
+══════════════════════════════════════════ */
+/* ── SHA-256 hash of admin password (no plaintext in source) ──
+   Password = iiser2025axl
+   To change: open any browser console and run:
+     crypto.subtle.digest('SHA-256',new TextEncoder().encode('newpassword'))
+       .then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
+   Then replace the hash string below. */
+const PW_HASH='aeba91eb0ea74bf51319125d7444930e7ddfd354eb3ee62564c384dfef8f46fc';
+const TK='axl_tutorials', AK='axl_adm';
+
+function loadT(){return JSON.parse(localStorage.getItem(TK)||'[]');}
+function saveT(a){localStorage.setItem(TK,JSON.stringify(a));}
+
+function icon(t){
+  t=t.toLowerCase();
+  if(t.includes('calculus')||t.includes('vector')) return '∇';
+  if(t.includes('linear')||t.includes('matrix')||t.includes('eigen')) return 'λ';
+  if(t.includes('analysis')||t.includes('real')) return 'ε';
+  if(t.includes('diff')||t.includes('ode')) return '∂';
+  if(t.includes('prob')||t.includes('stat')) return '∑';
+  if(t.includes('physics')) return 'Φ';
+  if(t.includes('bio')) return '∮';
+  return '∫';
+}
+
+function renderGrid(){
+  const tuts=loadT(), g=document.getElementById('tut-grid');
+  if(!g) return;
+  if(!tuts.length){
+    g.innerHTML=`<div style="grid-column:1/-1;padding:48px;text-align:center;
+      border:2px dashed var(--light-grey);">
+      <div style="font-family:var(--font-display);font-size:48px;color:var(--light-grey);">∫</div>
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
+                  color:var(--mid-grey);margin-top:12px;">Study resources will appear here</div>
+    </div>`;
+    return;
+  }
+  g.innerHTML=tuts.map((t,i)=>`
+    <div class="tut-card fade-in">
+      <div class="tut-num">0${i+1}</div>
+      <div class="tut-sem">${t.semester||''}</div>
+      <div class="tut-title">${t.topic}</div>
+      <p class="tut-desc">${t.desc||''}</p>
+      ${t.link||t.sol ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+        ${t.link?`<a href="${t.link}" target="_blank" class="tut-btn">Questions ↗</a>`:''}
+        ${t.sol ?`<a href="${t.sol}"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);" onmouseover="this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)';" onmouseout="this.style.background='transparent';this.style.color='var(--dark-grey)';this.style.borderColor='var(--light-grey)';">Solutions ↗</a>`:''}
+      </div>` : `<span class="tut-btn soon">Coming Soon</span>`}
+    </div>`).join('');
+}
+renderGrid();
+
+/* show admin only when hash = #admin */
+function checkHash(){
+  const z=document.getElementById('admin-zone');
+  if(location.hash==='#admin'){
+    z.style.display='block';
+    if(sessionStorage.getItem(AK)==='1'){
+      document.getElementById('adm-login').style.display='none';
+      document.getElementById('adm-panel').style.display='block';
+      renderAdmList();
+    }
+  } else { z.style.display='none'; }
+}
+checkHash();
+window.addEventListener('hashchange',checkHash);
+
+async function sha256(s){
+  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+async function verifyAdmin(){
+  const h=await sha256(document.getElementById('adm-pw').value);
+  if(h===PW_HASH){
+    sessionStorage.setItem(AK,'1');
+    document.getElementById('adm-login').style.display='none';
+    document.getElementById('adm-panel').style.display='block';
+    document.getElementById('adm-err').style.display='none';
+    renderAdmList();
+  } else {
+    document.getElementById('adm-err').style.display='block';
+    document.getElementById('adm-pw').value='';
+  }
+}
+function lockAdmin(){
+  sessionStorage.removeItem(AK);
+  history.replaceState(null,'',location.pathname);
+  document.getElementById('admin-zone').style.display='none';
+}
+function addTutorial(){
+  const sem=document.getElementById('f-sem').value.trim();
+  const top=document.getElementById('f-topic').value.trim();
+  const dsc=document.getElementById('f-desc').value.trim();
+  const lnk=document.getElementById('f-link').value.trim();
+  const sol=document.getElementById('f-sol').value.trim();
+  if(!top){alert('Topic is required.');return;}
+  const tuts=loadT();
+  tuts.push({id:Date.now(),semester:sem,topic:top,desc:dsc,link:lnk,sol:sol});
+  saveT(tuts);
+  ['f-sem','f-topic','f-desc','f-link','f-sol'].forEach(id=>document.getElementById(id).value='');
+  renderGrid(); renderAdmList();
+}
+function deleteTutorial(id){
+  if(!confirm('Delete this entry?')) return;
+  saveT(loadT().filter(t=>t.id!==id));
+  renderGrid(); renderAdmList();
+}
+function renderAdmList(){
+  const tuts=loadT(), el=document.getElementById('adm-list');
+  if(!el) return;
+  el.innerHTML=!tuts.length
+    ?'<p style="color:#555;font-size:12px;margin-top:16px;">No tutorials added yet.</p>'
+    :tuts.map(t=>`
+      <div class="adm-row">
+        <div class="adm-row-info">
+          <span class="adm-row-sem">${t.semester||'—'}</span>${t.topic}
+          ${t.link?'<span style="font-size:9px;color:#555;margin-left:8px;">✓ link</span>':''}
+        </div>
+        <button class="adm-btn sm" onclick="deleteTutorial(${t.id})">Delete</button>
+      </div>`).join('');
+}
+</script>
 </body>
 </html>
