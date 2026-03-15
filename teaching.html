@@ -152,7 +152,8 @@
   ============================================ */
   #tutorials{background:var(--off-white);}
   .tut-grid{
-    display:grid;grid-template-columns:repeat(3,1fr);
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
     gap:2px;background:var(--light-grey);
   }
   .tut-card{
@@ -172,16 +173,31 @@
   .tut-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;flex:1;}
   .tut-btn{
     display:inline-flex;align-items:center;gap:6px;
-    padding:8px 16px;background:var(--black);color:#fff;
-    border:1px solid var(--black);font-family:var(--font-mono);
+    padding:9px 18px;background:var(--black);color:#fff;
+    border:1.5px solid var(--black);font-family:var(--font-mono);
     font-size:9px;letter-spacing:2px;text-transform:uppercase;
-    transition:all .2s;align-self:flex-start;margin-top:4px;text-decoration:none;
+    transition:all .22s cubic-bezier(.4,0,.2,1);
+    align-self:flex-start;margin-top:4px;text-decoration:none;
+    position:relative;overflow:hidden;
   }
-  .tut-btn:hover{background:var(--accent);border-color:var(--accent);}
+  .tut-btn::after{
+    content:'';position:absolute;inset:0;
+    background:var(--accent);transform:scaleX(0);transform-origin:left;
+    transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:0;
+  }
+  .tut-btn span{position:relative;z-index:1;}
+  .tut-btn:hover{border-color:var(--accent);color:#fff;}
+  .tut-btn:hover::after{transform:scaleX(1);}
+  .tut-btn.outline{
+    background:transparent;color:var(--dark-grey);
+    border-color:var(--light-grey);
+  }
+  .tut-btn.outline:hover{border-color:var(--accent);color:#fff;}
   .tut-btn.soon{
     background:transparent;color:var(--mid-grey);
     border-color:var(--light-grey);cursor:default;pointer-events:none;
   }
+  .tut-btn.soon::after{display:none;}
 
   /* ============================================
      ADMIN ZONE
@@ -692,9 +708,9 @@ function renderGrid(){
   g.innerHTML=tuts.map(function(t,i){
     var btns='';
     if(t.link||t.sol){
-      btns='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">';
-      if(t.link) btns+='<a href="'+t.link+'" target="_blank" class="tut-btn">Questions ↗</a>';
-      if(t.sol)  btns+='<a href="'+t.sol+'"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);">Solutions ↗</a>';
+      btns='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">';
+      if(t.link) btns+='<a href="'+t.link+'" target="_blank" class="tut-btn"><span>Questions ↗</span></a>';
+      if(t.sol)  btns+='<a href="'+t.sol+'"  target="_blank" class="tut-btn outline"><span>Solutions ↗</span></a>';
       btns+='</div>';
     } else {
       btns='<span class="tut-btn soon">Coming Soon</span>';
