@@ -93,7 +93,6 @@
       opacity:1;transform:scale(1);
       filter:saturate(1.1) brightness(1.05);
     }
-    /* dramatic vignette overlay */
     .ps-overlay{
       position:absolute;inset:0;
       background:
@@ -102,8 +101,6 @@
       transition:opacity .5s;
     }
     .photo-strip-item:hover .ps-overlay{opacity:.7;}
-
-    /* animated accent line on hover */
     .photo-strip-item::after{
       content:'';position:absolute;bottom:0;left:0;
       width:0;height:3px;
@@ -111,7 +108,6 @@
       transition:width .6s cubic-bezier(.4,0,.2,1);
     }
     .photo-strip-item:hover::after{width:100%;}
-
     .ps-cap{
       position:absolute;bottom:0;left:0;right:0;padding:28px 32px;
       transform:translateY(6px);
@@ -251,8 +247,13 @@
       background:var(--off-white);border:1px solid var(--light-grey);
       border-left:3px solid var(--accent);
       padding:32px 36px;display:none;
+      animation:patReveal .35s cubic-bezier(.4,0,.2,1) both;
     }
-    .pat-box.on{display:block;}
+    .pat-box.on{display:block !important;}
+    @keyframes patReveal{
+      from{opacity:0;transform:translateY(10px);}
+      to{opacity:1;transform:none;}
+    }
     .pat-tag{
       font-size:9px;letter-spacing:3px;text-transform:uppercase;
       color:var(--accent);margin-bottom:10px;
@@ -339,36 +340,29 @@
       }
 
       /* ── photo strip: CINEMATIC mobile ── */
-      .photo-strip{grid-template-columns:1fr;gap:0;}
-
-      /* each photo: full viewport width, tall, dramatic */
+      .photo-strip{grid-template-columns:1fr;gap:3px;}
       .photo-strip-item{
-        height:85vw;
-        min-height:260px;
-        max-height:380px;
+        height:80vw;min-height:260px;max-height:360px;
       }
-      /* on mobile images start slightly zoomed, zoom out on reveal */
+      /* images always visible on mobile — no hidden state */
       .photo-strip-item img{
-        opacity:0;
-        transform:scale(1.08);
-        transition:opacity .8s cubic-bezier(.4,0,.2,1),
-                   transform 1.2s cubic-bezier(.4,0,.2,1),
-                   filter .8s;
-        object-position:center 25%;
-      }
-      /* class added by JS when in viewport */
-      .photo-strip-item.img-loaded img{
         opacity:.85;
         transform:scale(1.02);
+        object-position:center 25%;
+        filter:saturate(.9);
+        transition:opacity .6s, transform 1.4s cubic-bezier(.4,0,.2,1);
       }
-      /* accent line always visible on mobile */
-      .photo-strip-item::after{width:40%;transition:none;}
-
-      /* caption always fully visible on mobile */
-      .ps-cap{
-        transform:none;padding:18px 22px;
+      /* Ken Burns: drift slowly when in view */
+      .photo-strip-item.img-loaded img{
+        transform:scale(1.0);
+        opacity:.92;
       }
+      /* accent line always on at 50% on mobile */
+      .photo-strip-item::after{width:50%;}
+      /* captions always fully visible */
+      .ps-cap{transform:none;padding:18px 22px;}
       .ps-tag{opacity:1;transform:none;}
+      .ps-title{font-size:17px;}
       .ps-bar{padding:14px 22px;flex-direction:column;align-items:flex-start;gap:8px;}
 
       /* ── tutorials: single column, card gets horizontal feel ── */
@@ -788,12 +782,13 @@ const P={
 
 function showPat(k){
   const box=document.getElementById('pat-box');
-  if(!k){box.classList.remove('on');return;}
+  if(!k){box.classList.remove('on');box.style.display='none';return;}
   const d=P[k]; if(!d) return;
   document.getElementById('pat-tag').textContent   = d.tag;
   document.getElementById('pat-title').textContent = d.title;
   document.getElementById('pat-desc').textContent  = d.desc;
   document.getElementById('pat-formula').innerHTML = d.f;
+  box.style.display='block';
   box.classList.add('on');
   if(window.MathJax && MathJax.typesetPromise)
     MathJax.typesetPromise([document.getElementById('pat-formula')]);
