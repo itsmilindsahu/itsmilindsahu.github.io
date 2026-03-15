@@ -229,7 +229,7 @@ body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
 @media(max-width:960px){
   :root{--gap:72px;}
   .hero-content{grid-template-columns:1fr;}
-  .hero-axl-card{display:none;}
+  .hero-axl-card{display:none !important;}
   .about-layout,.axl-layout{grid-template-columns:1fr;}
   .projects-grid{grid-template-columns:1fr;}
   .project-card{border-right:0;}
