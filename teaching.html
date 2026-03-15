@@ -668,6 +668,8 @@ function renderGrid(tuts){
       if(t.link) btns += '<a href="'+t.link+'" target="_blank" class="tut-btn"><span>Questions ↗</span></a>';
       if(t.sol)  btns += '<a href="'+t.sol+'"  target="_blank" class="tut-btn outline"><span>Solutions ↗</span></a>';
       btns += '</div>';
+      btns += '<p style="font-size:10px;color:var(--mid-grey);margin-top:8px;line-height:1.7;">'+
+        '<span style="color:var(--accent);">*</span> Question set requires login with your <strong>student Gmail</strong> · Solution set is open access.</p>';
     } else {
       btns = '<span class="tut-btn soon">Coming Soon</span>';
     }
