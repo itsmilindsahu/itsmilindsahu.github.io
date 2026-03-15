@@ -70,27 +70,66 @@
     .th-pill:hover{border-color:var(--accent);color:var(--accent);}
 
     /* ── PHOTO STRIP ── */
-    .photo-strip{display:grid;grid-template-columns:1fr 1fr;background:var(--black);}
-    .photo-strip-item{position:relative;overflow:hidden;height:400px;}
+    .photo-strip{
+      display:grid;grid-template-columns:1fr 1fr;
+      background:var(--black);position:relative;
+    }
+    .photo-strip-item{
+      position:relative;overflow:hidden;height:480px;
+      cursor:pointer;
+    }
     .photo-strip-item img{
       width:100%;height:100%;object-fit:cover;
-      display:block;opacity:.8;transition:opacity .4s,transform .5s;
+      display:block;
+      opacity:.75;
+      transform:scale(1.04);
+      transition:opacity .7s cubic-bezier(.4,0,.2,1),
+                 transform .9s cubic-bezier(.4,0,.2,1),
+                 filter .7s;
+      filter:saturate(.8);
+      will-change:transform,opacity;
     }
-    .photo-strip-item:hover img{opacity:1;transform:scale(1.03);}
+    .photo-strip-item:hover img{
+      opacity:1;transform:scale(1);
+      filter:saturate(1.1) brightness(1.05);
+    }
+    /* dramatic vignette overlay */
     .ps-overlay{
       position:absolute;inset:0;
-      background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 52%);
+      background:
+        linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 55%),
+        linear-gradient(to right, rgba(0,0,0,.25) 0%, transparent 40%);
+      transition:opacity .5s;
     }
-    .ps-cap{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;}
+    .photo-strip-item:hover .ps-overlay{opacity:.7;}
+
+    /* animated accent line on hover */
+    .photo-strip-item::after{
+      content:'';position:absolute;bottom:0;left:0;
+      width:0;height:3px;
+      background:linear-gradient(90deg,var(--accent),transparent);
+      transition:width .6s cubic-bezier(.4,0,.2,1);
+    }
+    .photo-strip-item:hover::after{width:100%;}
+
+    .ps-cap{
+      position:absolute;bottom:0;left:0;right:0;padding:28px 32px;
+      transform:translateY(6px);
+      transition:transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    .photo-strip-item:hover .ps-cap{transform:translateY(0);}
     .ps-tag{
       font-size:9px;letter-spacing:3px;text-transform:uppercase;
-      color:var(--accent);margin-bottom:6px;
+      color:var(--accent);margin-bottom:8px;
+      opacity:0;transform:translateY(8px);
+      transition:opacity .4s .1s, transform .4s .1s;
     }
+    .photo-strip-item:hover .ps-tag{opacity:1;transform:translateY(0);}
     .ps-title{
-      font-family:var(--font-display);font-size:20px;
+      font-family:var(--font-display);font-size:22px;
       color:#fff;letter-spacing:2px;
     }
-    .ps-detail{font-size:11px;color:#777;margin-top:4px;}
+    .ps-detail{font-size:11px;color:#888;margin-top:5px;}
     .ps-bar{
       background:var(--black);border-top:1px solid #111;
       padding:18px 48px;display:flex;align-items:center;
@@ -100,7 +139,9 @@
     .ps-bar a{
       font-size:9px;letter-spacing:2px;text-transform:uppercase;
       color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;
+      transition:letter-spacing .3s;
     }
+    .ps-bar a:hover{letter-spacing:3px;}
 
     /* ── SECTION LABEL ── */
     .sec-lbl{
@@ -297,15 +338,38 @@
         letter-spacing:4px;
       }
 
-      /* ── photo strip: full-width stack, tall cinematic ── */
-      .photo-strip{grid-template-columns:1fr;gap:3px;}
-      .photo-strip-item{height:70vw;min-height:240px;max-height:340px;}
-      .photo-strip-item img{object-position:center 20%;}
-      .ps-cap{padding:18px 20px;}
-      .ps-title{font-size:18px;}
-      .ps-bar{
-        padding:14px 20px;flex-direction:column;align-items:flex-start;gap:8px;
+      /* ── photo strip: CINEMATIC mobile ── */
+      .photo-strip{grid-template-columns:1fr;gap:0;}
+
+      /* each photo: full viewport width, tall, dramatic */
+      .photo-strip-item{
+        height:85vw;
+        min-height:260px;
+        max-height:380px;
       }
+      /* on mobile images start slightly zoomed, zoom out on reveal */
+      .photo-strip-item img{
+        opacity:0;
+        transform:scale(1.08);
+        transition:opacity .8s cubic-bezier(.4,0,.2,1),
+                   transform 1.2s cubic-bezier(.4,0,.2,1),
+                   filter .8s;
+        object-position:center 25%;
+      }
+      /* class added by JS when in viewport */
+      .photo-strip-item.img-loaded img{
+        opacity:.85;
+        transform:scale(1.02);
+      }
+      /* accent line always visible on mobile */
+      .photo-strip-item::after{width:40%;transition:none;}
+
+      /* caption always fully visible on mobile */
+      .ps-cap{
+        transform:none;padding:18px 22px;
+      }
+      .ps-tag{opacity:1;transform:none;}
+      .ps-bar{padding:14px 22px;flex-direction:column;align-items:flex-start;gap:8px;}
 
       /* ── tutorials: single column, card gets horizontal feel ── */
       .tut-grid{grid-template-columns:1fr;gap:2px;}
@@ -367,22 +431,6 @@
 
       /* ── touch-friendly tap areas ── */
       .tut-btn,.th-pill,.pat-sel{min-height:44px;}
-
-      /* ── mobile floating tag on tutorials ── */
-      #tutorials::before{
-        content:'01';
-        position:absolute;right:16px;top:16px;
-        font-family:var(--font-display);font-size:80px;
-        color:rgba(26,86,219,.05);line-height:1;pointer-events:none;
-      }
-      #tutorials{position:relative;}
-
-      /* ── cinematic photo caption animation ── */
-      .ps-cap{
-        transform:translateY(8px);
-        transition:transform .4s ease;
-      }
-      .photo-strip-item:active .ps-cap{transform:translateY(0);}
     }
 
     /* extra small */
@@ -888,6 +936,43 @@ function renderAdmList(){
   window.__reObserve = function(){
     document.querySelectorAll('.m-reveal:not(.visible)').forEach(el=>obs.observe(el));
   };
+})();
+
+/* ══════════════════════════════════════════
+   CINEMATIC IMAGE LOAD — photo strip
+   Images animate in as they enter viewport
+══════════════════════════════════════════ */
+(function(){
+  const items = document.querySelectorAll('.photo-strip-item');
+  if(!items.length) return;
+
+  function revealItem(item){
+    const img = item.querySelector('img');
+    if(!img) return;
+    if(img.complete){
+      item.classList.add('img-loaded');
+    } else {
+      img.addEventListener('load', function(){
+        item.classList.add('img-loaded');
+      });
+      // force load if stuck
+      if(img.src) img.src = img.src;
+    }
+  }
+
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          revealItem(e.target);
+          obs.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.05});
+    items.forEach(function(item){ obs.observe(item); });
+  } else {
+    items.forEach(revealItem);
+  }
 })();
 
 /* hide custom cursor on touch devices */
