@@ -455,34 +455,6 @@
       PDF notes and study resources — open directly, no login needed.
     </p>
     <div id="tut-grid" class="tut-grid"></div>
-
-    <!-- ADMIN — only at teaching.html#admin -->
-    <div id="admin-zone">
-      <div id="adm-login">
-        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#666;margin-bottom:20px;">Admin Access</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <input id="adm-pw" type="password" placeholder="Password" class="adm-inp" style="width:220px;"
-            onkeydown="if(event.key==='Enter')verifyAdmin()">
-          <button class="adm-btn" onclick="verifyAdmin()">Unlock →</button>
-        </div>
-        <div id="adm-err" style="color:#e04;font-size:11px;margin-top:10px;display:none;">Incorrect password.</div>
-      </div>
-      <div id="adm-panel" style="display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
-          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">Tutorial Manager</span>
-          <button class="adm-btn sm" onclick="lockAdmin()">Lock &amp; Close</button>
-        </div>
-        <div class="adm-grid">
-          <div><div class="adm-lbl">Semester</div><input id="f-sem" class="adm-inp" placeholder="e.g. Semester 1"></div>
-          <div><div class="adm-lbl">Subject / Topic</div><input id="f-topic" class="adm-inp" placeholder="e.g. Vector Calculus"></div>
-          <div><div class="adm-lbl">Short Description</div><input id="f-desc" class="adm-inp" placeholder="What this covers..."></div>
-          <div><div class="adm-lbl">Question Set — Drive Link</div><input id="f-link" class="adm-inp" placeholder="https://drive.google.com/..."></div>
-          <div><div class="adm-lbl">Solution Set — Drive Link</div><input id="f-sol" class="adm-inp" placeholder="https://drive.google.com/..."></div>
-        </div>
-        <button class="adm-btn" onclick="addTutorial()">+ Add</button>
-        <div id="adm-list" style="margin-top:20px;"></div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -676,47 +648,31 @@ function showPat(k){
     MathJax.typesetPromise([document.getElementById('pat-formula')]);
 }
 
-/* TUTORIALS */
-/* SHA-256 of "iiser2025axl" — change hash to change password */
-var PW_HASH='aeba91eb0ea74bf51319125d7444930e7ddfd354eb3ee62564c384dfef8f46fc';
-var TK='axl_tutorials', AK='axl_adm';
+/* TUTORIALS — loads from tutorials.json in the repo
+   To add more: edit tutorials.json and push to GitHub */
 
-function loadT(){ return JSON.parse(localStorage.getItem(TK)||'[]'); }
-function saveT(a){ localStorage.setItem(TK,JSON.stringify(a)); }
-
-function icon(t){
-  t=t.toLowerCase();
-  if(t.includes('calculus')||t.includes('vector')) return '∇';
-  if(t.includes('linear')||t.includes('matrix')||t.includes('eigen')) return 'λ';
-  if(t.includes('analysis')||t.includes('real')) return 'ε';
-  if(t.includes('diff')||t.includes('ode')) return '∂';
-  if(t.includes('prob')||t.includes('stat')) return '∑';
-  if(t.includes('physics')) return 'Φ';
-  if(t.includes('bio')) return '∮';
-  return '∫';
-}
-
-function renderGrid(){
-  var tuts=loadT(), g=document.getElementById('tut-grid');
+function renderGrid(tuts){
+  var g = document.getElementById('tut-grid');
   if(!g) return;
-  if(!tuts.length){
-    g.innerHTML='<div style="grid-column:1/-1;padding:48px;text-align:center;border:2px dashed var(--light-grey);">'+
+  if(!tuts || !tuts.length){
+    g.innerHTML = '<div style="grid-column:1/-1;padding:48px;text-align:center;border:2px dashed var(--light-grey);">'+
       '<div style="font-family:var(--font-display);font-size:48px;color:var(--light-grey);">∫</div>'+
       '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mid-grey);margin-top:12px;">Study resources will appear here</div></div>';
     return;
   }
-  g.innerHTML=tuts.map(function(t,i){
-    var btns='';
-    if(t.link||t.sol){
-      btns='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">';
-      if(t.link) btns+='<a href="'+t.link+'" target="_blank" class="tut-btn"><span>Questions ↗</span></a>';
-      if(t.sol)  btns+='<a href="'+t.sol+'"  target="_blank" class="tut-btn outline"><span>Solutions ↗</span></a>';
-      btns+='</div>';
+  g.innerHTML = tuts.map(function(t, i){
+    var num = (i+1) < 10 ? '0'+(i+1) : ''+(i+1);
+    var btns = '';
+    if(t.link || t.sol){
+      btns = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">';
+      if(t.link) btns += '<a href="'+t.link+'" target="_blank" class="tut-btn"><span>Questions ↗</span></a>';
+      if(t.sol)  btns += '<a href="'+t.sol+'"  target="_blank" class="tut-btn outline"><span>Solutions ↗</span></a>';
+      btns += '</div>';
     } else {
-      btns='<span class="tut-btn soon">Coming Soon</span>';
+      btns = '<span class="tut-btn soon">Coming Soon</span>';
     }
     return '<div class="tut-card">'+
-      '<div class="tut-num">0'+(i+1)+'</div>'+
+      '<div class="tut-num">'+num+'</div>'+
       '<div class="tut-body-wrap">'+
         '<div class="tut-sem">'+(t.semester||'')+'</div>'+
         '<div class="tut-title">'+t.topic+'</div>'+
@@ -725,77 +681,12 @@ function renderGrid(){
       '</div></div>';
   }).join('');
 }
-renderGrid();
 
-/* admin hash check */
-function checkHash(){
-  var z=document.getElementById('admin-zone');
-  if(location.hash==='#admin'){
-    z.style.display='block';
-    if(sessionStorage.getItem(AK)==='1'){
-      document.getElementById('adm-login').style.display='none';
-      document.getElementById('adm-panel').style.display='block';
-      renderAdmList();
-    }
-  } else { z.style.display='none'; }
-}
-checkHash();
-window.addEventListener('hashchange',checkHash);
-
-async function sha256(s){
-  var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
-  return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');
-}
-async function verifyAdmin(){
-  var h=await sha256(document.getElementById('adm-pw').value);
-  if(h===PW_HASH){
-    sessionStorage.setItem(AK,'1');
-    document.getElementById('adm-login').style.display='none';
-    document.getElementById('adm-panel').style.display='block';
-    document.getElementById('adm-err').style.display='none';
-    renderAdmList();
-  } else {
-    document.getElementById('adm-err').style.display='block';
-    document.getElementById('adm-pw').value='';
-  }
-}
-function lockAdmin(){
-  sessionStorage.removeItem(AK);
-  history.replaceState(null,'',location.pathname);
-  document.getElementById('admin-zone').style.display='none';
-}
-function addTutorial(){
-  var sem=document.getElementById('f-sem').value.trim();
-  var top=document.getElementById('f-topic').value.trim();
-  var dsc=document.getElementById('f-desc').value.trim();
-  var lnk=document.getElementById('f-link').value.trim();
-  var sol=document.getElementById('f-sol').value.trim();
-  if(!top){alert('Topic is required.');return;}
-  var tuts=loadT();
-  tuts.push({id:Date.now(),semester:sem,topic:top,desc:dsc,link:lnk,sol:sol});
-  saveT(tuts);
-  ['f-sem','f-topic','f-desc','f-link','f-sol'].forEach(function(id){document.getElementById(id).value='';});
-  renderGrid(); renderAdmList();
-}
-function deleteTutorial(id){
-  if(!confirm('Delete this entry?')) return;
-  saveT(loadT().filter(function(t){return t.id!==id;}));
-  renderGrid(); renderAdmList();
-}
-function renderAdmList(){
-  var tuts=loadT(), el=document.getElementById('adm-list');
-  if(!el) return;
-  if(!tuts.length){ el.innerHTML='<p style="color:#555;font-size:12px;margin-top:16px;">No tutorials added yet.</p>'; return; }
-  el.innerHTML=tuts.map(function(t){
-    return '<div class="adm-row">'+
-      '<div class="adm-row-info"><span class="adm-row-sem">'+(t.semester||'—')+'</span>'+t.topic+
-      (t.link?'<span style="font-size:9px;color:#555;margin-left:8px;">✓ Q</span>':'')+
-      (t.sol ?'<span style="font-size:9px;color:#555;margin-left:4px;">✓ S</span>':'')+
-      '</div>'+
-      '<button class="adm-btn sm" onclick="deleteTutorial('+t.id+')">Delete</button>'+
-    '</div>';
-  }).join('');
-}
+/* fetch tutorials.json — works on all devices */
+fetch('tutorials.json?v='+Date.now())
+  .then(function(r){ return r.json(); })
+  .then(function(data){ renderGrid(data); })
+  .catch(function(){ renderGrid([]); });
 
 /* hide cursor on touch */
 if(window.matchMedia('(hover:none) and (pointer:coarse)').matches){
