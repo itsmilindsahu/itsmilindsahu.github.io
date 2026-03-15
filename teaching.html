@@ -263,17 +263,133 @@
     }
     .pv-num span{color:var(--accent);}
 
-    /* ── RESPONSIVE ── */
+    /* ══════════════════════════════════════
+       MOBILE — WOW FACTOR
+    ══════════════════════════════════════ */
+
+    /* tablet */
     @media(max-width:900px){
       .tut-grid{grid-template-columns:repeat(2,1fr);}
       .mb-grid{grid-template-columns:1fr;gap:40px;}
       .photo-strip{grid-template-columns:1fr;}
+      .photo-strip-item{height:320px;}
     }
+
+    /* mobile */
     @media(max-width:600px){
-      .tut-grid{grid-template-columns:1fr;}
-      .th-inner,.ps-bar{padding-left:20px;padding-right:20px;}
-      .pv-bar{padding:24px 20px;}
+
+      /* ── hero ── */
+      .th-hero{min-height:100svh;justify-content:center;}
+      .th-inner{padding:0 22px;}
+      .th-h1{font-size:clamp(64px,18vw,88px);line-height:.85;margin-bottom:16px;}
+      .th-sub{font-size:10px;letter-spacing:2px;color:#888;}
+      .th-pills{gap:6px;margin-top:24px;}
+      .th-pill{padding:10px 14px;font-size:8px;}
+
+      /* ── floating accent line behind hero text ── */
+      .th-hero::after{
+        content:'MATH';
+        position:absolute;bottom:-10px;right:-10px;
+        font-family:var(--font-display);
+        font-size:clamp(100px,40vw,180px);
+        color:rgba(26,86,219,.04);
+        line-height:1;pointer-events:none;
+        letter-spacing:4px;
+      }
+
+      /* ── photo strip: full-width stack, tall cinematic ── */
+      .photo-strip{grid-template-columns:1fr;gap:3px;}
+      .photo-strip-item{height:70vw;min-height:240px;max-height:340px;}
+      .photo-strip-item img{object-position:center 20%;}
+      .ps-cap{padding:18px 20px;}
+      .ps-title{font-size:18px;}
+      .ps-bar{
+        padding:14px 20px;flex-direction:column;align-items:flex-start;gap:8px;
+      }
+
+      /* ── tutorials: single column, card gets horizontal feel ── */
+      .tut-grid{grid-template-columns:1fr;gap:2px;}
+      .tut-card{
+        padding:22px 20px;
+        flex-direction:row;flex-wrap:wrap;gap:8px;align-items:flex-start;
+      }
+      .tut-card::before{width:3px;height:0;top:0;left:0;transition:height .3s;}
+      .tut-card:hover::before{height:100%;width:3px;}
+      .tut-num{
+        font-size:48px;line-height:1;width:52px;flex-shrink:0;
+        color:rgba(26,86,219,.15);
+      }
+      .tut-body-wrap{flex:1;display:flex;flex-direction:column;gap:6px;}
+      .tut-sem{margin:0;}
+      .tut-title{font-size:13px;}
+      .tut-desc{font-size:11px;line-height:1.75;}
+      .tut-btn{font-size:8px;padding:7px 14px;margin-top:6px;}
+
+      /* ── patterns dropdown ── */
+      .pat-sel{font-size:13px;padding:14px 40px 14px 16px;}
+      .pat-box{padding:22px 20px;}
+      .pat-title{font-size:15px;}
+      .pat-desc{font-size:12px;}
+      .pat-formula{padding:14px 16px;font-size:12px;}
+
+      /* ── MB learners ── */
+      .mb-grid{grid-template-columns:1fr;gap:32px;}
+      #mb-learners .container{padding:0 22px;}
+      .mb-feats{gap:2px;}
+      .mb-feat{padding:16px 18px;}
+      .mb-stats{gap:1px;}
+      .mb-stat{padding:16px 12px;}
+      .mb-stat-n{font-size:36px;}
+
+      /* ── admin panel ── */
       .adm-grid{grid-template-columns:1fr;}
+      #admin-zone{padding:20px;}
+
+      /* ── page views bar ── */
+      .pv-bar{padding:24px 22px;flex-direction:column;align-items:flex-start;gap:12px;}
+      .pv-num{font-size:40px;}
+
+      /* ── section padding ── */
+      #tutorials .container,
+      #patterns .container,
+      #mb-learners .container{padding:0 20px;}
+      #tutorials,#patterns,#mb-learners{padding:56px 0;}
+
+      /* ── section label ── */
+      .sec-lbl{margin-bottom:28px;}
+
+      /* ── scroll-reveal animation ── */
+      .m-reveal{
+        opacity:0;transform:translateY(28px);
+        transition:opacity .55s ease, transform .55s ease;
+      }
+      .m-reveal.visible{opacity:1;transform:none;}
+
+      /* ── touch-friendly tap areas ── */
+      .tut-btn,.th-pill,.pat-sel{min-height:44px;}
+
+      /* ── mobile floating tag on tutorials ── */
+      #tutorials::before{
+        content:'01';
+        position:absolute;right:16px;top:16px;
+        font-family:var(--font-display);font-size:80px;
+        color:rgba(26,86,219,.05);line-height:1;pointer-events:none;
+      }
+      #tutorials{position:relative;}
+
+      /* ── cinematic photo caption animation ── */
+      .ps-cap{
+        transform:translateY(8px);
+        transition:transform .4s ease;
+      }
+      .photo-strip-item:active .ps-cap{transform:translateY(0);}
+    }
+
+    /* extra small */
+    @media(max-width:380px){
+      .th-h1{font-size:58px;}
+      .tut-card{flex-direction:column;}
+      .tut-num{width:auto;font-size:36px;}
     }
   </style>
 </head>
@@ -282,14 +398,7 @@
 
 <nav class="dark-nav">
   <a href="index.html" class="nav-logo">
-    <div class="axl-badge">
-      <svg viewBox="0 0 22 22" fill="none">
-        <path d="M2 18L8 4L14 18" stroke="white" stroke-width="2" fill="none" stroke-linecap="square"/>
-        <line x1="4.5" y1="13" x2="11.5" y2="13" stroke="white" stroke-width="2"/>
-        <line x1="15" y1="4" x2="20" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/>
-        <line x1="20" y1="4" x2="15" y2="18" stroke="#1a56db" stroke-width="2" stroke-linecap="square"/>
-      </svg>
-    </div>
+    <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
     <span class="name-full" style="color:#fff">MILIND <span>SAHU</span></span>
   </a>
   <ul class="nav-links">
@@ -323,7 +432,7 @@
 
 <!-- ══ PHOTO STRIP ══ -->
 <div class="photo-strip">
-  <div class="photo-strip-item">
+  <div class="photo-strip-item m-reveal">
     <img src="teaching-img1.jpg" alt="Vector Calculus session">
     <div class="ps-overlay"></div>
     <div class="ps-cap">
@@ -332,7 +441,7 @@
       <div class="ps-detail">Line Integrals · Spherical &amp; Cylindrical Systems</div>
     </div>
   </div>
-  <div class="photo-strip-item">
+  <div class="photo-strip-item m-reveal">
     <img src="teaching-img2.jpg" alt="Mathematics tutorial">
     <div class="ps-overlay"></div>
     <div class="ps-cap">
@@ -681,15 +790,17 @@ function renderGrid(){
     return;
   }
   g.innerHTML=tuts.map((t,i)=>`
-    <div class="tut-card fade-in">
+    <div class="tut-card fade-in m-reveal">
       <div class="tut-num">0${i+1}</div>
-      <div class="tut-sem">${t.semester||''}</div>
-      <div class="tut-title">${t.topic}</div>
-      <p class="tut-desc">${t.desc||''}</p>
-      ${t.link||t.sol ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-        ${t.link?`<a href="${t.link}" target="_blank" class="tut-btn">Questions ↗</a>`:''}
-        ${t.sol ?`<a href="${t.sol}"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);" onmouseover="this.style.background='var(--accent)';this.style.color='#fff';this.style.borderColor='var(--accent)';" onmouseout="this.style.background='transparent';this.style.color='var(--dark-grey)';this.style.borderColor='var(--light-grey)';">Solutions ↗</a>`:''}
-      </div>` : `<span class="tut-btn soon">Coming Soon</span>`}
+      <div class="tut-body-wrap">
+        <div class="tut-sem">${t.semester||''}</div>
+        <div class="tut-title">${t.topic}</div>
+        <p class="tut-desc">${t.desc||''}</p>
+        ${t.link||t.sol ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+          ${t.link?`<a href="${t.link}" target="_blank" class="tut-btn">Questions ↗</a>`:''}
+          ${t.sol ?`<a href="${t.sol}"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);">Solutions ↗</a>`:''}
+        </div>` : `<span class="tut-btn soon">Coming Soon</span>`}
+      </div>
     </div>`).join('');
 }
 renderGrid();
@@ -762,6 +873,26 @@ function renderAdmList(){
         </div>
         <button class="adm-btn sm" onclick="deleteTutorial(${t.id})">Delete</button>
       </div>`).join('');
+/* ══════════════════════════════════════════
+   MOBILE SCROLL-REVEAL
+══════════════════════════════════════════ */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+  },{threshold:0.12});
+  document.querySelectorAll('.m-reveal').forEach(el=>obs.observe(el));
+  /* re-observe after renderGrid (cards added dynamically) */
+  const origRender = renderGrid;
+  window.__reObserve = function(){
+    document.querySelectorAll('.m-reveal:not(.visible)').forEach(el=>obs.observe(el));
+  };
+})();
+
+/* hide custom cursor on touch devices */
+if(window.matchMedia('(hover:none) and (pointer:coarse)').matches){
+  document.querySelectorAll('.cursor,.cursor-ring').forEach(el=>el.style.display='none');
+  document.body.style.cursor='auto';
 }
 </script>
 </body>
