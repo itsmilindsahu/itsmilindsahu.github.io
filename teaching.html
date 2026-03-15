@@ -14,425 +14,357 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous" defer></script>
   <style>
+  /* ============================================
+     NAV
+  ============================================ */
+  nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
+  nav.dark-nav .name-full{color:#fff!important;}
+  nav.dark-nav .nav-links a{color:#666!important;}
+  nav.dark-nav .nav-links a:hover,
+  nav.dark-nav .nav-links a.active{color:#fff!important;}
+  nav.dark-nav .hamburger span{background:#fff!important;}
 
-    /* ── NAV DARK ── */
-    nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
-    nav.dark-nav .name-full{color:#fff!important;}
-    nav.dark-nav .nav-links a{color:#666!important;}
-    nav.dark-nav .nav-links a:hover,
-    nav.dark-nav .nav-links a.active{color:#fff!important;}
-    nav.dark-nav .hamburger span{background:#fff!important;}
+  /* ============================================
+     HERO
+  ============================================ */
+  .th-hero{
+    min-height:56vh;background:var(--black);
+    display:flex;align-items:center;position:relative;overflow:hidden;
+  }
+  .th-grid{
+    position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);
+    background-size:48px 48px;pointer-events:none;
+  }
+  .th-glow{
+    position:absolute;top:50%;left:25%;width:640px;height:640px;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle,rgba(26,86,219,.13) 0%,transparent 65%);
+    pointer-events:none;
+  }
+  .th-inner{
+    position:relative;z-index:1;
+    max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;
+  }
+  .th-eyebrow{
+    font-size:10px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--accent);margin-bottom:16px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .th-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent);}
+  .th-h1{
+    font-family:var(--font-display);
+    font-size:clamp(56px,9vw,110px);
+    line-height:.88;color:#fff;letter-spacing:3px;margin-bottom:20px;
+  }
+  .th-h1 span{color:var(--accent);}
+  .th-sub{
+    font-size:12px;letter-spacing:3px;text-transform:uppercase;
+    color:#666;max-width:560px;line-height:2;
+  }
+  .th-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px;}
+  .th-pill{
+    padding:8px 18px;background:transparent;border:1px solid #222;
+    font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+    text-transform:uppercase;color:#666;transition:all .2s;text-decoration:none;
+    display:inline-block;
+  }
+  .th-pill:hover{border-color:var(--accent);color:var(--accent);}
 
-    /* ── HERO ── */
-    .th-hero{
-      min-height:56vh;background:var(--black);
-      display:flex;align-items:center;position:relative;overflow:hidden;
-    }
-    .th-grid{
-      position:absolute;inset:0;
-      background-image:
-        linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);
-      background-size:48px 48px;
-    }
-    .th-glow{
-      position:absolute;top:50%;left:25%;width:640px;height:640px;
-      transform:translate(-50%,-50%);
-      background:radial-gradient(circle,rgba(26,86,219,.13) 0%,transparent 65%);
-      pointer-events:none;
-    }
-    .th-inner{
-      position:relative;z-index:1;
-      max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;
-    }
-    .th-eyebrow{
-      font-size:10px;letter-spacing:4px;text-transform:uppercase;
-      color:var(--accent);margin-bottom:16px;
-      display:flex;align-items:center;gap:12px;
-    }
-    .th-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent);}
-    .th-h1{
-      font-family:var(--font-display);
-      font-size:clamp(56px,9vw,110px);
-      line-height:.88;color:#fff;letter-spacing:3px;margin-bottom:20px;
-    }
-    .th-h1 span{color:var(--accent);}
-    .th-sub{
-      font-size:12px;letter-spacing:3px;text-transform:uppercase;
-      color:#666;max-width:560px;line-height:2;
-    }
-    .th-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:32px;}
-    .th-pill{
-      padding:8px 18px;background:transparent;border:1px solid #222;
-      font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
-      text-transform:uppercase;color:#666;transition:all .2s;text-decoration:none;
-    }
-    .th-pill:hover{border-color:var(--accent);color:var(--accent);}
+  /* ============================================
+     PHOTO STRIP — desktop
+  ============================================ */
+  .photo-strip{
+    display:grid;grid-template-columns:1fr 1fr;
+    background:var(--black);
+  }
+  .photo-strip-item{
+    position:relative;overflow:hidden;
+    height:460px;
+  }
+  .photo-strip-item img{
+    width:100%;height:100%;
+    object-fit:cover;object-position:center 20%;
+    display:block;
+    /* always visible — no opacity tricks */
+    opacity:.82;
+    transition:opacity .6s ease, transform .8s cubic-bezier(.4,0,.2,1), filter .6s;
+    transform:scale(1.0);
+    filter:saturate(.85);
+  }
+  .photo-strip-item:hover img{
+    opacity:1;
+    transform:scale(1.04);
+    filter:saturate(1.1);
+  }
+  .ps-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.1) 50%, transparent 100%);
+    pointer-events:none;
+  }
+  .photo-strip-item::after{
+    content:'';position:absolute;bottom:0;left:0;
+    width:0;height:3px;
+    background:linear-gradient(90deg,var(--accent),transparent);
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .photo-strip-item:hover::after{width:100%;}
+  .ps-cap{
+    position:absolute;bottom:0;left:0;right:0;
+    padding:24px 28px;
+    /* always visible */
+  }
+  .ps-tag{
+    font-size:9px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--accent);margin-bottom:6px;
+    /* always visible */
+  }
+  .ps-title{
+    font-family:var(--font-display);font-size:20px;
+    color:#fff;letter-spacing:2px;
+  }
+  .ps-detail{font-size:11px;color:#888;margin-top:4px;}
+  .ps-bar{
+    background:var(--black);border-top:1px solid #111;
+    padding:16px 48px;display:flex;align-items:center;
+    justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  .ps-bar span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;}
+  .ps-bar a{
+    font-size:9px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;
+  }
 
-    /* ── PHOTO STRIP ── */
-    .photo-strip{
-      display:grid;grid-template-columns:1fr 1fr;
-      background:var(--black);position:relative;
-    }
-    .photo-strip-item{
-      position:relative;overflow:hidden;height:480px;
-      cursor:pointer;
-    }
+  /* ============================================
+     SECTION LABEL
+  ============================================ */
+  .sec-lbl{
+    font-size:10px;letter-spacing:4px;text-transform:uppercase;
+    color:var(--mid-grey);display:flex;align-items:center;gap:12px;margin-bottom:48px;
+  }
+  .sec-lbl::before{content:'';width:32px;height:1px;background:var(--mid-grey);}
+  .sec-lbl .num{color:var(--accent);}
+
+  /* ============================================
+     TUTORIALS — 3 col
+  ============================================ */
+  #tutorials{background:var(--off-white);}
+  .tut-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:2px;background:var(--light-grey);
+  }
+  .tut-card{
+    background:var(--white);padding:28px 24px;
+    display:flex;flex-direction:column;gap:10px;
+    position:relative;transition:background .2s;
+  }
+  .tut-card::before{
+    content:'';position:absolute;top:0;left:0;
+    width:0;height:3px;background:var(--accent);transition:width .3s;
+  }
+  .tut-card:hover{background:#f9f9f6;}
+  .tut-card:hover::before{width:100%;}
+  .tut-num{font-family:var(--font-display);font-size:36px;color:var(--light-grey);line-height:1;}
+  .tut-sem{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);}
+  .tut-title{font-size:14px;font-weight:700;color:var(--black);}
+  .tut-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;flex:1;}
+  .tut-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 16px;background:var(--black);color:#fff;
+    border:1px solid var(--black);font-family:var(--font-mono);
+    font-size:9px;letter-spacing:2px;text-transform:uppercase;
+    transition:all .2s;align-self:flex-start;margin-top:4px;text-decoration:none;
+  }
+  .tut-btn:hover{background:var(--accent);border-color:var(--accent);}
+  .tut-btn.soon{
+    background:transparent;color:var(--mid-grey);
+    border-color:var(--light-grey);cursor:default;pointer-events:none;
+  }
+
+  /* ============================================
+     ADMIN ZONE
+  ============================================ */
+  #admin-zone{
+    display:none;background:#0a0a08;border:1px solid #1e1e1c;
+    padding:32px;margin-top:40px;position:relative;
+  }
+  #admin-zone::before{
+    content:'';position:absolute;top:0;left:0;right:0;
+    height:2px;background:linear-gradient(90deg,var(--accent),transparent);
+  }
+  .adm-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-bottom:6px;}
+  .adm-inp{
+    width:100%;padding:9px 12px;background:#080808;
+    border:1px solid #1e1e1c;color:#fff;
+    font-family:var(--font-mono);font-size:12px;outline:none;
+    transition:border-color .2s;
+  }
+  .adm-inp:focus{border-color:var(--accent);}
+  .adm-inp::placeholder{color:#2a2a28;}
+  .adm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+  .adm-btn{
+    padding:10px 24px;background:var(--accent);color:#fff;border:none;
+    font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
+    text-transform:uppercase;cursor:pointer;transition:background .2s;
+  }
+  .adm-btn:hover{background:var(--accent-2);}
+  .adm-btn.sm{padding:4px 12px;background:transparent;color:#555;border:1px solid #333;font-size:9px;}
+  .adm-btn.sm:hover{border-color:#e04;color:#e04;}
+  .adm-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 14px;background:#080808;border:1px solid #161614;
+    margin-bottom:3px;flex-wrap:wrap;gap:8px;
+  }
+  .adm-row-info{font-size:12px;color:#ccc;}
+  .adm-row-sem{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-right:10px;}
+
+  /* ============================================
+     PATTERNS DROPDOWN
+  ============================================ */
+  #patterns{background:var(--white);}
+  .pat-wrap{position:relative;max-width:520px;margin-bottom:32px;}
+  .pat-sel{
+    width:100%;padding:14px 44px 14px 18px;
+    background:var(--off-white);border:1px solid var(--light-grey);
+    border-left:3px solid var(--accent);
+    font-family:var(--font-mono);font-size:12px;color:var(--black);
+    appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;
+  }
+  .pat-arrow{
+    position:absolute;right:16px;top:50%;transform:translateY(-50%);
+    color:var(--accent);font-size:12px;pointer-events:none;
+  }
+  /* pattern box — ALWAYS block, hidden via visibility not display */
+  .pat-box{
+    background:var(--off-white);border:1px solid var(--light-grey);
+    border-left:3px solid var(--accent);
+    padding:32px 36px;
+    visibility:hidden;height:0;overflow:hidden;
+    transition:none;
+  }
+  .pat-box.on{
+    visibility:visible;height:auto;overflow:visible;
+  }
+  .pat-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:10px;}
+  .pat-title{font-size:17px;font-weight:700;color:var(--black);margin-bottom:12px;}
+  .pat-desc{font-size:13px;color:var(--dark-grey);line-height:1.9;margin-bottom:20px;}
+  .pat-formula{background:var(--white);border:1px solid var(--light-grey);padding:20px 24px;overflow-x:auto;color:var(--black);}
+
+  /* ============================================
+     MB LEARNERS
+  ============================================ */
+  #mb-learners{background:var(--off-white);}
+  .mb-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start;}
+  .mb-text p{font-size:13px;color:var(--dark-grey);margin-bottom:16px;line-height:1.95;}
+  .mb-text p strong{color:var(--black);}
+  .mb-quote{
+    border-left:3px solid var(--accent);padding:14px 20px;
+    background:var(--white);margin:24px 0;
+    font-size:13px;color:var(--dark-grey);font-style:italic;line-height:1.85;
+  }
+  .mb-feats{display:flex;flex-direction:column;gap:2px;}
+  .mb-feat{background:var(--white);padding:20px 22px;border-left:3px solid transparent;transition:border-color .2s;}
+  .mb-feat:hover{border-left-color:var(--accent);}
+  .mb-feat-icon{font-family:var(--font-display);font-size:30px;color:var(--accent);line-height:1;margin-bottom:8px;}
+  .mb-feat-title{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--black);}
+  .mb-feat-desc{font-size:12px;color:var(--dark-grey);line-height:1.8;}
+  .mb-stats{display:flex;gap:2px;background:var(--light-grey);margin-top:28px;}
+  .mb-stat{background:var(--black);padding:20px 24px;flex:1;text-align:center;}
+  .mb-stat-n{font-family:var(--font-display);font-size:44px;color:#fff;line-height:1;}
+  .mb-stat-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-top:4px;}
+
+  /* ============================================
+     PAGE VIEWS
+  ============================================ */
+  .pv-bar{
+    background:var(--black);padding:36px 48px;
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:16px;border-top:1px solid #111;
+  }
+  .pv-lbl{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;}
+  .pv-num{font-family:var(--font-display);font-size:48px;color:#fff;letter-spacing:4px;line-height:1;}
+
+  /* ============================================
+     TABLET
+  ============================================ */
+  @media(max-width:900px){
+    .tut-grid{grid-template-columns:repeat(2,1fr);}
+    .mb-grid{grid-template-columns:1fr;gap:40px;}
+    .photo-strip{grid-template-columns:1fr;}
+    .photo-strip-item{height:340px;}
+    .ps-bar{padding:14px 24px;}
+  }
+
+  /* ============================================
+     MOBILE — clean, no conflicts
+  ============================================ */
+  @media(max-width:600px){
+    /* hero */
+    .th-hero{min-height:100svh;}
+    .th-inner{padding:0 20px;}
+    .th-h1{font-size:clamp(60px,17vw,84px);line-height:.86;margin-bottom:14px;}
+    .th-sub{font-size:10px;letter-spacing:2px;color:#888;}
+    .th-pills{gap:6px;margin-top:22px;}
+    .th-pill{padding:10px 14px;font-size:8px;min-height:44px;display:inline-flex;align-items:center;}
+
+    /* photos — SIMPLE, NO TRICKS, just show them */
+    .photo-strip{grid-template-columns:1fr;gap:3px;}
+    .photo-strip-item{height:72vw;min-height:240px;max-height:340px;}
     .photo-strip-item img{
-      width:100%;height:100%;object-fit:cover;
-      display:block;
-      opacity:.75;
-      transform:scale(1.04);
-      transition:opacity .7s cubic-bezier(.4,0,.2,1),
-                 transform .9s cubic-bezier(.4,0,.2,1),
-                 filter .7s;
-      filter:saturate(.8);
-      will-change:transform,opacity;
+      opacity:1 !important;
+      transform:none !important;
+      filter:none !important;
+      object-position:center 20%;
     }
-    .photo-strip-item:hover img{
-      opacity:1;transform:scale(1);
-      filter:saturate(1.1) brightness(1.05);
-    }
-    .ps-overlay{
-      position:absolute;inset:0;
-      background:
-        linear-gradient(to top, rgba(0,0,0,.9) 0%, transparent 55%),
-        linear-gradient(to right, rgba(0,0,0,.25) 0%, transparent 40%);
-      transition:opacity .5s;
-    }
-    .photo-strip-item:hover .ps-overlay{opacity:.7;}
-    .photo-strip-item::after{
-      content:'';position:absolute;bottom:0;left:0;
-      width:0;height:3px;
-      background:linear-gradient(90deg,var(--accent),transparent);
-      transition:width .6s cubic-bezier(.4,0,.2,1);
-    }
-    .photo-strip-item:hover::after{width:100%;}
-    .ps-cap{
-      position:absolute;bottom:0;left:0;right:0;padding:28px 32px;
-      transform:translateY(6px);
-      transition:transform .45s cubic-bezier(.4,0,.2,1);
-    }
-    .photo-strip-item:hover .ps-cap{transform:translateY(0);}
-    .ps-tag{
-      font-size:9px;letter-spacing:3px;text-transform:uppercase;
-      color:var(--accent);margin-bottom:8px;
-      opacity:0;transform:translateY(8px);
-      transition:opacity .4s .1s, transform .4s .1s;
-    }
-    .photo-strip-item:hover .ps-tag{opacity:1;transform:translateY(0);}
-    .ps-title{
-      font-family:var(--font-display);font-size:22px;
-      color:#fff;letter-spacing:2px;
-    }
-    .ps-detail{font-size:11px;color:#888;margin-top:5px;}
-    .ps-bar{
-      background:var(--black);border-top:1px solid #111;
-      padding:18px 48px;display:flex;align-items:center;
-      justify-content:space-between;flex-wrap:wrap;gap:12px;
-    }
-    .ps-bar span{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;}
-    .ps-bar a{
-      font-size:9px;letter-spacing:2px;text-transform:uppercase;
-      color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;
-      transition:letter-spacing .3s;
-    }
-    .ps-bar a:hover{letter-spacing:3px;}
+    .ps-cap{padding:16px 20px;}
+    .ps-tag{color:var(--accent);}
+    .ps-title{font-size:17px;}
+    .ps-detail{color:#aaa;}
+    .ps-bar{padding:14px 20px;flex-direction:column;align-items:flex-start;gap:8px;}
 
-    /* ── SECTION LABEL ── */
-    .sec-lbl{
-      font-size:10px;letter-spacing:4px;text-transform:uppercase;
-      color:var(--mid-grey);display:flex;align-items:center;gap:12px;margin-bottom:48px;
-    }
-    .sec-lbl::before{content:'';width:32px;height:1px;background:var(--mid-grey);}
-    .sec-lbl .num{color:var(--accent);}
+    /* tutorials */
+    .tut-grid{grid-template-columns:1fr;gap:2px;}
+    .tut-card{padding:20px 18px;flex-direction:row;flex-wrap:wrap;gap:8px;align-items:flex-start;}
+    .tut-num{font-size:44px;width:48px;flex-shrink:0;color:rgba(26,86,219,.15);}
+    .tut-body-wrap{flex:1;display:flex;flex-direction:column;gap:6px;}
+    .tut-title{font-size:13px;}
+    .tut-desc{font-size:11px;line-height:1.75;}
+    .tut-btn{font-size:8px;padding:7px 14px;min-height:44px;display:inline-flex;align-items:center;}
 
-    /* ── TUTORIALS ── */
-    #tutorials{background:var(--off-white);}
-    .tut-grid{
-      display:grid;grid-template-columns:repeat(3,1fr);
-      gap:2px;background:var(--light-grey);
-    }
-    .tut-card{
-      background:var(--white);padding:28px 24px;
-      display:flex;flex-direction:column;gap:10px;
-      position:relative;transition:background .2s;
-    }
-    .tut-card::before{
-      content:'';position:absolute;top:0;left:0;
-      width:0;height:3px;background:var(--accent);transition:width .3s;
-    }
-    .tut-card:hover{background:#f9f9f6;}
-    .tut-card:hover::before{width:100%;}
-    .tut-num{
-      font-family:var(--font-display);font-size:36px;
-      color:var(--light-grey);line-height:1;
-    }
-    .tut-sem{
-      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);
-    }
-    .tut-title{font-size:14px;font-weight:700;color:var(--black);}
-    .tut-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;flex:1;}
-    .tut-btn{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:8px 16px;background:var(--black);color:#fff;
-      border:1px solid var(--black);font-family:var(--font-mono);
-      font-size:9px;letter-spacing:2px;text-transform:uppercase;
-      transition:all .2s;align-self:flex-start;margin-top:4px;text-decoration:none;
-    }
-    .tut-btn:hover{background:var(--accent);border-color:var(--accent);}
-    .tut-btn.soon{
-      background:transparent;color:var(--mid-grey);
-      border-color:var(--light-grey);cursor:default;pointer-events:none;
-    }
+    /* patterns */
+    .pat-sel{font-size:13px;padding:14px 40px 14px 16px;min-height:44px;}
+    .pat-box{padding:20px 18px;}
+    .pat-title{font-size:15px;}
+    .pat-desc{font-size:12px;}
+    .pat-formula{padding:14px 16px;font-size:12px;}
 
-    /* ── ADMIN ZONE ── */
-    #admin-zone{
-      display:none;background:#0a0a08;border:1px solid #1e1e1c;
-      padding:32px;margin-top:40px;position:relative;
-    }
-    #admin-zone::before{
-      content:'';position:absolute;top:0;left:0;right:0;
-      height:2px;background:linear-gradient(90deg,var(--accent),transparent);
-    }
-    .adm-lbl{
-      font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#555;margin-bottom:6px;
-    }
-    .adm-inp{
-      width:100%;padding:9px 12px;background:#080808;
-      border:1px solid #1e1e1c;color:#fff;
-      font-family:var(--font-mono);font-size:12px;outline:none;
-      transition:border-color .2s;
-    }
-    .adm-inp:focus{border-color:var(--accent);}
-    .adm-inp::placeholder{color:#2a2a28;}
-    .adm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
-    .adm-btn{
-      padding:10px 24px;background:var(--accent);color:#fff;border:none;
-      font-family:var(--font-mono);font-size:9px;letter-spacing:2px;
-      text-transform:uppercase;cursor:pointer;transition:background .2s;
-    }
-    .adm-btn:hover{background:var(--accent-2);}
-    .adm-btn.sm{
-      padding:4px 12px;background:transparent;color:#555;
-      border:1px solid #333;font-size:9px;
-    }
-    .adm-btn.sm:hover{border-color:#e04;color:#e04;}
-    .adm-row{
-      display:flex;align-items:center;justify-content:space-between;
-      padding:10px 14px;background:#080808;border:1px solid #161614;
-      margin-bottom:3px;flex-wrap:wrap;gap:8px;
-    }
-    .adm-row-info{font-size:12px;color:#ccc;}
-    .adm-row-sem{
-      font-size:9px;letter-spacing:2px;text-transform:uppercase;
-      color:var(--accent);margin-right:10px;
-    }
+    /* mb learners */
+    .mb-grid{grid-template-columns:1fr;gap:32px;}
+    .mb-feat{padding:16px 18px;}
+    .mb-stat{padding:16px 12px;}
+    .mb-stat-n{font-size:36px;}
 
-    /* ── PATTERNS ── */
-    #patterns{background:var(--white);}
-    .pat-wrap{position:relative;max-width:520px;margin-bottom:32px;}
-    .pat-sel{
-      width:100%;padding:14px 44px 14px 18px;
-      background:var(--off-white);border:1px solid var(--light-grey);
-      border-left:3px solid var(--accent);
-      font-family:var(--font-mono);font-size:12px;color:var(--black);
-      appearance:none;-webkit-appearance:none;cursor:pointer;outline:none;
-    }
-    .pat-arrow{
-      position:absolute;right:16px;top:50%;transform:translateY(-50%);
-      color:var(--accent);font-size:12px;pointer-events:none;
-    }
-    .pat-box{
-      background:var(--off-white);border:1px solid var(--light-grey);
-      border-left:3px solid var(--accent);
-      padding:32px 36px;display:none;
-      animation:patReveal .35s cubic-bezier(.4,0,.2,1) both;
-    }
-    .pat-box.on{display:block !important;}
-    @keyframes patReveal{
-      from{opacity:0;transform:translateY(10px);}
-      to{opacity:1;transform:none;}
-    }
-    .pat-tag{
-      font-size:9px;letter-spacing:3px;text-transform:uppercase;
-      color:var(--accent);margin-bottom:10px;
-    }
-    .pat-title{font-size:17px;font-weight:700;color:var(--black);margin-bottom:12px;}
-    .pat-desc{font-size:13px;color:var(--dark-grey);line-height:1.9;margin-bottom:20px;}
-    .pat-formula{
-      background:var(--white);border:1px solid var(--light-grey);
-      padding:20px 24px;overflow-x:auto;color:var(--black);
-    }
+    /* admin */
+    .adm-grid{grid-template-columns:1fr;}
+    #admin-zone{padding:20px;}
 
-    /* ── MB LEARNERS ── */
-    #mb-learners{background:var(--off-white);}
-    .mb-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:start;}
-    .mb-text p{font-size:13px;color:var(--dark-grey);margin-bottom:16px;line-height:1.95;}
-    .mb-text p strong{color:var(--black);}
-    .mb-quote{
-      border-left:3px solid var(--accent);padding:14px 20px;
-      background:var(--white);margin:24px 0;
-      font-size:13px;color:var(--dark-grey);font-style:italic;line-height:1.85;
-    }
-    .mb-feats{display:flex;flex-direction:column;gap:2px;}
-    .mb-feat{
-      background:var(--white);padding:20px 22px;
-      border-left:3px solid transparent;transition:border-color .2s;
-    }
-    .mb-feat:hover{border-left-color:var(--accent);}
-    .mb-feat-icon{
-      font-family:var(--font-display);font-size:30px;
-      color:var(--accent);line-height:1;margin-bottom:8px;
-    }
-    .mb-feat-title{font-size:13px;font-weight:700;margin-bottom:5px;color:var(--black);}
-    .mb-feat-desc{font-size:12px;color:var(--dark-grey);line-height:1.8;}
-    .mb-stats{display:flex;gap:2px;background:var(--light-grey);margin-top:28px;}
-    .mb-stat{background:var(--black);padding:20px 24px;flex:1;text-align:center;}
-    .mb-stat-n{font-family:var(--font-display);font-size:44px;color:#fff;line-height:1;}
-    .mb-stat-l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#444;margin-top:4px;}
+    /* page views */
+    .pv-bar{padding:24px 20px;flex-direction:column;align-items:flex-start;gap:12px;}
+    .pv-num{font-size:40px;}
 
-    /* ── FOOTER VIEWS BAR ── */
-    .pv-bar{
-      background:var(--black);padding:36px 48px;
-      display:flex;align-items:center;justify-content:space-between;
-      flex-wrap:wrap;gap:16px;border-top:1px solid #111;
-    }
-    .pv-lbl{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;}
-    .pv-num{
-      font-family:var(--font-display);font-size:48px;
-      color:#fff;letter-spacing:4px;line-height:1;
-    }
-    .pv-num span{color:var(--accent);}
+    /* sections */
+    #tutorials,#patterns,#mb-learners{padding:52px 0;}
+    #tutorials .container,#patterns .container,#mb-learners .container{padding:0 20px;}
+    .sec-lbl{margin-bottom:28px;}
+  }
 
-    /* ══════════════════════════════════════
-       MOBILE — WOW FACTOR
-    ══════════════════════════════════════ */
-
-    /* tablet */
-    @media(max-width:900px){
-      .tut-grid{grid-template-columns:repeat(2,1fr);}
-      .mb-grid{grid-template-columns:1fr;gap:40px;}
-      .photo-strip{grid-template-columns:1fr;}
-      .photo-strip-item{height:320px;}
-    }
-
-    /* mobile */
-    @media(max-width:600px){
-
-      /* ── hero ── */
-      .th-hero{min-height:100svh;justify-content:center;}
-      .th-inner{padding:0 22px;}
-      .th-h1{font-size:clamp(64px,18vw,88px);line-height:.85;margin-bottom:16px;}
-      .th-sub{font-size:10px;letter-spacing:2px;color:#888;}
-      .th-pills{gap:6px;margin-top:24px;}
-      .th-pill{padding:10px 14px;font-size:8px;}
-
-      /* ── floating accent line behind hero text ── */
-      .th-hero::after{
-        content:'MATH';
-        position:absolute;bottom:-10px;right:-10px;
-        font-family:var(--font-display);
-        font-size:clamp(100px,40vw,180px);
-        color:rgba(26,86,219,.04);
-        line-height:1;pointer-events:none;
-        letter-spacing:4px;
-      }
-
-      /* ── photo strip: CINEMATIC mobile ── */
-      .photo-strip{grid-template-columns:1fr;gap:3px;}
-      .photo-strip-item{
-        height:80vw;min-height:260px;max-height:360px;
-      }
-      /* images always visible on mobile — no hidden state */
-      .photo-strip-item img{
-        opacity:.85;
-        transform:scale(1.02);
-        object-position:center 25%;
-        filter:saturate(.9);
-        transition:opacity .6s, transform 1.4s cubic-bezier(.4,0,.2,1);
-      }
-      /* Ken Burns: drift slowly when in view */
-      .photo-strip-item.img-loaded img{
-        transform:scale(1.0);
-        opacity:.92;
-      }
-      /* accent line always on at 50% on mobile */
-      .photo-strip-item::after{width:50%;}
-      /* captions always fully visible */
-      .ps-cap{transform:none;padding:18px 22px;}
-      .ps-tag{opacity:1;transform:none;}
-      .ps-title{font-size:17px;}
-      .ps-bar{padding:14px 22px;flex-direction:column;align-items:flex-start;gap:8px;}
-
-      /* ── tutorials: single column, card gets horizontal feel ── */
-      .tut-grid{grid-template-columns:1fr;gap:2px;}
-      .tut-card{
-        padding:22px 20px;
-        flex-direction:row;flex-wrap:wrap;gap:8px;align-items:flex-start;
-      }
-      .tut-card::before{width:3px;height:0;top:0;left:0;transition:height .3s;}
-      .tut-card:hover::before{height:100%;width:3px;}
-      .tut-num{
-        font-size:48px;line-height:1;width:52px;flex-shrink:0;
-        color:rgba(26,86,219,.15);
-      }
-      .tut-body-wrap{flex:1;display:flex;flex-direction:column;gap:6px;}
-      .tut-sem{margin:0;}
-      .tut-title{font-size:13px;}
-      .tut-desc{font-size:11px;line-height:1.75;}
-      .tut-btn{font-size:8px;padding:7px 14px;margin-top:6px;}
-
-      /* ── patterns dropdown ── */
-      .pat-sel{font-size:13px;padding:14px 40px 14px 16px;}
-      .pat-box{padding:22px 20px;}
-      .pat-title{font-size:15px;}
-      .pat-desc{font-size:12px;}
-      .pat-formula{padding:14px 16px;font-size:12px;}
-
-      /* ── MB learners ── */
-      .mb-grid{grid-template-columns:1fr;gap:32px;}
-      #mb-learners .container{padding:0 22px;}
-      .mb-feats{gap:2px;}
-      .mb-feat{padding:16px 18px;}
-      .mb-stats{gap:1px;}
-      .mb-stat{padding:16px 12px;}
-      .mb-stat-n{font-size:36px;}
-
-      /* ── admin panel ── */
-      .adm-grid{grid-template-columns:1fr;}
-      #admin-zone{padding:20px;}
-
-      /* ── page views bar ── */
-      .pv-bar{padding:24px 22px;flex-direction:column;align-items:flex-start;gap:12px;}
-      .pv-num{font-size:40px;}
-
-      /* ── section padding ── */
-      #tutorials .container,
-      #patterns .container,
-      #mb-learners .container{padding:0 20px;}
-      #tutorials,#patterns,#mb-learners{padding:56px 0;}
-
-      /* ── section label ── */
-      .sec-lbl{margin-bottom:28px;}
-
-      /* ── scroll-reveal animation ── */
-      .m-reveal{
-        opacity:0;transform:translateY(28px);
-        transition:opacity .55s ease, transform .55s ease;
-      }
-      .m-reveal.visible{opacity:1;transform:none;}
-
-      /* ── touch-friendly tap areas ── */
-      .tut-btn,.th-pill,.pat-sel{min-height:44px;}
-    }
-
-    /* extra small */
-    @media(max-width:380px){
-      .th-h1{font-size:58px;}
-      .tut-card{flex-direction:column;}
-      .tut-num{width:auto;font-size:36px;}
-    }
+  @media(max-width:380px){
+    .th-h1{font-size:56px;}
+    .tut-card{flex-direction:column;}
+    .tut-num{width:auto;}
+  }
   </style>
 </head>
 <body>
@@ -440,7 +372,7 @@
 
 <nav class="dark-nav">
   <a href="index.html" class="nav-logo">
-    <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
+    <div class="axl-badge"><svg viewBox="0 0 28 28" fill="none"><rect width="28" height="28" fill="#0d0d0b"/><text x="14" y="16" font-family="Space Mono, monospace" font-size="14" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="14" y="25" font-family="Space Mono, monospace" font-size="6" fill="#1a56db" text-anchor="middle" letter-spacing="1">M.S</text></svg></div>
     <span class="name-full" style="color:#fff">MILIND <span>SAHU</span></span>
   </a>
   <ul class="nav-links">
@@ -456,7 +388,7 @@
 
 <main>
 
-<!-- ══ HERO ══ -->
+<!-- HERO -->
 <div class="th-hero">
   <div class="th-grid"></div>
   <div class="th-glow"></div>
@@ -465,14 +397,14 @@
     <h1 class="th-h1 fade-in stagger-1">TEACHING<br><span>&amp; THEORY</span></h1>
     <p class="th-sub fade-in stagger-2">Tutorials · Mathematical Patterns · Peer Learning</p>
     <div class="th-pills fade-in stagger-3">
-      <a href="#tutorials"  class="th-pill">Tutorials</a>
-      <a href="#patterns"   class="th-pill">Math Patterns</a>
-      <a href="#mb-learners"class="th-pill">MB Learners</a>
+      <a href="#tutorials"   class="th-pill">Tutorials</a>
+      <a href="#patterns"    class="th-pill">Math Patterns</a>
+      <a href="#mb-learners" class="th-pill">MB Learners</a>
     </div>
   </div>
 </div>
 
-<!-- ══ PHOTO STRIP ══ -->
+<!-- PHOTOS -->
 <div class="photo-strip">
   <div class="photo-strip-item">
     <img src="teaching-img1.jpg" alt="Vector Calculus session" loading="eager">
@@ -499,75 +431,47 @@
 </div>
 
 
-<!-- ══════════════════════════════════
-     01 — TUTORIALS
-═════════════════════════════════════ -->
+<!-- ── 01 TUTORIALS ── -->
 <section id="tutorials">
   <div class="container">
     <p class="sec-lbl"><span class="num">01</span> Tutorials &amp; Study Resources</p>
     <p style="font-size:13px;color:var(--dark-grey);line-height:1.9;max-width:640px;margin-bottom:48px;">
-      PDF notes and study resources — open directly in your browser, no login needed.
+      PDF notes and study resources — open directly, no login needed.
     </p>
-
     <div id="tut-grid" class="tut-grid"></div>
 
-    <!-- ADMIN PANEL — only appears at teaching.html#admin -->
+    <!-- ADMIN — only at teaching.html#admin -->
     <div id="admin-zone">
       <div id="adm-login">
-        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#666;margin-bottom:20px;">
-          Admin Access
-        </div>
+        <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#666;margin-bottom:20px;">Admin Access</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-          <input id="adm-pw" type="password" placeholder="Password" class="adm-inp"
-            style="width:220px;" onkeydown="if(event.key==='Enter')verifyAdmin()">
+          <input id="adm-pw" type="password" placeholder="Password" class="adm-inp" style="width:220px;"
+            onkeydown="if(event.key==='Enter')verifyAdmin()">
           <button class="adm-btn" onclick="verifyAdmin()">Unlock →</button>
         </div>
-        <div id="adm-err" style="color:#e04;font-size:11px;margin-top:10px;display:none;">
-          Incorrect password.
-        </div>
+        <div id="adm-err" style="color:#e04;font-size:11px;margin-top:10px;display:none;">Incorrect password.</div>
       </div>
-
       <div id="adm-panel" style="display:none;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px;">
-          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">
-            Tutorial Manager
-          </span>
+          <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);">Tutorial Manager</span>
           <button class="adm-btn sm" onclick="lockAdmin()">Lock &amp; Close</button>
         </div>
         <div class="adm-grid">
-          <div>
-            <div class="adm-lbl">Semester</div>
-            <input id="f-sem"   class="adm-inp" placeholder="e.g. Semester 1">
-          </div>
-          <div>
-            <div class="adm-lbl">Subject / Topic</div>
-            <input id="f-topic" class="adm-inp" placeholder="e.g. Vector Calculus">
-          </div>
-          <div>
-            <div class="adm-lbl">Short Description</div>
-            <input id="f-desc"  class="adm-inp" placeholder="What this covers...">
-          </div>
-          <div>
-            <div class="adm-lbl">Question Set — Google Drive Link</div>
-            <input id="f-link"  class="adm-inp" placeholder="https://drive.google.com/file/d/...">
-          </div>
-          <div>
-            <div class="adm-lbl">Solution Set — Google Drive Link</div>
-            <input id="f-sol"   class="adm-inp" placeholder="https://drive.google.com/file/d/...">
-          </div>
+          <div><div class="adm-lbl">Semester</div><input id="f-sem" class="adm-inp" placeholder="e.g. Semester 1"></div>
+          <div><div class="adm-lbl">Subject / Topic</div><input id="f-topic" class="adm-inp" placeholder="e.g. Vector Calculus"></div>
+          <div><div class="adm-lbl">Short Description</div><input id="f-desc" class="adm-inp" placeholder="What this covers..."></div>
+          <div><div class="adm-lbl">Question Set — Drive Link</div><input id="f-link" class="adm-inp" placeholder="https://drive.google.com/..."></div>
+          <div><div class="adm-lbl">Solution Set — Drive Link</div><input id="f-sol" class="adm-inp" placeholder="https://drive.google.com/..."></div>
         </div>
         <button class="adm-btn" onclick="addTutorial()">+ Add</button>
         <div id="adm-list" style="margin-top:20px;"></div>
       </div>
     </div>
-
   </div>
 </section>
 
 
-<!-- ══════════════════════════════════
-     02 — MATHEMATICAL PATTERNS
-═════════════════════════════════════ -->
+<!-- ── 02 PATTERNS ── -->
 <section id="patterns">
   <div class="container">
     <p class="sec-lbl"><span class="num">02</span> Mathematical Patterns &amp; Insights</p>
@@ -575,7 +479,6 @@
       Structural patterns, proof techniques, and insights collected during coursework.
       Select a topic from the dropdown.
     </p>
-
     <div class="pat-wrap">
       <select class="pat-sel" id="pat-sel" onchange="showPat(this.value)">
         <option value="">— Select a topic —</option>
@@ -591,7 +494,6 @@
       </select>
       <div class="pat-arrow">▾</div>
     </div>
-
     <div class="pat-box" id="pat-box">
       <div class="pat-tag"  id="pat-tag"></div>
       <div class="pat-title"id="pat-title"></div>
@@ -602,42 +504,23 @@
 </section>
 
 
-<!-- ══════════════════════════════════
-     03 — MB LEARNERS
-═════════════════════════════════════ -->
+<!-- ── 03 MB LEARNERS ── -->
 <section id="mb-learners">
   <div class="container">
     <p class="sec-lbl"><span class="num">03</span> Teaching Initiative</p>
     <div class="mb-grid">
-
       <div class="mb-text fade-in">
-        <h2 style="font-family:var(--font-display);font-size:clamp(38px,5vw,60px);
-                   line-height:.9;letter-spacing:2px;margin-bottom:20px;color:var(--black);">
+        <h2 style="font-family:var(--font-display);font-size:clamp(38px,5vw,60px);line-height:.9;letter-spacing:2px;margin-bottom:20px;color:var(--black);">
           MB LEARNERS<span style="color:var(--accent)">.</span>
         </h2>
-        <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;
-                  color:var(--accent);margin-bottom:20px;">
+        <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;">
           Peer Learning · IISER Tirupati
         </p>
-        <p>
-          IISER courses can be brutal — especially interdisciplinary ones.
-          <strong>MB Learners is a peer-learning group</strong> where we trade skills
-          to survive the semester together.
-        </p>
-        <p>
-          We are not a coaching centre. We are a group of students who realized that
-          <strong>"Math people need help with Biology, and Bio people need help with Math."</strong>
-        </p>
-        <p>
-          The initiative runs informal tutorial sessions, shares proof shortcuts,
-          and breaks down mathematically heavy topics into approachable explanations.
-        </p>
-        <div class="mb-quote">
-          "If you're at IISER Tirupati and struggling with a subject,
-          there's always a seat here."
-        </div>
+        <p>IISER courses can be brutal — especially interdisciplinary ones. <strong>MB Learners is a peer-learning group</strong> where we trade skills to survive the semester together.</p>
+        <p>We are not a coaching centre. We are a group of students who realized that <strong>"Math people need help with Biology, and Bio people need help with Math."</strong></p>
+        <p>The initiative runs informal tutorial sessions, shares proof shortcuts, and breaks down mathematically heavy topics into approachable explanations.</p>
+        <div class="mb-quote">"If you're at IISER Tirupati and struggling with a subject, there's always a seat here."</div>
       </div>
-
       <div class="fade-in stagger-2">
         <div class="mb-feats">
           <div class="mb-feat">
@@ -657,39 +540,26 @@
           </div>
         </div>
         <div class="mb-stats">
-          <div class="mb-stat">
-            <div class="mb-stat-n">30<span style="color:var(--accent)">+</span></div>
-            <div class="mb-stat-l">Students</div>
-          </div>
-          <div class="mb-stat">
-            <div class="mb-stat-n" style="color:var(--accent)">MB</div>
-            <div class="mb-stat-l">Math × Bio</div>
-          </div>
-          <div class="mb-stat">
-            <div class="mb-stat-n">∞</div>
-            <div class="mb-stat-l">Open Sessions</div>
-          </div>
+          <div class="mb-stat"><div class="mb-stat-n">30<span style="color:var(--accent)">+</span></div><div class="mb-stat-l">Students</div></div>
+          <div class="mb-stat"><div class="mb-stat-n" style="color:var(--accent)">MB</div><div class="mb-stat-l">Math × Bio</div></div>
+          <div class="mb-stat"><div class="mb-stat-n">∞</div><div class="mb-stat-l">Open Sessions</div></div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
 
-<!-- ══ PAGE VIEWS BAR ══ -->
+<!-- PAGE VIEWS -->
 <div class="pv-bar">
   <div>
     <div class="pv-lbl">Page Views</div>
     <div class="pv-num" id="pv-num">—</div>
   </div>
   <div style="text-align:right;">
-    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:6px;">
-      IISER Tirupati · 2025
-    </div>
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:6px;">IISER Tirupati · 2025</div>
     <a href="mailto:milind20251175@students.iisertirupati.ac.in"
-       style="font-size:9px;letter-spacing:2px;text-transform:uppercase;
-              color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;">
+       style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);padding-bottom:2px;">
       Get In Touch →
     </a>
   </div>
@@ -730,27 +600,24 @@
 <button class="theme-toggle" title="Toggle dark/light mode">◑</button>
 <script src="script.js"></script>
 <script>
-/* ══════════════════════════════════════════
-   PAGE VIEWS
-══════════════════════════════════════════ */
+/* PAGE VIEWS */
 (function(){
-  const K='th_views',B=429;
-  let n=parseInt(localStorage.getItem(K),10);
+  var K='th_views', B=429;
+  var n=parseInt(localStorage.getItem(K),10);
   if(isNaN(n)||n<B) n=B;
   n++; localStorage.setItem(K,n);
-  const el=document.getElementById('pv-num');
-  const s=Math.max(B,n-50),t0=performance.now();
-  (function tick(now){
-    const p=Math.min((now-t0)/900,1),e=1-Math.pow(1-p,3);
+  var el=document.getElementById('pv-num');
+  var s=Math.max(B,n-50), t0=performance.now();
+  function tick(now){
+    var p=Math.min((now-t0)/900,1), e=1-Math.pow(1-p,3);
     el.textContent=Math.round(s+(n-s)*e).toLocaleString();
     if(p<1) requestAnimationFrame(tick);
-  })(performance.now());
+  }
+  requestAnimationFrame(tick);
 })();
 
-/* ══════════════════════════════════════════
-   MATH PATTERNS
-══════════════════════════════════════════ */
-const P={
+/* MATH PATTERNS */
+var P={
   conservative:{tag:'Vector Calculus',title:'Conservative Vector Fields',
     desc:'A vector field F is conservative iff its curl is zero everywhere. This guarantees path-independence of line integrals and the existence of a scalar potential φ with F = ∇φ.',
     f:'$$ \\nabla \\times \\mathbf{F} = \\mathbf{0} \\iff \\mathbf{F} = \\nabla\\varphi $$'},
@@ -781,33 +648,25 @@ const P={
 };
 
 function showPat(k){
-  const box=document.getElementById('pat-box');
-  if(!k){box.classList.remove('on');box.style.display='none';return;}
-  const d=P[k]; if(!d) return;
+  var box=document.getElementById('pat-box');
+  if(!k){ box.classList.remove('on'); return; }
+  var d=P[k]; if(!d) return;
   document.getElementById('pat-tag').textContent   = d.tag;
   document.getElementById('pat-title').textContent = d.title;
   document.getElementById('pat-desc').textContent  = d.desc;
   document.getElementById('pat-formula').innerHTML = d.f;
-  box.style.display='block';
   box.classList.add('on');
   if(window.MathJax && MathJax.typesetPromise)
     MathJax.typesetPromise([document.getElementById('pat-formula')]);
 }
 
-/* ══════════════════════════════════════════
-   TUTORIALS — localStorage
-══════════════════════════════════════════ */
-/* ── SHA-256 hash of admin password (no plaintext in source) ──
-   Password = iiser2025axl
-   To change: open any browser console and run:
-     crypto.subtle.digest('SHA-256',new TextEncoder().encode('newpassword'))
-       .then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))
-   Then replace the hash string below. */
-const PW_HASH='aeba91eb0ea74bf51319125d7444930e7ddfd354eb3ee62564c384dfef8f46fc';
-const TK='axl_tutorials', AK='axl_adm';
+/* TUTORIALS */
+/* SHA-256 of "iiser2025axl" — change hash to change password */
+var PW_HASH='aeba91eb0ea74bf51319125d7444930e7ddfd354eb3ee62564c384dfef8f46fc';
+var TK='axl_tutorials', AK='axl_adm';
 
-function loadT(){return JSON.parse(localStorage.getItem(TK)||'[]');}
-function saveT(a){localStorage.setItem(TK,JSON.stringify(a));}
+function loadT(){ return JSON.parse(localStorage.getItem(TK)||'[]'); }
+function saveT(a){ localStorage.setItem(TK,JSON.stringify(a)); }
 
 function icon(t){
   t=t.toLowerCase();
@@ -822,36 +681,39 @@ function icon(t){
 }
 
 function renderGrid(){
-  const tuts=loadT(), g=document.getElementById('tut-grid');
+  var tuts=loadT(), g=document.getElementById('tut-grid');
   if(!g) return;
   if(!tuts.length){
-    g.innerHTML=`<div style="grid-column:1/-1;padding:48px;text-align:center;
-      border:2px dashed var(--light-grey);">
-      <div style="font-family:var(--font-display);font-size:48px;color:var(--light-grey);">∫</div>
-      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;
-                  color:var(--mid-grey);margin-top:12px;">Study resources will appear here</div>
-    </div>`;
+    g.innerHTML='<div style="grid-column:1/-1;padding:48px;text-align:center;border:2px dashed var(--light-grey);">'+
+      '<div style="font-family:var(--font-display);font-size:48px;color:var(--light-grey);">∫</div>'+
+      '<div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--mid-grey);margin-top:12px;">Study resources will appear here</div></div>';
     return;
   }
-  g.innerHTML=tuts.map((t,i)=>`
-    <div class="tut-card fade-in m-reveal">
-      <div class="tut-num">0${i+1}</div>
-      <div class="tut-body-wrap">
-        <div class="tut-sem">${t.semester||''}</div>
-        <div class="tut-title">${t.topic}</div>
-        <p class="tut-desc">${t.desc||''}</p>
-        ${t.link||t.sol ? `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
-          ${t.link?`<a href="${t.link}" target="_blank" class="tut-btn">Questions ↗</a>`:''}
-          ${t.sol ?`<a href="${t.sol}"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);">Solutions ↗</a>`:''}
-        </div>` : `<span class="tut-btn soon">Coming Soon</span>`}
-      </div>
-    </div>`).join('');
+  g.innerHTML=tuts.map(function(t,i){
+    var btns='';
+    if(t.link||t.sol){
+      btns='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">';
+      if(t.link) btns+='<a href="'+t.link+'" target="_blank" class="tut-btn">Questions ↗</a>';
+      if(t.sol)  btns+='<a href="'+t.sol+'"  target="_blank" class="tut-btn" style="background:transparent;color:var(--dark-grey);border-color:var(--light-grey);">Solutions ↗</a>';
+      btns+='</div>';
+    } else {
+      btns='<span class="tut-btn soon">Coming Soon</span>';
+    }
+    return '<div class="tut-card">'+
+      '<div class="tut-num">0'+(i+1)+'</div>'+
+      '<div class="tut-body-wrap">'+
+        '<div class="tut-sem">'+(t.semester||'')+'</div>'+
+        '<div class="tut-title">'+t.topic+'</div>'+
+        '<p class="tut-desc">'+(t.desc||'')+'</p>'+
+        btns+
+      '</div></div>';
+  }).join('');
 }
 renderGrid();
 
-/* show admin only when hash = #admin */
+/* admin hash check */
 function checkHash(){
-  const z=document.getElementById('admin-zone');
+  var z=document.getElementById('admin-zone');
   if(location.hash==='#admin'){
     z.style.display='block';
     if(sessionStorage.getItem(AK)==='1'){
@@ -865,11 +727,11 @@ checkHash();
 window.addEventListener('hashchange',checkHash);
 
 async function sha256(s){
-  const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
-  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join('');
 }
 async function verifyAdmin(){
-  const h=await sha256(document.getElementById('adm-pw').value);
+  var h=await sha256(document.getElementById('adm-pw').value);
   if(h===PW_HASH){
     sessionStorage.setItem(AK,'1');
     document.getElementById('adm-login').style.display='none';
@@ -887,93 +749,41 @@ function lockAdmin(){
   document.getElementById('admin-zone').style.display='none';
 }
 function addTutorial(){
-  const sem=document.getElementById('f-sem').value.trim();
-  const top=document.getElementById('f-topic').value.trim();
-  const dsc=document.getElementById('f-desc').value.trim();
-  const lnk=document.getElementById('f-link').value.trim();
-  const sol=document.getElementById('f-sol').value.trim();
+  var sem=document.getElementById('f-sem').value.trim();
+  var top=document.getElementById('f-topic').value.trim();
+  var dsc=document.getElementById('f-desc').value.trim();
+  var lnk=document.getElementById('f-link').value.trim();
+  var sol=document.getElementById('f-sol').value.trim();
   if(!top){alert('Topic is required.');return;}
-  const tuts=loadT();
+  var tuts=loadT();
   tuts.push({id:Date.now(),semester:sem,topic:top,desc:dsc,link:lnk,sol:sol});
   saveT(tuts);
-  ['f-sem','f-topic','f-desc','f-link','f-sol'].forEach(id=>document.getElementById(id).value='');
+  ['f-sem','f-topic','f-desc','f-link','f-sol'].forEach(function(id){document.getElementById(id).value='';});
   renderGrid(); renderAdmList();
 }
 function deleteTutorial(id){
   if(!confirm('Delete this entry?')) return;
-  saveT(loadT().filter(t=>t.id!==id));
+  saveT(loadT().filter(function(t){return t.id!==id;}));
   renderGrid(); renderAdmList();
 }
 function renderAdmList(){
-  const tuts=loadT(), el=document.getElementById('adm-list');
+  var tuts=loadT(), el=document.getElementById('adm-list');
   if(!el) return;
-  el.innerHTML=!tuts.length
-    ?'<p style="color:#555;font-size:12px;margin-top:16px;">No tutorials added yet.</p>'
-    :tuts.map(t=>`
-      <div class="adm-row">
-        <div class="adm-row-info">
-          <span class="adm-row-sem">${t.semester||'—'}</span>${t.topic}
-          ${t.link?'<span style="font-size:9px;color:#555;margin-left:8px;">✓ link</span>':''}
-        </div>
-        <button class="adm-btn sm" onclick="deleteTutorial(${t.id})">Delete</button>
-      </div>`).join('');
+  if(!tuts.length){ el.innerHTML='<p style="color:#555;font-size:12px;margin-top:16px;">No tutorials added yet.</p>'; return; }
+  el.innerHTML=tuts.map(function(t){
+    return '<div class="adm-row">'+
+      '<div class="adm-row-info"><span class="adm-row-sem">'+(t.semester||'—')+'</span>'+t.topic+
+      (t.link?'<span style="font-size:9px;color:#555;margin-left:8px;">✓ Q</span>':'')+
+      (t.sol ?'<span style="font-size:9px;color:#555;margin-left:4px;">✓ S</span>':'')+
+      '</div>'+
+      '<button class="adm-btn sm" onclick="deleteTutorial('+t.id+')">Delete</button>'+
+    '</div>';
+  }).join('');
 }
-/* ══════════════════════════════════════════
-   MOBILE SCROLL-REVEAL
-══════════════════════════════════════════ */
-(function(){
-  if(!('IntersectionObserver' in window)) return;
-  const obs = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-  },{threshold:0.12});
-  document.querySelectorAll('.m-reveal').forEach(el=>obs.observe(el));
-  /* re-observe after renderGrid (cards added dynamically) */
-  const origRender = renderGrid;
-  window.__reObserve = function(){
-    document.querySelectorAll('.m-reveal:not(.visible)').forEach(el=>obs.observe(el));
-  };
-})();
 
-/* ══════════════════════════════════════════
-   CINEMATIC IMAGE LOAD — photo strip
-   Images animate in as they enter viewport
-══════════════════════════════════════════ */
-(function(){
-  const items = document.querySelectorAll('.photo-strip-item');
-  if(!items.length) return;
-
-  function revealItem(item){
-    const img = item.querySelector('img');
-    if(!img) return;
-    if(img.complete){
-      item.classList.add('img-loaded');
-    } else {
-      img.addEventListener('load', function(){
-        item.classList.add('img-loaded');
-      });
-      // force load if stuck
-      if(img.src) img.src = img.src;
-    }
-  }
-
-  if('IntersectionObserver' in window){
-    const obs = new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){
-          revealItem(e.target);
-          obs.unobserve(e.target);
-        }
-      });
-    }, {threshold:0.05});
-    items.forEach(function(item){ obs.observe(item); });
-  } else {
-    items.forEach(revealItem);
-  }
-})();
-
-/* hide custom cursor on touch devices */
+/* hide cursor on touch */
 if(window.matchMedia('(hover:none) and (pointer:coarse)').matches){
-  document.querySelectorAll('.cursor,.cursor-ring').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.cursor,.cursor-ring').forEach(function(el){el.style.display='none';});
   document.body.style.cursor='auto';
 }
 </script>
