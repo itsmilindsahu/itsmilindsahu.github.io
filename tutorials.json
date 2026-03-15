@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "semester": "Semester 2",
+    "topic": "Problem Set 1 — Matrix",
+    "desc": "Basic matrix operations, transpose properties, symmetric and skew-symmetric matrices, nilpotent matrices, and how matrices interact with vectors and row operations.",
+    "link": "https://drive.google.com/file/d/1YbocCPC3UmISEgACE1wXwlQHLtPNVSPC/view",
+    "sol":  "https://drive.google.com/file/d/1tTm2mbsWtHEHkJ1MEI7l9WLbWtUe6OrO/view"
+  },
+  {
+    "id": 2,
+    "semester": "Semester 2",
+    "topic": "Problem Set 2 — Invertibility & Linear Transformation",
+    "desc": "Matrix invertibility, similarity of matrices, transpose and determinant properties, linear transformations, and solving homogeneous linear systems using rank and row reduction.",
+    "link": "https://drive.google.com/file/d/19FE4AfaPRLloBnUcOvbNySimNam2x9o0/view",
+    "sol":  "https://drive.google.com/file/d/1tLwAysuZ6rGkY53MU_pR8W98Lij45TWf/view"
+  },
+  {
+    "id": 3,
+    "semester": "Semester 2",
+    "topic": "Problem Set 3 — Vector Spaces",
+    "desc": "Vector space concepts, proving matrices and solution sets form vector spaces, spaces of continuous and differentiable functions, and verifying vector space axioms.",
+    "link": "https://drive.google.com/file/d/1RTpFj4GPtOUaw1qOWmRjLY7R9LZQPOM4/view",
+    "sol":  "https://drive.google.com/file/d/1O-uv_7AaPIgQ3BfJiCs0wL2SclQLHAg0/view"
+  },
+  {
+    "id": 4,
+    "semester": "Semester 2",
+    "topic": "Problem Set 4 — Vector Spaces (Span & Dimension)",
+    "desc": "Vector spaces built from span and generators, determining finite generation, linear independence of vectors, matrices, polynomials and functions, and understanding subspace dimension.",
+    "link": "https://drive.google.com/file/d/179_XlM9hjJCIqushu_ctxLmox4s2U1c6/view",
+    "sol":  "https://drive.google.com/file/d/1dNjOWqmimWUe5D2lkAYNKz7sRjRudEVR/view"
+  },
+  {
+    "id": 5,
+    "semester": "Semester 2",
+    "topic": "Problem Set 5 — Span & Basis",
+    "desc": "Understanding bases, span, and linear independence across vector spaces like matrices, polynomials, and Rn. Finding bases of subspaces and how coordinates change with different bases.",
+    "link": "https://drive.google.com/file/d/10bLzahLmZNm-jBHpeLqQrb8hsuUXVqM6/view",
+    "sol":  "https://drive.google.com/file/d/1a5KnZr2RopxUMXQRd4G79xUR844WML2G/view"
+  }
+]
