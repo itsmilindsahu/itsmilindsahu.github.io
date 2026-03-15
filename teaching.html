@@ -474,8 +474,8 @@
 
 <!-- ══ PHOTO STRIP ══ -->
 <div class="photo-strip">
-  <div class="photo-strip-item m-reveal">
-    <img src="teaching-img1.jpg" alt="Vector Calculus session">
+  <div class="photo-strip-item">
+    <img src="teaching-img1.jpg" alt="Vector Calculus session" loading="eager">
     <div class="ps-overlay"></div>
     <div class="ps-cap">
       <div class="ps-tag">MB Learners · IISER Tirupati</div>
@@ -483,8 +483,8 @@
       <div class="ps-detail">Line Integrals · Spherical &amp; Cylindrical Systems</div>
     </div>
   </div>
-  <div class="photo-strip-item m-reveal">
-    <img src="teaching-img2.jpg" alt="Mathematics tutorial">
+  <div class="photo-strip-item">
+    <img src="teaching-img2.jpg" alt="Mathematics tutorial" loading="eager">
     <div class="ps-overlay"></div>
     <div class="ps-cap">
       <div class="ps-tag">MB Learners · IISER Tirupati</div>
@@ -917,6 +917,7 @@ function renderAdmList(){
         </div>
         <button class="adm-btn sm" onclick="deleteTutorial(${t.id})">Delete</button>
       </div>`).join('');
+}
 /* ══════════════════════════════════════════
    MOBILE SCROLL-REVEAL
 ══════════════════════════════════════════ */
