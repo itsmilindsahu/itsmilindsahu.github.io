@@ -223,6 +223,9 @@ body.dark .footer-top{border-bottom-color:#0a0a08;}
 body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
 
 /* RESPONSIVE */
+/* ═══════════════════════════════════════
+   RESPONSIVE — TABLET
+═══════════════════════════════════════ */
 @media(max-width:960px){
   :root{--gap:72px;}
   .hero-content{grid-template-columns:1fr;}
@@ -234,15 +237,156 @@ body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
   .footer-top{grid-template-columns:1fr;}
   .footer-links{align-items:flex-start;}
 }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — MOBILE (wow factor)
+═══════════════════════════════════════ */
 @media(max-width:640px){
+
+  /* ── nav ── */
   nav{padding:0 18px;}
   .container,.page-hero-inner,.footer-inner{padding:0 18px;}
-  .hero-content{padding:72px 18px 36px;}
-  .nav-links{display:none;flex-direction:column;position:fixed;top:var(--nav-h);left:0;right:0;background:var(--off-white);border-bottom:1px solid var(--light-grey);padding:20px;gap:18px;}
+  .nav-links{
+    display:none;flex-direction:column;
+    position:fixed;top:var(--nav-h);left:0;right:0;
+    background:rgba(245,244,240,.97);backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--light-grey);
+    padding:24px 20px;gap:0;
+    box-shadow:0 12px 40px rgba(0,0,0,.08);
+  }
   .nav-links.open{display:flex;}
+  .nav-links li{border-bottom:1px solid var(--light-grey);}
+  .nav-links li:last-child{border-bottom:none;}
+  .nav-links a{
+    display:block;padding:14px 4px;
+    font-size:11px;letter-spacing:3px;
+  }
   .hamburger{display:flex;}
-  .gallery-grid{grid-template-columns:1fr 1fr;}
+
+  /* ── hero: full-screen, name dominates ── */
+  #hero{min-height:100svh;align-items:flex-end;padding-bottom:48px;}
+  .hero-content{
+    padding:80px 20px 0;
+    grid-template-columns:1fr;
+    gap:0;
+  }
+  .hero-eyebrow{font-size:9px;letter-spacing:3px;margin-bottom:12px;}
+  .hero-name{
+    font-size:clamp(72px,20vw,96px);
+    line-height:.82;
+    margin-bottom:14px;
+    word-break:break-word;
+  }
+  .hero-subtitle{font-size:10px;letter-spacing:2px;margin-bottom:20px;}
+
+  /* terminal: compact on mobile */
+  .hero-terminal{padding:12px 14px;}
+  .terminal-body{margin-top:10px;}
+  .terminal-line{font-size:10px;}
+
+  /* cta buttons: full-width stacked */
+  .hero-links{
+    flex-direction:column;gap:8px;margin-bottom:0;
+  }
+  .hero-links .btn{
+    width:100%;justify-content:center;
+    padding:14px 20px;font-size:10px;
+  }
+
+  /* ghost watermark behind hero name */
+  #hero::after{
+    content:'AXL';
+    position:absolute;bottom:-20px;right:-8px;
+    font-family:var(--font-display);
+    font-size:clamp(120px,45vw,200px);
+    color:rgba(26,86,219,.04);
+    line-height:1;pointer-events:none;letter-spacing:4px;
+    z-index:0;
+  }
+  .hero-content > div:first-child{position:relative;z-index:1;}
+
+  /* ── ticker: smaller on mobile ── */
+  .ticker-item{font-size:9px;padding:0 20px;gap:8px;}
+
+  /* ── about: single col, stats in 2×2 grid ── */
+  #about{padding:56px 0;}
+  .about-layout{grid-template-columns:1fr;gap:32px;}
+  .about-text p{font-size:13px;}
+  .about-right{
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:2px;
+    background:var(--light-grey);
+  }
+  .stat-box{padding:18px 16px;}
+  .stat-num{font-size:38px;}
+  .about-tags{gap:6px;}
+  .tag-pill{font-size:8px;padding:5px 10px;}
+  /* about cta buttons */
+  .about-text > div:last-child{flex-direction:column;gap:8px;}
+  .about-text > div:last-child .btn{width:100%;justify-content:center;}
+
+  /* ── research: reduce galaxy height on mobile ── */
+  #research-graph{height:320px;min-height:320px;}
+  .graph-legend{display:none;}
+
+  /* certs: 2 col */
+  .certs-grid-dark{grid-template-columns:repeat(2,1fr);gap:4px;}
+  .cert-dark-label{font-size:7px;}
+
+  /* ── AXL stack: single col ── */
+  .axl-stack-layout{grid-template-columns:1fr;gap:28px;}
+  .axl-stack-left .axl-name{font-size:clamp(56px,16vw,72px);}
+  .axl-stack-block{padding:16px 18px;}
+  .axl-stack-items{gap:5px;}
+  .axl-tag{font-size:8px;padding:4px 8px;}
+
+  /* ── projects CTA ── */
+  #projects{padding:56px 0;}
+  #projects .container{padding:0 20px;}
+
+  /* ── gallery: 2 col tight ── */
+  .gallery-grid{
+    grid-template-columns:1fr 1fr;
+    gap:3px;
+  }
+  .gallery-item{aspect-ratio:1/1;}
+  .gallery-overlay{font-size:9px;padding:8px;}
+
+  /* ── footer ── */
   .footer-bottom{flex-direction:column;gap:6px;}
+  .footer-links{gap:12px;}
+  .footer-link{font-size:11px;}
+
+  /* ── scroll-reveal base state ── */
+  .fade-in{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .55s ease, transform .55s ease;
+  }
+  .fade-in.in-view{opacity:1;transform:none;}
+
+  /* stagger delays */
+  .stagger-1{transition-delay:.08s;}
+  .stagger-2{transition-delay:.16s;}
+  .stagger-3{transition-delay:.24s;}
+  .stagger-4{transition-delay:.32s;}
+
+  /* ── section labels: tighter ── */
+  .section-label{margin-bottom:28px;}
+
+  /* ── btn touch targets ── */
+  .btn{min-height:44px;}
+
+  /* ── theme toggle: reposition so it doesn't block nav ── */
+  .theme-toggle{bottom:20px;right:16px;width:36px;height:36px;font-size:14px;}
+}
+
+/* ── extra small ── */
+@media(max-width:380px){
+  .hero-name{font-size:64px;}
+  .about-right{grid-template-columns:1fr;}
+  .gallery-grid{grid-template-columns:1fr;}
 }
 
 /* ══════════════════════════════════
