@@ -2,215 +2,248 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AXL — Axiom Labs</title>
+  <title>Milind Sahu — AXL Axiom Labs</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
-  <style>
-    .axl-hero-full{min-height:100vh;background:var(--black);display:flex;align-items:center;position:relative;overflow:hidden;}
-    .axl-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);background-size:48px 48px;}
-    .axl-hero-glow{position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 65%);pointer-events:none;}
-    .axl-hero-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;}
-    .axl-big-name{font-family:var(--font-display);font-size:clamp(80px,14vw,160px);line-height:.85;color:var(--white);letter-spacing:4px;margin-bottom:12px;}
-    .axl-big-name span{color:var(--accent);}
-    .axl-full-name{font-size:16px;letter-spacing:8px;text-transform:uppercase;color:#777;margin-bottom:28px;}
-    .axl-big-tag{font-family:var(--font-display);font-size:26px;color:#444;letter-spacing:4px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:40px;}
-    .axl-big-tag .arr{color:var(--accent);}
-    .axl-pillars-dark{display:flex;flex-wrap:wrap;gap:8px;}
-    .axl-pill-dark{padding:7px 16px;border:1px solid #222;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#555;transition:all .2s;}
-    .axl-pill-dark:hover{border-color:var(--accent);color:var(--accent);}
-    nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
-    nav.dark-nav .name-full{color:var(--white)!important;}
-    nav.dark-nav .nav-links a{color:#555!important;}
-    nav.dark-nav .nav-links a:hover,nav.dark-nav .nav-links a.active{color:var(--white)!important;}
-    nav.dark-nav .hamburger span{background:var(--white)!important;}
-    .mission-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--light-grey);}
-    .mission-card{background:var(--white);padding:40px 32px;transition:background .2s;}
-    .mission-card:hover{background:var(--off-white);}
-    .mission-icon{font-family:var(--font-display);font-size:48px;color:var(--accent);margin-bottom:16px;}
-    .mission-title{font-size:15px;font-weight:700;margin-bottom:12px;}
-    .mission-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;}
-    .timeline{position:relative;padding-left:32px;}
-    .timeline::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--light-grey);}
-    .timeline-item{position:relative;margin-bottom:40px;}
-    .timeline-item::before{content:'';position:absolute;left:-36px;top:6px;width:9px;height:9px;background:var(--accent);border-radius:50%;}
-    .timeline-date{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
-    .timeline-event{font-size:15px;font-weight:700;margin-bottom:6px;}
-    .timeline-detail{font-size:12px;color:var(--dark-grey);}
-    @media(max-width:640px){.axl-hero-inner{padding:0 20px;}.mission-grid{grid-template-columns:1fr;}}
-  </style>
 </head>
 <body>
 <div class="cursor"></div><div class="cursor-ring"></div>
-<nav class="dark-nav">
+<nav>
   <a href="index.html" class="nav-logo">
     <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
-    <span class="name-full" style="color:white">MILIND <span>SAHU</span></span>
+    <span class="name-full">MILIND <span>SAHU</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html" class="active">Home</a></li>
     <li><a href="index.html#about">About</a></li>
     <li><a href="projects.html">Projects</a></li>
-    <li><a href="axiom-labs.html" class="active">AXL</a></li>
+    <li><a href="axiom-labs.html">AXL</a></li>
     <li><a href="teaching.html">Teaching</a></li>
     <li><a href="index.html#research">Research</a></li>
     <li><a href="index.html#gallery">Gallery</a></li>
+    <li><a href="index.html#certificates">Certs</a></li>
   </ul>
-  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <button class="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <main>
-<div class="axl-hero-full">
-  <div class="axl-hero-grid"></div>
-  <div class="axl-hero-glow"></div>
-  <div class="axl-hero-inner">
-    <div class="axl-big-name fade-in">AX<span>L</span></div>
-    <div class="axl-full-name fade-in stagger-1">— Axiom Labs</div>
-    <div class="axl-big-tag fade-in stagger-2"><span>Theory</span><span class="arr">→</span><span>Algorithms</span><span class="arr">→</span><span>Intelligence</span></div>
-    <div class="axl-pillars-dark fade-in stagger-3">
-      <span class="axl-pill-dark">Algorithms</span><span class="axl-pill-dark">Optimization</span>
-      <span class="axl-pill-dark">Machine Learning</span><span class="axl-pill-dark">Energy Analytics</span>
-      <span class="axl-pill-dark">Policy Systems</span>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div>
+      <div class="hero-eyebrow fade-in"><span class="dot"></span>BS-MS Student · IISER Tirupati · 2025-Present</div>
+      <h1 class="hero-name fade-in stagger-1">MILIND<br><span class="accent-line">SAHU</span><span class="underscore">_</span></h1>
+      <p class="hero-subtitle fade-in stagger-2">Mathematics <span>·</span> Computing <span>·</span> Energy Systems</p>
+      <div class="hero-terminal fade-in stagger-2"><div class="terminal-body"></div></div>
+      <div class="hero-links fade-in stagger-3">
+        <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-primary">GitHub</a>
+        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="btn btn-ghost">LinkedIn</a>
+        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="btn btn-ghost">Email</a>
+        <a href="projects.html" class="btn btn-ghost">Projects →</a>
+      </div>
     </div>
+    <div class="hero-axl-card fade-in stagger-3">
+      <div class="hero-axl-logo">
+        <div class="axl-text">AX<span>L</span></div>
+        <div class="axl-sub">AXIOM LABS</div>
+      </div>
+      <div class="axl-card-tagline">Theory <span class="arr">→</span> Algorithms <span class="arr">→</span> Intelligence</div>
+      <div class="axl-mini-stats">
+        <div class="axl-mini-stat"><div class="axl-mini-num">3×</div><div class="axl-mini-label">Prizes Won</div></div>
+        <div class="axl-mini-stat"><div class="axl-mini-num">Top 5</div><div class="axl-mini-label">National Rank</div></div>
+        <div class="axl-mini-stat"><div class="axl-mini-num">4+</div><div class="axl-mini-label">Projects</div></div>
+        <div class="axl-mini-stat"><div class="axl-mini-num" style="color:var(--accent)">AXL</div><div class="axl-mini-label">Est. 2025</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item"><strong>3rd Prize</strong><span class="sep">·</span>Inter IISER Entrepreneurship Summit</span>
+    <span class="ticker-item"><strong>2nd Prize</strong><span class="sep">·</span>IIT Hyderabad Eco Champion Hackathon</span>
+    <span class="ticker-item"><strong>Rank 5</strong><span class="sep">·</span>Hack Beyond Limits — 1000+ Teams</span>
+    <span class="ticker-item"><strong>Top 100</strong><span class="sep">·</span>CodeSynthesis National — 4000+ Teams</span>
+    <span class="ticker-item"><strong>Round 3</strong><span class="sep">·</span>IIT Kanpur EcoCraft Policy Conclave 26</span>
+    <span class="ticker-item"><strong>AXL</strong><span class="sep">·</span>Axiom Labs — Theory → Algorithms → Intelligence</span>
+    <span class="ticker-item"><strong>3rd Prize</strong><span class="sep">·</span>Inter IISER Entrepreneurship Summit</span>
+    <span class="ticker-item"><strong>2nd Prize</strong><span class="sep">·</span>IIT Hyderabad Eco Champion Hackathon</span>
+    <span class="ticker-item"><strong>Rank 5</strong><span class="sep">·</span>Hack Beyond Limits — 1000+ Teams</span>
+    <span class="ticker-item"><strong>Top 100</strong><span class="sep">·</span>CodeSynthesis National — 4000+ Teams</span>
+    <span class="ticker-item"><strong>Round 3</strong><span class="sep">·</span>IIT Kanpur EcoCraft Policy Conclave 26</span>
+    <span class="ticker-item"><strong>AXL</strong><span class="sep">·</span>Axiom Labs — Theory → Algorithms → Intelligence</span>
   </div>
 </div>
 
+<!-- ABOUT -->
 <section id="about">
   <div class="container">
-    <p class="section-label"><span class="num">01</span> What is AXL</p>
+    <p class="section-label"><span class="num">01</span> About</p>
     <div class="about-layout">
       <div class="about-text fade-in">
-        <p><strong>Axiom Labs (AXL)</strong> is an independent computational research identity — a one-person research collective operating at the intersection of pure mathematics, algorithms, and applied systems.</p>
-        <p>The name reflects a core principle: <strong>build from axioms</strong>. Every system should have a rigorous theoretical foundation before implementation. No shortcuts, no duct tape.</p>
-        <p>AXL is the identity under which I compete in national hackathons, develop independent research projects, and publish technical work. It allows me to maintain a <strong>coherent research identity</strong> across institutions, competitions, and collaborators.</p>
-        <p>Currently focused on: energy systems analytics, optimization for policy design, and machine learning with mathematical guarantees.</p>
+        <p>I'm a <strong>first-year BS-MS student at IISER Tirupati</strong>, working at the intersection of mathematical modeling, optimization theory, and computational methods applied to real-world systems.</p>
+        <p>My work spans <strong>energy analytics, machine learning, and quantitative policy analysis</strong>. I build systems that translate rigorous theory into deployable tools — from NILM-based energy disaggregation to proof-theoretic waste traceability frameworks.</p>
+        <p>Through my research identity <strong>AXL — Axiom Labs</strong>, I compete in national hackathons at IITs and IISERs, consistently placing in the top ranks against thousands of participants.</p>
+        <div class="about-tags">
+          <span class="tag-pill">Mathematical Economics</span>
+          <span class="tag-pill">Optimization Theory</span>
+          <span class="tag-pill">Game Theory</span>
+          <span class="tag-pill">Energy Systems</span>
+          <span class="tag-pill">Machine Learning</span>
+          <span class="tag-pill">Policy Analysis</span>
+        </div>
+        <p style="font-size:11px;color:var(--mid-grey);margin-top:20px;line-height:1.8;border-left:2px solid var(--light-grey);padding-left:12px;">
+          Outside research — I shoot and edit. Mostly street, campus life, and the quiet moments between things.
+          <a href="https://www.instagram.com/its_milindsahu/" target="_blank" style="color:var(--accent);text-decoration:none;"> @its_milindsahu →</a>
+        </p>
+        <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="axiom-labs.html" class="btn btn-primary">Explore AXL →</a>
+          <a href="projects.html" class="btn btn-ghost">See Projects</a>
+        </div>
       </div>
       <div class="about-right fade-in stagger-2">
-        <div class="stat-box"><div class="stat-num">4+</div><div class="stat-label">Projects Under AXL</div></div>
         <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">National Prizes Won</div></div>
         <div class="stat-box"><div class="stat-num">5K+</div><div class="stat-label">Competitors Beaten</div></div>
-        <div class="stat-box"><div class="stat-num" style="font-size:32px;color:var(--accent)">2025</div><div class="stat-label">Established</div></div>
+        <div class="stat-box"><div class="stat-num" style="font-size:30px;color:var(--accent)">IISER-T</div><div class="stat-label">BS-MS 2025–Present</div></div>
+        <div class="stat-box"><div class="stat-num" style="font-size:30px;color:var(--accent)">IISER-T</div><div class="stat-label">BS-MS 2025–Present</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<section style="background:var(--off-white)">
+<!-- RESEARCH -->
+<section id="research">
   <div class="container">
-    <p class="section-label"><span class="num">02</span> Research Pillars</p>
-    <div class="mission-grid">
-      <div class="mission-card fade-in"><div class="mission-icon">∑</div><div class="mission-title">Algorithms & Complexity</div><p class="mission-desc">Designing efficient algorithms with provable guarantees. Not just "it works" but "it works because..."</p></div>
-      <div class="mission-card fade-in stagger-1"><div class="mission-icon">min</div><div class="mission-title">Optimization Theory</div><p class="mission-desc">Convex and non-convex optimization for real-world systems — energy, infrastructure, logistics.</p></div>
-      <div class="mission-card fade-in stagger-2"><div class="mission-icon">∇θ</div><div class="mission-title">Machine Learning</div><p class="mission-desc">ML with mathematical foundations — not black-box models but systems you can reason about.</p></div>
-      <div class="mission-card fade-in stagger-3"><div class="mission-icon">ΔE</div><div class="mission-title">Energy Systems Analytics</div><p class="mission-desc">Computational tools for energy monitoring, disaggregation, and policy optimization.</p></div>
-    </div>
-  </div>
-</section>
+    <p class="section-label"><span class="num">02</span> Research Galaxy</p>
+    <div class="graph-hint">Drag to rotate · Scroll to zoom · Hover planets</div>
+    <div id="research-graph"></div>
 
-<section>
-  <div class="container">
-    <p class="section-label"><span class="num">03</span> AXL Track Record</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;">
-      <div class="timeline fade-in">
-        <div class="timeline-item"><div class="timeline-date">2025 · IIES</div><div class="timeline-event">🥉 NILM Energy Monitoring</div><div class="timeline-detail">3rd Prize — Inter IISER Entrepreneurship Summit. IISERs · IISc · NISER · CEBS.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIT Hyderabad</div><div class="timeline-event">🥈 TRACEWASTE</div><div class="timeline-detail">2nd Prize — Eco Champion Hackathon. Elan &amp; nVision 2026.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2025 · Solo</div><div class="timeline-event">🏅 EcoFusion — Rank 5</div><div class="timeline-detail">Hack Beyond Limits. 1000+ participants. Solo project under AXL.</div></div>
+    <p class="section-label" style="margin-top:72px;"><span class="num">—</span> Certificates & Awards</p>
+    <div class="certs-grid-dark">
+      <div class="cert-dark-item fade-in">
+        <div class="cert-dark-img"><img src="cert-hbl-award.jpg" alt="Rank 5 Hack Beyond Limits"></div>
+        <div class="cert-dark-label">🏅 Rank 5 · Hack Beyond Limits</div>
       </div>
-      <div class="timeline fade-in stagger-2">
-        <div class="timeline-item"><div class="timeline-date">2025 · National</div><div class="timeline-event">🏆 HEV Optimization — Top 100</div><div class="timeline-detail">CodeSynthesis National Challenge. 4000+ teams.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIT Kanpur</div><div class="timeline-event">⭐ EcoCraft — Round 3</div><div class="timeline-detail">Policy Conclave '26. Environmental policy analysis.</div></div>
-        <div class="timeline-item"><div class="timeline-date">Ongoing</div><div class="timeline-event">→ Next Project</div><div class="timeline-detail">Mathematical Economics + Optimization. In progress.</div></div>
+      <div class="cert-dark-item fade-in stagger-1">
+        <div class="cert-dark-img"><img src="cert-hbl.jpg" alt="Hack Beyond Limits Participation"></div>
+        <div class="cert-dark-label">Hack Beyond Limits · Participation</div>
+      </div>
+      <div class="cert-dark-item fade-in stagger-2">
+        <div class="cert-dark-img"><img src="cert-cs1.jpg" alt="CodeSynthesis"></div>
+        <div class="cert-dark-label">CodeSynthesis · Participation</div>
+      </div>
+      <div class="cert-dark-item fade-in stagger-3">
+        <div class="cert-dark-img"><img src="cert-cs2.jpg" alt="CodeSynthesis Round 1"></div>
+        <div class="cert-dark-label">CodeSynthesis · Round 1</div>
+      </div>
+      <div class="cert-dark-item fade-in stagger-4">
+        <div class="cert-dark-img"><img src="cert-cs3.jpg" alt="CodeSynthesis Round 2"></div>
+        <div class="cert-dark-label">CodeSynthesis · Round 2</div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="projects" style="background:var(--white)">
+<!-- AXL -->
+<section id="axl-preview">
   <div class="container">
-    <p class="section-label" style="margin-bottom:40px;"><span class="num">04</span> AXL Projects</p>
-    <div class="projects-grid">
-      <article class="project-card">
-        <div class="project-img-wrap"><img src="nilm.jpg" alt="NILM"><div class="project-img-overlay"></div><div class="project-img-badge">🥉 3rd Prize · Inter IISER Entrepreneurship Summit</div></div>
-        <div class="project-body">
-          <div class="project-category">Energy · ML · IoT</div>
-          <div class="project-title">NILM-Based Smart Energy Monitoring System</div>
-          <p class="project-desc">Non-Intrusive Load Monitoring framework for appliance-level energy disaggregation. Random Forest anomaly detection + LSTM load prediction. Smart plug with MQTT + FastAPI backend.</p>
-          <div class="method-tags"><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-ml">LSTM Networks</span><span class="mtag mtag-ml">Time-Series Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Anomaly Detection</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
+    <p class="section-label"><span class="num">03</span> Research Identity</p>
+    <div class="axl-stack-layout fade-in">
+      <div class="axl-stack-left">
+        <div class="axl-name">AX<span>L</span></div>
+        <div class="axl-collective">Axiom Labs · Computational Research Collective</div>
+        <div class="axl-tagline">Theory <span class="arrow">→</span> Algorithms <span class="arrow">→</span> Intelligence</div>
+        <p class="axl-desc">Axiom Labs is my independent computational research identity — building at the intersection of rigorous mathematics and deployable systems. Every project starts from axioms, not assumptions.</p>
+        <a href="axiom-labs.html" class="btn btn-primary" style="margin-top:8px;">Explore AXL →</a>
+      </div>
+      <div class="axl-stack-right">
+        <div class="axl-stack-block">
+          <div class="axl-stack-title">Research Focus</div>
+          <div class="axl-stack-items">
+            <span class="axl-tag axl-tag-core">Quantitative Systems</span>
+            <span class="axl-tag axl-tag-core">Optimization</span>
+            <span class="axl-tag axl-tag-core">Machine Learning</span>
+            <span class="axl-tag axl-tag-core">Energy Systems Analytics</span>
+          </div>
         </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><img src="tracewaste.jpg" alt="TRACEWASTE"><div class="project-img-overlay"></div><div class="project-img-badge">🥈 2nd Prize · IIT Hyderabad Eco Champion</div></div>
-        <div class="project-body">
-          <div class="project-category">Policy · Sustainability</div>
-          <div class="project-title">TRACEWASTE — Proof-Based Waste Traceability</div>
-          <p class="project-desc">Verification-first framework for post-collection waste accountability using QR-linked batch proofs, geotagging, and timestamped logs to close accountability gaps in waste management.</p>
-          <div class="method-tags"><span class="mtag mtag-policy">Systems Design</span><span class="mtag mtag-policy">Policy Analysis</span><span class="mtag mtag-math">Statistical Modeling</span><span class="mtag mtag-policy">Geo-Verification</span></div>
-          <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="project-link">LinkedIn →</a></div>
+        <div class="axl-stack-block">
+          <div class="axl-stack-title">ML Methods</div>
+          <div class="axl-stack-items">
+            <span class="axl-tag axl-tag-ml">Random Forest</span>
+            <span class="axl-tag axl-tag-ml">LSTM Networks</span>
+            <span class="axl-tag axl-tag-ml">Time-Series Forecasting</span>
+            <span class="axl-tag axl-tag-ml">Anomaly Detection</span>
+          </div>
         </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">EF</div><div class="sub">Optical Energy Monitor</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🏅 Rank 5 · Hack Beyond Limits — 1000+ Teams</div></div>
-        <div class="project-body">
-          <div class="project-category">Energy · Sensing · Solo</div>
-          <div class="project-title">EcoFusion — Optical Energy Monitoring System</div>
-          <p class="project-desc">Optical sensing-based system for appliance-level energy inference. Modeled consumption behavior using time-series patterns and cost analytics. Competed solo — Ranked 5th out of 1000+ participants.</p>
-          <div class="method-tags"><span class="mtag mtag-ml">Time-Series Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Signal Processing</span><span class="mtag mtag-ml">Anomaly Detection</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
+        <div class="axl-stack-block">
+          <div class="axl-stack-title">Mathematical Foundations</div>
+          <div class="axl-stack-items">
+            <span class="axl-tag axl-tag-math">Linear Algebra</span>
+            <span class="axl-tag axl-tag-math">Optimization Theory</span>
+            <span class="axl-tag axl-tag-math">Probability</span>
+            <span class="axl-tag axl-tag-math">Statistical Inference</span>
+          </div>
         </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">HEV</div><div class="sub">Hybrid EV Optimization</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🏆 Top 100 · CodeSynthesis — 4000+ Teams</div></div>
-        <div class="project-body">
-          <div class="project-category">Systems · Optimization · ML</div>
-          <div class="project-title">Hybrid Electric Vehicle Optimization</div>
-          <p class="project-desc">OBD-II telemetry pipelines for hybrid efficiency analysis. Rule-based hybrid mode switching strategies to maximize energy recovery and minimize fuel consumption.</p>
-          <div class="method-tags"><span class="mtag mtag-math">Optimization Theory</span><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-energy">Energy Systems</span><span class="mtag mtag-math">Linear Algebra</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">Repository →</a></div>
-        </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">EC</div><div class="sub">Policy Analysis</div></div><div class="project-img-overlay"></div><div class="project-img-badge">⭐ Round 3 · IIT Kanpur Policy Conclave 26</div></div>
-        <div class="project-body">
-          <div class="project-category">Policy · Sustainability</div>
-          <div class="project-title">EcoCraft Policy Challenge</div>
-          <p class="project-desc">Competed in the EcoCraft Policy Challenge at IIT Kanpur Policy Conclave 2026. Reached Round 3 with proposals at the intersection of environmental policy and computational analysis.</p>
-          <div class="method-tags"><span class="mtag mtag-policy">Policy Analysis</span><span class="mtag mtag-math">Statistical Inference</span><span class="mtag mtag-policy">Optimization</span><span class="mtag mtag-policy">Quantitative Systems</span></div>
-          <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="project-link">LinkedIn →</a></div>
-        </div>
-      </article>
+      </div>
     </div>
   </div>
 </section>
 
-<section style="background:var(--black);text-align:center;padding:80px 0;">
+<!-- PROJECTS CTA -->
+<section id="projects" style="background:var(--black);padding:80px 0;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(26,86,219,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.06) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
+  <div style="position:absolute;top:50%;left:50%;width:600px;height:400px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(26,86,219,.12) 0%,transparent 65%);pointer-events:none;"></div>
+  <div class="container" style="position:relative;z-index:1;text-align:center;">
+    <p class="section-label" style="justify-content:center;color:#333;margin-bottom:28px;"><span class="num">04</span> Projects</p>
+    <div style="font-family:var(--font-display);font-size:clamp(52px,8vw,96px);line-height:.9;letter-spacing:4px;color:white;margin-bottom:12px;">5 PROJECTS<span style="color:var(--accent)">.</span></div>
+    <p style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:12px;">3 Prizes · IITs &amp; IISERs · 5000+ Competitors</p>
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:28px 0 36px;">
+      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Energy</span>
+      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">ML / AI</span>
+      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Policy</span>
+      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Optimization</span>
+      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Systems</span>
+    </div>
+    <a href="axiom-labs.html#projects" class="btn btn-primary" style="font-size:11px;padding:13px 32px;">View All Projects under AXL →</a>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
   <div class="container">
-    <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;margin-bottom:16px;">AXL — Axiom Labs</p>
-    <h2 style="font-family:var(--font-display);font-size:clamp(48px,7vw,88px);letter-spacing:4px;color:white;margin-bottom:12px;">THEORY FIRST<span style="color:var(--accent)">.</span></h2>
-    <p style="font-size:13px;color:#444;max-width:480px;margin:0 auto 32px;line-height:1.9;">Every system built under AXL starts from axioms, not assumptions.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-primary">GitHub →</a>
-      <a href="index.html" class="btn btn-ghost">Back to Home</a>
+    <p class="section-label"><span class="num">05</span> Gallery</p>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="photo1.jpg" alt="2nd Prize IIT Hyderabad"><div class="gallery-overlay">2nd Prize · IIT Hyderabad</div></div>
+      <div class="gallery-item"><img src="photo2.jpg" alt="Presentation IIES"><div class="gallery-overlay">Presentation · IIES</div></div>
+      <div class="gallery-item"><img src="photo3.jpg" alt="IISER Tirupati Team"><div class="gallery-overlay">IISER Tirupati Team</div></div>
+      <div class="gallery-item"><img src="photo4.jpg" alt="Pitched to Judges"><div class="gallery-overlay">Pitched to Judges · IIES</div></div>
+      <div class="gallery-item"><img src="photo5.jpg" alt="3rd Prize IIES"><div class="gallery-overlay">3rd Prize · IIES</div></div>
     </div>
   </div>
 </section>
+
 </main>
 <footer>
   <div class="footer-inner">
     <div class="footer-top">
       <div class="footer-brand">
-        <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" fill="#0d0d0b"/><path d="M4 36 L16 8 L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/><line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/><line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/><line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/></svg><div class="logo-text">AX<span>L</span></div></div>
+        <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" fill="#0d0d0b"/><path d="M4 36L16 8L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/><line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/><line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/><line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/></svg><div class="logo-text">AX<span>L</span></div></div>
         <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
       </div>
       <div class="footer-links">
-        <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link">GitHub</a>
-        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link">LinkedIn</a>
-        <a href="https://www.instagram.com/its_milindsahu/" target="_blank" class="footer-link">Instagram</a>
-        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link">Email</a>
+        <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>github.com/itsmilindsahu</a>
+        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>linkedin.com/in/itsmilindsahu</a>
+        <a href="https://www.instagram.com/its_milindsahu/" target="_blank" class="footer-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>milind20251175@iisertirupati.ac.in</a>
       </div>
     </div>
     <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span></div>
   </div>
 </footer>
-<button class="theme-toggle" title="Toggle dark/light mode">◑</button>
+<button class="theme-toggle" title="Toggle dark/light">◑</button>
 <script src="script.js"></script>
 </body>
 </html>
