@@ -347,3 +347,29 @@ if(document.readyState==='loading'){
 } else {
   initGalaxy();
 }
+
+// ═══════════════════════════════════════
+// MOBILE SCROLL-REVEAL
+// Adds .in-view to .fade-in elements as they enter viewport
+// ═══════════════════════════════════════
+(function(){
+  if(!('IntersectionObserver' in window)) {
+    // fallback: just show everything
+    document.querySelectorAll('.fade-in').forEach(function(el){
+      el.classList.add('in-view');
+    });
+    return;
+  }
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) {
+        e.target.classList.add('in-view');
+        obs.unobserve(e.target);
+      }
+    });
+  }, {threshold: 0.1, rootMargin: '0px 0px -40px 0px'});
+
+  document.querySelectorAll('.fade-in').forEach(function(el){
+    obs.observe(el);
+  });
+})();
