@@ -27,7 +27,8 @@
     }
 
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
       width: 100%;
       padding: 12px;
       background: var(--white);
@@ -37,10 +38,12 @@
       color: var(--black);
       line-height: 1.6;
       transition: border-color 0.2s;
+      box-sizing: border-box;
     }
 
     .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group textarea:focus,
+    .form-group select:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.1);
@@ -64,7 +67,7 @@
       margin-top: 40px;
     }
 
-    .btn-generate {
+    .btn-save {
       flex: 1;
       padding: 12px 24px;
       background: var(--accent);
@@ -79,9 +82,8 @@
       font-weight: 700;
     }
 
-    .btn-generate:hover {
-      background: var(--accent-2);
-    }
+    .btn-save:hover { background: var(--accent-2); }
+    .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .btn-reset {
       padding: 12px 24px;
@@ -101,110 +103,116 @@
       color: var(--black);
     }
 
-    .preview-section {
-      margin-top: 48px;
-      padding-top: 40px;
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--black);
+      color: var(--white);
+      padding: 14px 28px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 5000;
+      border-left: 3px solid #00c896;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast.error { border-left-color: #e53935; }
+
+    /* Saved entries list */
+    .saved-section {
+      margin-top: 64px;
+      padding-top: 48px;
       border-top: 1px solid var(--light-grey);
     }
 
-    .preview-header {
+    .saved-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .saved-title {
       font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 20px;
       font-weight: 700;
     }
 
-    .preview-code {
-      background: var(--black);
-      color: #00c896;
-      padding: 20px;
-      border-radius: 4px;
-      overflow-x: auto;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      line-height: 1.6;
-      margin-bottom: 16px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+    .saved-count {
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--mid-grey);
     }
 
-    .copy-button {
-      padding: 10px 20px;
-      background: var(--accent);
-      color: var(--white);
-      border: 1px solid var(--accent);
-      font-family: var(--font-mono);
+    .saved-entries {
+      display: grid;
+      gap: 16px;
+    }
+
+    .saved-entry-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 20px;
+      border: 1px solid var(--light-grey);
+      background: var(--white);
+      gap: 16px;
+    }
+
+    .saved-entry-info { flex: 1; min-width: 0; }
+
+    .saved-entry-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .saved-entry-meta {
       font-size: 10px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-weight: 700;
+      color: var(--mid-grey);
     }
 
-    .copy-button:hover {
-      background: var(--accent-2);
-    }
-
-    .copy-button.copied {
-      background: #00c896;
-      border-color: #00c896;
-    }
-
-    .instructions {
-      background: var(--off-white);
-      border-left: 3px solid var(--accent);
-      padding: 16px;
-      margin-top: 24px;
-      border-radius: 2px;
-    }
-
-    .instructions h3 {
-      font-size: 12px;
+    .btn-delete-entry {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #fcc;
+      color: #d32f2f;
+      font-family: var(--font-mono);
+      font-size: 9px;
       letter-spacing: 1px;
       text-transform: uppercase;
-      color: var(--black);
-      margin-bottom: 12px;
-      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .instructions ol {
-      margin-left: 20px;
-      color: var(--dark-grey);
-      font-size: 12px;
-      line-height: 1.8;
-    }
-
-    .instructions li {
-      margin-bottom: 8px;
-    }
-
-    .instructions code {
-      background: var(--white);
-      padding: 2px 6px;
-      border-radius: 2px;
-      font-family: var(--font-mono);
-      color: var(--accent);
-    }
-
-    .preview-section {
-      display: none;
-    }
-
-    .preview-section.active {
-      display: block;
+    .btn-delete-entry:hover {
+      background: #fee;
     }
 
     @media (max-width: 768px) {
-      .form-actions {
-        flex-direction: column;
-      }
-
-      .btn-reset {
-        width: 100%;
-      }
+      .form-actions { flex-direction: column; }
+      .btn-reset { width: 100%; }
+      .saved-entry-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -231,182 +239,213 @@
 <div class="page-hero">
   <div class="page-hero-inner">
     <a href="research-internship.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Entries</a>
-    <h1 class="page-title">Create Entry<span style="color:var(--accent)">_</span></h1>
-    <p class="page-subtitle">Generate markdown for your daily research entry</p>
+    <h1 class="page-title">New Entry<span style="color:var(--accent)">_</span></h1>
+    <p class="page-subtitle">Write and save your daily research note</p>
   </div>
 </div>
 <section>
   <div class="container">
     <div class="entry-form-container fade-in">
-      <form id="entryForm">
-        <div class="form-group">
-          <label for="entryLocation">Internship Location *</label>
-          <select id="entryLocation" required style="width: 100%; padding: 12px; background: var(--white); border: 1px solid var(--light-grey); font-family: var(--font-mono); font-size: 13px; color: var(--black);">
-            <option value="">Select location...</option>
-            <option value="iiit-kottayam">IIIT Kottayam (CSE DEPT)</option>
-            <option value="iit-palakkad">IIT Palakkad (Maths Dept)</option>
-          </select>
-          <div class="form-helper-text">Choose which internship location this entry is for</div>
-        </div>
-        <div class="form-group">
-          <label for="entryDate">Entry Date *</label>
-          <input type="date" id="entryDate" required>
-          <div class="form-helper-text">Format: YYYY-MM-DD (e.g., 2026-05-21)</div>
-        </div>
 
-        <div class="form-group">
-          <label for="entryTitle">Title *</label>
-          <input type="text" id="entryTitle" placeholder="e.g., Day 2: Paper Reading and Analysis" required>
-          <div class="form-helper-text">Give your entry a descriptive title</div>
-        </div>
+      <!-- Form -->
+      <div class="form-group">
+        <label for="entryLocation">Internship Location *</label>
+        <select id="entryLocation" required>
+          <option value="">Select location...</option>
+          <option value="iiit-kottayam">IIIT Kottayam (CSE DEPT)</option>
+          <option value="iit-palakkad">IIT Palakkad (Maths Dept)</option>
+        </select>
+        <div class="form-helper-text">Choose which internship location this entry is for</div>
+      </div>
 
-        <div class="form-group">
-          <label for="entrySummary">Summary *</label>
-          <input type="text" id="entrySummary" placeholder="e.g., Read papers related to my research topic and took detailed notes." required>
-          <div class="form-helper-text">One-line summary (shows in listing)</div>
-        </div>
+      <div class="form-group">
+        <label for="entryDate">Entry Date *</label>
+        <input type="date" id="entryDate" required>
+      </div>
 
-        <div class="form-group">
-          <label for="entryTags">Tags (comma-separated)</label>
-          <input type="text" id="entryTags" placeholder="e.g., research, papers, learning">
-          <div class="form-helper-text">Separate with commas: tag1, tag2, tag3</div>
-        </div>
+      <div class="form-group">
+        <label for="entryTitle">Title *</label>
+        <input type="text" id="entryTitle" placeholder="e.g., Day 2: Paper Reading and Analysis" required>
+        <div class="form-helper-text">Give your entry a descriptive title</div>
+      </div>
 
-        <div class="form-group">
-          <label for="entryContent">Content *</label>
-          <textarea id="entryContent" placeholder="## What I worked on today&#10;&#10;Write your research notes here...&#10;&#10;## Key learning&#10;&#10;What did you learn?&#10;&#10;## Next steps&#10;&#10;- Next item" required></textarea>
-          <div class="form-helper-text">Markdown format supported. Headings (##), lists, code, links, etc.</div>
-        </div>
+      <div class="form-group">
+        <label for="entrySummary">Summary *</label>
+        <input type="text" id="entrySummary" placeholder="e.g., Read papers on graph neural networks and took notes." required>
+        <div class="form-helper-text">One-line summary shown in the listing</div>
+      </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn-generate" onclick="generateMarkdown()">Generate Markdown</button>
-          <button type="reset" class="btn-reset">Clear Form</button>
-        </div>
-      </form>
+      <div class="form-group">
+        <label for="entryTags">Tags <span style="text-transform:none;font-weight:400;color:var(--mid-grey)">(comma-separated)</span></label>
+        <input type="text" id="entryTags" placeholder="e.g., research, papers, learning">
+      </div>
 
-      <div id="previewSection" class="preview-section">
-        <p class="preview-header">→ Copy your markdown below</p>
-        <div class="preview-code" id="previewCode"></div>
-        <button class="copy-button" onclick="copyToClipboard()">Copy to Clipboard</button>
+      <div class="form-group">
+        <label for="entryContent">Content *</label>
+        <textarea id="entryContent" placeholder="## What I worked on today&#10;&#10;Write your research notes here...&#10;&#10;## Key learnings&#10;&#10;What did you learn?&#10;&#10;## Next steps&#10;&#10;- Item 1" required></textarea>
+        <div class="form-helper-text">Markdown supported — headings (##), lists, code blocks, links. Ctrl+Enter to save.</div>
+      </div>
 
-        <div class="instructions">
-          <h3>📁 Next Steps:</h3>
-          <ol>
-            <li>Click <strong>"Copy to Clipboard"</strong> above</li>
-            <li>Create a new file in <code>/content/research-internship/</code></li>
-            <li>Name it: <code id="suggestedFilename"></code></li>
-            <li>Paste the markdown content</li>
-            <li>Commit and push to GitHub</li>
-            <li>Your entry will appear on the Research page!</li>
-          </ol>
+      <div class="form-actions">
+        <button class="btn-save" id="saveBtn" onclick="saveEntry()">Save Entry</button>
+        <button class="btn-reset" onclick="resetForm()">Clear Form</button>
+      </div>
+
+      <!-- Saved entries list -->
+      <div class="saved-section" id="savedSection">
+        <div class="saved-header">
+          <span class="saved-title">Saved Entries</span>
+          <span class="saved-count" id="savedCount"></span>
         </div>
+        <div class="saved-entries" id="savedEntriesList"></div>
       </div>
     </div>
   </div>
 </section>
 </main>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
 <script src="script.js"></script>
 <script>
-  // Check if user is logged in
+  // ── Auth ──────────────────────────────────────────────
   function checkLogin() {
-    const isLoggedIn = localStorage.getItem('research-portal-logged-in') === 'true';
-    if (!isLoggedIn) {
+    if (localStorage.getItem('research-portal-logged-in') !== 'true') {
       sessionStorage.setItem('research-return-url', 'new-research-entry.html');
       window.location.href = 'login.html';
     }
   }
 
-  // Check login on page load
-  document.addEventListener('DOMContentLoaded', () => {
-    checkLogin();
-    
-    // Set today's date as default
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    document.getElementById('entryDate').value = `${yyyy}-${mm}-${dd}`;
+  // ── Toast ─────────────────────────────────────────────
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    requestAnimationFrame(() => { t.classList.add('show'); });
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
 
-    // Fade in
-    document.querySelectorAll('.fade-in').forEach(el => {
-      setTimeout(() => el.classList.add('visible'), 50);
-    });
-  });
+  // ── Storage helpers ───────────────────────────────────
+  function loadEntries() {
+    try { return JSON.parse(localStorage.getItem('research-entries') || '[]'); }
+    catch { return []; }
+  }
 
-  function generateMarkdown() {
-    const location = document.getElementById('entryLocation').value;
-    const date = document.getElementById('entryDate').value;
-    const title = document.getElementById('entryTitle').value;
-    const summary = document.getElementById('entrySummary').value;
-    const tagsInput = document.getElementById('entryTags').value;
-    const content = document.getElementById('entryContent').value;
+  function saveEntries(arr) {
+    localStorage.setItem('research-entries', JSON.stringify(arr));
+  }
 
-    // Validation
+  // ── Save entry ────────────────────────────────────────
+  function saveEntry() {
+    const location    = document.getElementById('entryLocation').value.trim();
+    const date        = document.getElementById('entryDate').value.trim();
+    const title       = document.getElementById('entryTitle').value.trim();
+    const summary     = document.getElementById('entrySummary').value.trim();
+    const tagsRaw     = document.getElementById('entryTags').value.trim();
+    const content     = document.getElementById('entryContent').value.trim();
+
     if (!location || !date || !title || !summary || !content) {
-      alert('Please fill in all required fields (marked with *)');
+      showToast('Please fill in all required fields (*)', true);
       return;
     }
 
-    // Get location name
     const locationSelect = document.getElementById('entryLocation');
-    const locationName = locationSelect.options[locationSelect.selectedIndex].text;
+    const locationName   = locationSelect.options[locationSelect.selectedIndex].text;
 
-    // Parse tags
-    const tags = tagsInput
-      .split(',')
-      .map(tag => tag.trim())
-      .filter(tag => tag.length > 0);
+    const tags = tagsRaw
+      ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean)
+      : [];
 
-    // Generate markdown with frontmatter
-    const tagsArray = tags.length > 0 ? `["${tags.join('", "')}"]` : '[]';
-    const markdown = `---
-title: "${title}"
-date: "${date}"
-location: "${locationName}"
-tags: ${tagsArray}
-summary: "${summary}"
----
+    const id   = 'local-' + Date.now();
+    const slug = date;
 
-${content}
-`;
+    const entry = { id, slug, folder: location, locationName, date, title, summary, tags, content };
 
-    // Show preview
-    document.getElementById('previewCode').textContent = markdown;
-    document.getElementById('suggestedFilename').textContent = `content/research-internship/${location}/${date}.md`;
-    document.getElementById('previewSection').classList.add('active');
+    const entries = loadEntries();
 
-    // Scroll to preview
-    setTimeout(() => {
-      document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  }
-
-  function copyToClipboard() {
-    const previewCode = document.getElementById('previewCode').textContent;
-    navigator.clipboard.writeText(previewCode).then(() => {
-      const btn = event.target;
-      const original = btn.textContent;
-      btn.textContent = '✓ Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = original;
-        btn.classList.remove('copied');
-      }, 2000);
-    }).catch(err => {
-      alert('Failed to copy. Please copy manually.');
-    });
-  }
-
-  // Allow Ctrl+Enter in textarea
-  document.addEventListener('DOMContentLoaded', () => {
-    const contentArea = document.getElementById('entryContent');
-    if (contentArea) {
-      contentArea.addEventListener('keydown', function(e) {
-        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-          generateMarkdown();
-        }
-      });
+    // Check duplicate (same folder + date)
+    const dupIdx = entries.findIndex(e => e.folder === location && e.date === date);
+    if (dupIdx !== -1) {
+      if (!confirm(`An entry for ${date} at ${locationName} already exists. Replace it?`)) return;
+      entries[dupIdx] = entry;
+    } else {
+      entries.unshift(entry);
     }
+
+    saveEntries(entries);
+    showToast('✓ Entry saved successfully!');
+    resetForm(false);
+    renderSavedEntries();
+  }
+
+  // ── Reset form ────────────────────────────────────────
+  function resetForm(clearAll = true) {
+    if (clearAll) {
+      document.getElementById('entryLocation').value = '';
+      document.getElementById('entryTitle').value    = '';
+      document.getElementById('entrySummary').value  = '';
+      document.getElementById('entryTags').value     = '';
+      document.getElementById('entryContent').value  = '';
+    }
+    // Reset date to today
+    const today = new Date();
+    document.getElementById('entryDate').value =
+      `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  }
+
+  // ── Delete entry ──────────────────────────────────────
+  function deleteEntry(id) {
+    if (!confirm('Delete this entry? This cannot be undone.')) return;
+    const entries = loadEntries().filter(e => e.id !== id);
+    saveEntries(entries);
+    renderSavedEntries();
+    showToast('Entry deleted.');
+  }
+
+  // ── Render saved list ─────────────────────────────────
+  function renderSavedEntries() {
+    const entries = loadEntries();
+    const list    = document.getElementById('savedEntriesList');
+    const count   = document.getElementById('savedCount');
+
+    count.textContent = `${entries.length} note${entries.length !== 1 ? 's' : ''} saved`;
+
+    if (entries.length === 0) {
+      list.innerHTML = `<p style="font-size:12px;color:var(--mid-grey);padding:20px 0;">No saved entries yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = entries.map(e => `
+      <div class="saved-entry-row">
+        <div class="saved-entry-info">
+          <div class="saved-entry-title">${escapeHtml(e.title)}</div>
+          <div class="saved-entry-meta">${e.date} · ${escapeHtml(e.locationName)}</div>
+        </div>
+        <button class="btn-delete-entry" onclick="deleteEntry('${e.id}')">Delete</button>
+      </div>`).join('');
+  }
+
+  function escapeHtml(text) {
+    const d = document.createElement('div');
+    d.textContent = text || '';
+    return d.innerHTML;
+  }
+
+  // ── Init ──────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    checkLogin();
+    resetForm(false);
+    renderSavedEntries();
+
+    // Ctrl+Enter shortcut in textarea
+    document.getElementById('entryContent').addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') saveEntry();
+    });
+
+    // Fade-in
+    document.querySelectorAll('.fade-in').forEach(el =>
+      setTimeout(() => el.classList.add('visible'), 50));
   });
 </script>
 </body>
