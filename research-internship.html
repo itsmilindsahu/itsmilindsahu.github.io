@@ -406,59 +406,70 @@
   }
 
   // ── Load all entries ──────────────────────────────────
+  // GitHub repo — update if you rename the repo
+  const GITHUB_USER   = 'itsmilindsahu';
+  const GITHUB_REPO   = 'itsmilindsahu.github.io';
+  const GITHUB_BRANCH = 'main'; // change to 'master' if your default branch differs
+
   async function loadResearchEntries() {
-    const listContainer = document.getElementById('research-list');
-
-    // 1. Local (localStorage) entries — always available
-    const localEntries = getLocalNotes().map(e => ({ ...e, source: 'local' }));
-
-    // 2. File-based entries (works on a web server / GitHub Pages)
-    const fileEntries = [];
     const locations = [
       { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
       { folder: 'iit-palakkad',  name: 'IIT Palakkad (Maths Dept)' }
     ];
 
+    // 1. Show localStorage notes immediately (no waiting)
+    const localEntries = getLocalNotes().map(e => ({ ...e, source: 'local' }));
+    renderEntries(localEntries);
+
+    // 2. Fetch .md files via GitHub Contents API (works on GitHub Pages)
+    const fileEntries = [];
+
     for (const loc of locations) {
       try {
-        const res = await fetch(`./content/research-internship/${loc.folder}/`);
+        const apiUrl =
+          `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/content/research-internship/${loc.folder}?ref=${GITHUB_BRANCH}`;
+        const res = await fetch(apiUrl, { headers: { Accept: 'application/vnd.github.v3+json' } });
         if (!res.ok) continue;
-        const html = await res.text();
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-        const filenames = Array.from(doc.querySelectorAll('a'))
-          .map(a => a.getAttribute('href'))
-          .filter(h => h && h.endsWith('.md'))
-          .map(h => h.split('/').pop());
 
-        for (const fn of filenames) {
+        const files = await res.json();
+        if (!Array.isArray(files)) continue;
+
+        for (const file of files.filter(f => f.type === 'file' && f.name.endsWith('.md'))) {
           try {
-            const mdRes = await fetch(`./content/research-internship/${loc.folder}/${fn}`);
+            // raw.githubusercontent.com bypasses API rate limits
+            const rawUrl =
+              `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/research-internship/${loc.folder}/${file.name}`;
+            const mdRes = await fetch(rawUrl);
             if (!mdRes.ok) continue;
+
             const mdText = await mdRes.text();
             const { data, content } = parseFrontmatter(mdText);
-            const slug = fn.replace('.md', '');
-            // skip if already in localEntries (same folder + slug)
-            const duplicate = localEntries.some(e => e.folder === loc.folder && e.slug === slug);
-            if (!duplicate) {
-              fileEntries.push({
-                id: `file-${loc.folder}-${slug}`,
-                slug,
-                folder: loc.folder,
-                locationName: loc.name,
-                title: data.title || 'Untitled',
-                date: data.date || new Date().toISOString().split('T')[0],
-                summary: data.summary || '',
-                tags: data.tags || [],
-                content: content.trim(),
-                source: 'file'
-              });
-            }
-          } catch { /* skip bad file */ }
+            const slug = file.name.replace('.md', '');
+
+            // Skip if a localStorage note already covers this date+folder
+            if (localEntries.some(e => e.folder === loc.folder && e.slug === slug)) continue;
+
+            fileEntries.push({
+              id:           `file-${loc.folder}-${slug}`,
+              slug,
+              folder:       loc.folder,
+              locationName: loc.name,
+              title:        data.title   || slug,
+              date:         data.date    || slug,
+              summary:      data.summary || '',
+              tags:         Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
+              content:      content.trim(),
+              source:       'file'
+            });
+          } catch { /* skip unreadable file */ }
         }
-      } catch { /* directory listing not available */ }
+      } catch { /* API unavailable or rate-limited */ }
     }
 
-    renderEntries([...localEntries, ...fileEntries]);
+    // Re-render merging localStorage + file entries
+    if (fileEntries.length > 0) {
+      renderEntries([...localEntries, ...fileEntries]);
+    }
   }
 
   // ── Init ──────────────────────────────────────────────
