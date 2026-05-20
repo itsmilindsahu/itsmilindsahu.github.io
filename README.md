@@ -46,12 +46,14 @@ Organize and track research progress across **two internship locations** with a 
 
 ### 🔐 Login System
 
-**Password:** `milind2025` (change in `login.html`)
+**Password:** `research2026`
 
 - Access: `login.html`
 - Only authenticated users can view and create entries
 - Session stored in browser localStorage
 - Logout button available on research page
+
+⚠️ **Security Note:** For production use, store the password in environment variables or use a backend authentication service. Do NOT commit real passwords to public Git repositories.
 
 ### 📁 Folder Structure (Two Internships)
 

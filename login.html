@@ -135,6 +135,7 @@
   </style>
 </head>
 <body>
+<div class="cursor"></div><div class="cursor-ring"></div>
   <div class="login-container">
     <form class="login-form" onsubmit="handleLogin(event)">
       <div class="login-header">
@@ -159,8 +160,11 @@
     </form>
   </div>
 
+  <script src="script.js"></script>
   <script>
-    const CORRECT_PASSWORD = 'milind2025';
+    // ⚠️ SECURITY NOTE: For production, store password in environment variables
+    // or use a backend authentication service. Do NOT commit real passwords to git!
+    const CORRECT_PASSWORD = 'research2026';
 
     function handleLogin(event) {
       event.preventDefault();
