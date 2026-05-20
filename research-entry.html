@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Entry — Milind Sahu</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    .research-article {
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    .research-article-meta {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--light-grey);
+    }
+
+    .research-article-date {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .research-article-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--black);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .research-article-summary {
+      font-size: 13px;
+      color: var(--dark-grey);
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .research-article-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .research-article-tag {
+      padding: 5px 12px;
+      background: var(--off-white);
+      border: 1px solid var(--light-grey);
+      border-radius: 2px;
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--dark-grey);
+    }
+
+    .research-article-content {
+      font-size: 14px;
+      color: var(--dark-grey);
+    }
+
+    .research-article-content h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-top: 32px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .research-article-content h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--black);
+      margin-top: 24px;
+      margin-bottom: 12px;
+    }
+
+    .research-article-content p {
+      margin-bottom: 16px;
+      line-height: 1.8;
+    }
+
+    .research-article-content ul,
+    .research-article-content ol {
+      margin-bottom: 16px;
+      margin-left: 24px;
+    }
+
+    .research-article-content li {
+      margin-bottom: 8px;
+    }
+
+    .research-article-content a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .research-article-content a:hover {
+      color: var(--accent-2);
+    }
+
+    .research-article-content code {
+      background: var(--off-white);
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: #c75c5c;
+    }
+
+    .research-article-content pre {
+      background: var(--black);
+      color: #00c896;
+      padding: 16px;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .research-article-content pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    .research-article-content blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 16px;
+      margin-left: 0;
+      margin-bottom: 16px;
+      color: var(--mid-grey);
+      font-style: italic;
+    }
+
+    .research-article-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    .research-article-content table th,
+    .research-article-content table td {
+      border: 1px solid var(--light-grey);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .research-article-content table th {
+      background: var(--off-white);
+      font-weight: 700;
+    }
+
+    .research-article-footer {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--light-grey);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .research-article-nav {
+      display: flex;
+      gap: 16px;
+    }
+
+    .research-article-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      transition: gap 0.2s;
+    }
+
+    .research-article-nav-link:hover {
+      gap: 10px;
+    }
+
+    .research-error {
+      padding: 40px 32px;
+      text-align: center;
+      color: var(--mid-grey);
+    }
+
+    @media (max-width: 768px) {
+      .research-article-title {
+        font-size: 24px;
+      }
+
+      .research-article-content h2 {
+        font-size: 16px;
+      }
+
+      .research-article-footer {
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="cursor"></div><div class="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
+    <span class="name-full">MILIND <span>SAHU</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="axiom-labs.html">AXL</a></li>
+    <li><a href="teaching.html">Teaching</a></li>
+    <li><a href="research-internship.html" class="active">Research</a></li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+    <li><a href="index.html#certificates">Certs</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<main>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <a href="research-internship.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to Entries</a>
+    <h1 class="page-title" id="entry-title">Loading<span style="color:var(--accent)">_</span></h1>
+  </div>
+</div>
+<section>
+  <div class="container">
+    <article id="research-article" class="research-article fade-in">
+      <div class="research-error">
+        <div>Loading research entry...</div>
+      </div>
+    </article>
+  </div>
+</section>
+</main>
+<script src="script.js"></script>
+<script>
+  // Simple frontmatter parser
+  function parseFrontmatter(text) {
+    if (!text.startsWith('---')) {
+      return { data: {}, content: text };
+    }
+    
+    const lines = text.split('\n');
+    let endIdx = -1;
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim() === '---') {
+        endIdx = i;
+        break;
+      }
+    }
+    
+    if (endIdx === -1) {
+      return { data: {}, content: text };
+    }
+    
+    const frontmatterText = lines.slice(1, endIdx).join('\n');
+    const content = lines.slice(endIdx + 1).join('\n');
+    
+    const data = {};
+    const lines_fm = frontmatterText.split('\n');
+    for (const line of lines_fm) {
+      const match = line.match(/^([^:]+):\s*(.+)$/);
+      if (match) {
+        let value = match[2].trim();
+        // Handle quoted strings
+        if ((value.startsWith('"') && value.endsWith('"')) || 
+            (value.startsWith("'") && value.endsWith("'"))) {
+          value = value.slice(1, -1);
+        }
+        // Handle arrays
+        if (value.startsWith('[') && value.endsWith(']')) {
+          value = value.slice(1, -1)
+            .split(',')
+            .map(v => v.trim().replace(/^["']|["']$/g, ''));
+        }
+        data[match[1].trim()] = value;
+      }
+    }
+    
+    return { data, content };
+  }
+
+  // Parse URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const slug = urlParams.get('slug');
+
+  async function loadResearchEntry() {
+    const container = document.getElementById('research-article');
+    const titleEl = document.getElementById('entry-title');
+
+    if (!slug) {
+      container.innerHTML = `
+        <div class="research-error">
+          <div>No entry specified. <a href="research-internship.html" style="color: var(--accent);">Return to entries →</a></div>
+        </div>
+      `;
+      return;
+    }
+
+    try {
+      const response = await fetch(`./content/research-internship/${slug}.md`);
+      if (!response.ok) throw new Error('Entry not found');
+
+      const mdText = await response.text();
+      const { data, content } = parseFrontmatter(mdText);
+
+      // Set page title
+      document.title = `${data.title || 'Untitled'} — Research Internship`;
+      titleEl.textContent = data.title || 'Untitled';
+
+      // Parse and render markdown
+      const htmlContent = marked.parse(content);
+
+      // Build the article
+      const date = new Date(data.date || new Date()).toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      container.innerHTML = `
+        <div class="research-article-meta">
+          <div class="research-article-date">${date}</div>
+          <h1 class="research-article-title">${escapeHtml(data.title || 'Untitled')}</h1>
+          ${data.summary ? `<p class="research-article-summary">${escapeHtml(data.summary)}</p>` : ''}
+          ${Array.isArray(data.tags) && data.tags.length > 0 ? `
+            <div class="research-article-tags">
+              ${data.tags.map(tag => `<span class="research-article-tag">${escapeHtml(tag)}</span>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+        <div class="research-article-content">${htmlContent}</div>
+        <div class="research-article-footer">
+          <div class="research-article-nav">
+            <a href="research-internship.html" class="research-article-nav-link">← All Entries</a>
+          </div>
+        </div>
+      `;
+
+      // Trigger fade-in
+      container.classList.add('visible');
+    } catch (err) {
+      console.error('Error loading research entry:', err);
+      container.innerHTML = `
+        <div class="research-error">
+          <div>Error loading research entry. <a href="research-internship.html" style="color: var(--accent);">Return to entries →</a></div>
+        </div>
+      `;
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  document.addEventListener('DOMContentLoaded', loadResearchEntry);
+</script>
+</body>
+</html>

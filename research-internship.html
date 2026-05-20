@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Internship — Milind Sahu</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    .research-listing {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .research-entry {
+      background: var(--white);
+      border: 1px solid var(--light-grey);
+      padding: 32px;
+      transition: all 0.2s;
+    }
+
+    .research-entry:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.1);
+    }
+
+    .research-entry-date {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .research-entry-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+
+    .research-entry-summary {
+      font-size: 13px;
+      color: var(--dark-grey);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .research-entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .research-tag {
+      padding: 4px 10px;
+      background: var(--off-white);
+      border: 1px solid var(--light-grey);
+      border-radius: 2px;
+      font-size: 8px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--dark-grey);
+      transition: all 0.2s;
+    }
+
+    .research-tag:hover {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .research-entry-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 700;
+      transition: gap 0.2s;
+    }
+
+    .research-entry-link:hover {
+      gap: 10px;
+    }
+
+    .research-empty {
+      padding: 60px 32px;
+      text-align: center;
+      color: var(--mid-grey);
+    }
+
+    .research-empty-text {
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+      .research-entry {
+        padding: 24px;
+      }
+
+      .research-entry-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="cursor"></div><div class="cursor-ring"></div>
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
+    <span class="name-full">MILIND <span>SAHU</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="axiom-labs.html">AXL</a></li>
+    <li><a href="teaching.html">Teaching</a></li>
+    <li><a href="research-internship.html" class="active">Research</a></li>
+    <li><a href="index.html#gallery">Gallery</a></li>
+    <li><a href="index.html#certificates">Certs</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+<main>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <a href="index.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back</a>
+    <h1 class="page-title">Research Internship<span style="color:var(--accent)">_</span></h1>
+    <p class="page-subtitle">Daily research journal · Progress tracking · Learning notes</p>
+  </div>
+</div>
+<section>
+  <div class="container">
+    <p class="section-label"><span class="num">—</span> Journal Entries</p>
+    <div id="research-list" class="research-listing fade-in">
+      <div class="research-empty">
+        <div class="research-empty-text">Loading research entries...</div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<script src="script.js"></script>
+<script>
+  // Simple frontmatter parser
+  function parseFrontmatter(text) {
+    if (!text.startsWith('---')) {
+      return { data: {}, content: text };
+    }
+    
+    const lines = text.split('\n');
+    let endIdx = -1;
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim() === '---') {
+        endIdx = i;
+        break;
+      }
+    }
+    
+    if (endIdx === -1) {
+      return { data: {}, content: text };
+    }
+    
+    const frontmatterText = lines.slice(1, endIdx).join('\n');
+    const content = lines.slice(endIdx + 1).join('\n');
+    
+    const data = {};
+    const lines_fm = frontmatterText.split('\n');
+    for (const line of lines_fm) {
+      const match = line.match(/^([^:]+):\s*(.+)$/);
+      if (match) {
+        let value = match[2].trim();
+        // Handle quoted strings
+        if ((value.startsWith('"') && value.endsWith('"')) || 
+            (value.startsWith("'") && value.endsWith("'"))) {
+          value = value.slice(1, -1);
+        }
+        // Handle arrays
+        if (value.startsWith('[') && value.endsWith(']')) {
+          value = value.slice(1, -1)
+            .split(',')
+            .map(v => v.trim().replace(/^["']|["']$/g, ''));
+        }
+        data[match[1].trim()] = value;
+      }
+    }
+    
+    return { data, content };
+  }
+
+  // Load and display research entries
+  async function loadResearchEntries() {
+    const listContainer = document.getElementById('research-list');
+    
+    try {
+      // Fetch the list of files from the content directory
+      const response = await fetch('./content/research-internship/');
+      const html = await response.text();
+      
+      // Parse the directory listing HTML to get all .md files
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const links = Array.from(doc.querySelectorAll('a'))
+        .map(a => a.href)
+        .filter(href => href.endsWith('.md'))
+        .map(href => href.split('/').pop());
+
+      if (links.length === 0) {
+        listContainer.innerHTML = `
+          <div class="research-empty">
+            <div class="research-empty-text">No research entries yet. Create your first entry in /content/research-internship/</div>
+          </div>
+        `;
+        return;
+      }
+
+      // Sort by date descending (newest first)
+      links.sort().reverse();
+
+      // Fetch and parse each markdown file
+      const entries = [];
+      for (const filename of links) {
+        try {
+          const mdResponse = await fetch(`./content/research-internship/${filename}`);
+          const mdText = await mdResponse.text();
+          
+          // Parse frontmatter
+          const { data, content } = parseFrontmatter(mdText);
+          
+          const slug = filename.replace('.md', '');
+          entries.push({
+            slug,
+            filename,
+            title: data.title || 'Untitled',
+            date: data.date || new Date().toISOString().split('T')[0],
+            summary: data.summary || '',
+            tags: data.tags || [],
+            content: content.trim()
+          });
+        } catch (err) {
+          console.warn(`Failed to load ${filename}:`, err);
+        }
+      }
+
+      // Render entries
+      if (entries.length === 0) {
+        listContainer.innerHTML = `
+          <div class="research-empty">
+            <div class="research-empty-text">No valid research entries found.</div>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = entries.map((entry, idx) => `
+        <article class="research-entry fade-in ${idx > 0 ? `stagger-${Math.min(idx, 3)}` : ''}">
+          <div class="research-entry-date">${new Date(entry.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+          <h2 class="research-entry-title">${escapeHtml(entry.title)}</h2>
+          <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
+          ${Array.isArray(entry.tags) && entry.tags.length > 0 ? `
+            <div class="research-entry-tags">
+              ${entry.tags.map(tag => `<span class="research-tag">${escapeHtml(tag)}</span>`).join('')}
+            </div>
+          ` : ''}
+          <a href="research-entry.html?slug=${entry.slug}" class="research-entry-link">
+            Read Entry <span>→</span>
+          </a>
+        </article>
+      `).join('');
+
+      // Trigger fade-in animations
+      document.querySelectorAll('.fade-in').forEach(el => {
+        if (!el.classList.contains('visible')) {
+          setTimeout(() => el.classList.add('visible'), 50);
+        }
+      });
+    } catch (err) {
+      console.error('Error loading research entries:', err);
+      listContainer.innerHTML = `
+        <div class="research-empty">
+          <div class="research-empty-text">Error loading research entries. Please check the /content/research-internship/ folder.</div>
+        </div>
+      `;
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Load entries when page loads
+  document.addEventListener('DOMContentLoaded', loadResearchEntries);
+</script>
+</body>
+</html>
