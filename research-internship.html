@@ -127,28 +127,6 @@
       letter-spacing: 1px;
     }
 
-    .logout-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      background: transparent;
-      border: 1px solid var(--light-grey);
-      color: var(--dark-grey);
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-top: 32px;
-    }
-
-    .logout-btn:hover {
-      border-color: var(--black);
-      color: var(--black);
-    }
-
     /* Full-page note modal */
     .note-modal-overlay {
       display: none;
@@ -257,12 +235,8 @@
   <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
       <p class="section-label"><span class="num">—</span> Journal Entries</p>
-      <button class="logout-btn" onclick="handleLogout()">Logout</button>
-    </div>
-    <div style="margin-bottom: 32px;">
-      <a href="new-research-entry.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
-        <span>+ New Entry</span>
-      </a>
+      <!-- Only shown when logged in -->
+      <a href="new-research-entry.html" id="newEntryBtn" class="btn btn-primary" style="display:none; align-items: center; gap: 8px; font-size:10px;">+ New Entry</a>
     </div>
     <div id="research-list" class="research-listing fade-in">
       <div class="research-empty">
@@ -299,20 +273,6 @@
 <button class="theme-toggle" title="Toggle dark/light">◑</button>
 <script src="script.js"></script>
 <script>
-  // ── Auth ──────────────────────────────────────────────
-  function checkLogin() {
-    if (localStorage.getItem('research-portal-logged-in') !== 'true') {
-      sessionStorage.setItem('research-return-url', 'research-internship.html');
-      window.location.href = 'login.html';
-    }
-  }
-
-  function handleLogout() {
-    localStorage.removeItem('research-portal-logged-in');
-    localStorage.removeItem('research-portal-login-time');
-    window.location.href = 'login.html';
-  }
-
   // ── Helpers ───────────────────────────────────────────
   function escapeHtml(text) {
     const d = document.createElement('div');
@@ -503,7 +463,11 @@
 
   // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    checkLogin();
+    // Show "+ New Entry" only if already logged in
+    if (localStorage.getItem('research-portal-logged-in') === 'true') {
+      const btn = document.getElementById('newEntryBtn');
+      if (btn) btn.style.display = 'inline-flex';
+    }
     loadResearchEntries();
   });
 </script>
