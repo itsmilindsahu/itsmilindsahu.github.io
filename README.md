@@ -44,9 +44,31 @@ A minimal, technical personal portfolio + research identity website.
 
 This site includes a daily research internship journal system that automatically lists and displays your research progress.
 
-### Adding a new research internship entry
+### ⚡ Quick Start: Add a new entry (3 steps)
 
-Create a new Markdown file inside:
+**Step 1: Open the entry form**
+- Visit `new-research-entry.html` (or click "+ New Entry" button on research page)
+
+**Step 2: Fill in the form**
+- Entry date (defaults to today)
+- Title (e.g., "Day 2: Paper Reading")
+- Summary (one line)
+- Tags (optional: research, papers, learning)
+- Content (your research notes in markdown)
+
+**Step 3: Create the file**
+- Click "Generate Markdown"
+- Copy the markdown to clipboard
+- Create file: `/content/research-internship/YYYY-MM-DD.md`
+- Paste and commit to GitHub
+
+Done! Your entry appears automatically.
+
+---
+
+### Manual: Adding a new research internship entry
+
+If you prefer to create files manually:
 
 ```
 /content/research-internship/
