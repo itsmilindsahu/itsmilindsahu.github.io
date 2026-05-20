@@ -298,9 +298,19 @@
     return { data, content };
   }
 
+  // Check if user is logged in
+  function checkLogin() {
+    const isLoggedIn = localStorage.getItem('research-portal-logged-in') === 'true';
+    if (!isLoggedIn) {
+      sessionStorage.setItem('research-return-url', 'research-entry.html' + window.location.search);
+      window.location.href = 'login.html';
+    }
+  }
+
   // Parse URL parameters
   const urlParams = new URLSearchParams(window.location.search);
   const slug = urlParams.get('slug');
+  const folder = urlParams.get('folder') || 'iiit-kottayam';
 
   async function loadResearchEntry() {
     const container = document.getElementById('research-article');
@@ -316,7 +326,7 @@
     }
 
     try {
-      const response = await fetch(`./content/research-internship/${slug}.md`);
+      const response = await fetch(`./content/research-internship/${folder}/${slug}.md`);
       if (!response.ok) throw new Error('Entry not found');
 
       const mdText = await response.text();
@@ -339,6 +349,7 @@
       container.innerHTML = `
         <div class="research-article-meta">
           <div class="research-article-date">${date}</div>
+          ${data.location ? `<div style="font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--mid-grey); margin-bottom: 12px;">📍 ${escapeHtml(data.location)}</div>` : ''}
           <h1 class="research-article-title">${escapeHtml(data.title || 'Untitled')}</h1>
           ${data.summary ? `<p class="research-article-summary">${escapeHtml(data.summary)}</p>` : ''}
           ${Array.isArray(data.tags) && data.tags.length > 0 ? `
@@ -373,7 +384,10 @@
     return div.innerHTML;
   }
 
-  document.addEventListener('DOMContentLoaded', loadResearchEntry);
+  document.addEventListener('DOMContentLoaded', () => {
+    checkLogin();
+    loadResearchEntry();
+  });
 </script>
 </body>
 </html>

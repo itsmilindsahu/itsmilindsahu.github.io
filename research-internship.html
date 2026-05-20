@@ -14,6 +14,27 @@
       gap: 32px;
     }
 
+    .research-section {
+      margin-bottom: 48px;
+    }
+
+    .research-section-title {
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--light-grey);
+      font-weight: 700;
+    }
+
+    .research-section-entries {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
     .research-entry {
       background: var(--white);
       border: 1px solid var(--light-grey);
@@ -101,6 +122,28 @@
       letter-spacing: 1px;
     }
 
+    .logout-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: transparent;
+      border: 1px solid var(--light-grey);
+      color: var(--dark-grey);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 32px;
+    }
+
+    .logout-btn:hover {
+      border-color: var(--black);
+      color: var(--black);
+    }
+
     @media (max-width: 768px) {
       .research-entry {
         padding: 24px;
@@ -141,7 +184,10 @@
 </div>
 <section>
   <div class="container">
-    <p class="section-label"><span class="num">—</span> Journal Entries</p>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+      <p class="section-label"><span class="num">—</span> Journal Entries</p>
+      <button class="logout-btn" onclick="handleLogout()">Logout</button>
+    </div>
     <div style="margin-bottom: 32px;">
       <a href="new-research-entry.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
         <span>+ New Entry</span>
@@ -154,9 +200,21 @@
     </div>
   </div>
 </section>
-</main>
-<script src="script.js"></script>
-<script>
+</maiCheck if user is logged in
+  function checkLogin() {
+    const isLoggedIn = localStorage.getItem('research-portal-logged-in') === 'true';
+    if (!isLoggedIn) {
+      sessionStorage.setItem('research-return-url', 'research-internship.html');
+      window.location.href = 'login.html';
+    }
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('research-portal-logged-in');
+    localStorage.removeItem('research-portal-login-time');
+    window.location.href = 'login.html';
+  }
+
   // Simple frontmatter parser
   function parseFrontmatter(text) {
     if (!text.startsWith('---')) {
@@ -185,12 +243,10 @@
       const match = line.match(/^([^:]+):\s*(.+)$/);
       if (match) {
         let value = match[2].trim();
-        // Handle quoted strings
         if ((value.startsWith('"') && value.endsWith('"')) || 
             (value.startsWith("'") && value.endsWith("'"))) {
           value = value.slice(1, -1);
         }
-        // Handle arrays
         if (value.startsWith('[') && value.endsWith(']')) {
           value = value.slice(1, -1)
             .split(',')
@@ -208,80 +264,104 @@
     const listContainer = document.getElementById('research-list');
     
     try {
-      // Fetch the list of files from the content directory
-      const response = await fetch('./content/research-internship/');
-      const html = await response.text();
-      
-      // Parse the directory listing HTML to get all .md files
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      const links = Array.from(doc.querySelectorAll('a'))
-        .map(a => a.href)
-        .filter(href => href.endsWith('.md'))
-        .map(href => href.split('/').pop());
+      const locations = [
+        { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
+        { folder: 'iit-palakkad', name: 'IIT Palakkad (Maths Dept)' }
+      ];
 
-      if (links.length === 0) {
-        listContainer.innerHTML = `
-          <div class="research-empty">
-            <div class="research-empty-text">No research entries yet. Create your first entry in /content/research-internship/</div>
-          </div>
-        `;
-        return;
-      }
+      const allEntries = {};
+      let totalEntries = 0;
 
-      // Sort by date descending (newest first)
-      links.sort().reverse();
+      // Load entries from both locations
+      for (const location of locations) {
+        allEntries[location.folder] = {
+          name: location.name,
+          entries: []
+        };
 
-      // Fetch and parse each markdown file
-      const entries = [];
-      for (const filename of links) {
         try {
-          const mdResponse = await fetch(`./content/research-internship/${filename}`);
-          const mdText = await mdResponse.text();
+          const response = await fetch(`./content/research-internship/${location.folder}/`);
+          const html = await response.text();
           
-          // Parse frontmatter
-          const { data, content } = parseFrontmatter(mdText);
-          
-          const slug = filename.replace('.md', '');
-          entries.push({
-            slug,
-            filename,
-            title: data.title || 'Untitled',
-            date: data.date || new Date().toISOString().split('T')[0],
-            summary: data.summary || '',
-            tags: data.tags || [],
-            content: content.trim()
-          });
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const links = Array.from(doc.querySelectorAll('a'))
+            .map(a => a.href)
+            .filter(href => href.endsWith('.md'))
+            .map(href => href.split('/').pop());
+
+          // Fetch and parse each file
+          for (const filename of links) {
+            try {
+              const mdResponse = await fetch(`./content/research-internship/${location.folder}/${filename}`);
+              const mdText = await mdResponse.text();
+              
+              const { data, content } = parseFrontmatter(mdText);
+              
+              const slug = filename.replace('.md', '');
+              allEntries[location.folder].entries.push({
+                slug,
+                filename,
+                folder: location.folder,
+                title: data.title || 'Untitled',
+                date: data.date || new Date().toISOString().split('T')[0],
+                summary: data.summary || '',
+                tags: data.tags || [],
+                content: content.trim()
+              });
+              totalEntries++;
+            } catch (err) {
+              console.warn(`Failed to load ${filename}:`, err);
+            }
+          }
+
+          // Sort entries by date (newest first)
+          allEntries[location.folder].entries.sort((a, b) => new Date(b.date) - new Date(a.date));
         } catch (err) {
-          console.warn(`Failed to load ${filename}:`, err);
+          console.warn(`Failed to load ${location.folder}:`, err);
         }
       }
 
-      // Render entries
-      if (entries.length === 0) {
+      // Render all entries
+      if (totalEntries === 0) {
         listContainer.innerHTML = `
           <div class="research-empty">
-            <div class="research-empty-text">No valid research entries found.</div>
+            <div class="research-empty-text">No research entries yet. Click "+ New Entry" to start!</div>
           </div>
         `;
         return;
       }
 
-      listContainer.innerHTML = entries.map((entry, idx) => `
-        <article class="research-entry fade-in ${idx > 0 ? `stagger-${Math.min(idx, 3)}` : ''}">
-          <div class="research-entry-date">${new Date(entry.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-          <h2 class="research-entry-title">${escapeHtml(entry.title)}</h2>
-          <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
-          ${Array.isArray(entry.tags) && entry.tags.length > 0 ? `
-            <div class="research-entry-tags">
-              ${entry.tags.map(tag => `<span class="research-tag">${escapeHtml(tag)}</span>`).join('')}
+      let html = '';
+      for (const location of locations) {
+        const locationData = allEntries[location.folder];
+        if (locationData.entries.length === 0) continue;
+
+        html += `
+          <div class="research-section">
+            <h2 class="research-section-title">📍 ${locationData.name}</h2>
+            <div class="research-section-entries">
+              ${locationData.entries.map((entry, idx) => `
+                <article class="research-entry fade-in ${idx > 0 ? `stagger-${Math.min(idx, 3)}` : ''}">
+                  <div class="research-entry-date">${new Date(entry.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+                  <h3 class="research-entry-title">${escapeHtml(entry.title)}</h3>
+                  <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
+                  ${Array.isArray(entry.tags) && entry.tags.length > 0 ? `
+                    <div class="research-entry-tags">
+                      ${entry.tags.map(tag => `<span class="research-tag">${escapeHtml(tag)}</span>`).join('')}
+                    </div>
+                  ` : ''}
+                  <a href="research-entry.html?slug=${entry.slug}&folder=${entry.folder}" class="research-entry-link">
+                    Read Entry <span>→</span>
+                  </a>
+                </article>
+              `).join('')}
             </div>
-          ` : ''}
-          <a href="research-entry.html?slug=${entry.slug}" class="research-entry-link">
-            Read Entry <span>→</span>
-          </a>
-        </article>
-      `).join('');
+          </div>
+        `;
+      }
+
+      listContainer.innerHTML = html;
 
       // Trigger fade-in animations
       document.querySelectorAll('.fade-in').forEach(el => {
@@ -303,6 +383,12 @@
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+  }
+
+  // Load on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    checkLogin();
+    loadResearchEntries();
   }
 
   // Load entries when page loads

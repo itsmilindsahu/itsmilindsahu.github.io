@@ -42,49 +42,71 @@ A minimal, technical personal portfolio + research identity website.
 
 ## 📖 RESEARCH INTERNSHIP JOURNAL
 
-This site includes a daily research internship journal system that automatically lists and displays your research progress.
+Organize and track research progress across **two internship locations** with a **secure login system**.
 
-### ⚡ Quick Start: Add a new entry (3 steps)
+### 🔐 Login System
 
-**Step 1: Open the entry form**
-- Visit `new-research-entry.html` (or click "+ New Entry" button on research page)
+**Password:** `milind2025` (change in `login.html`)
 
-**Step 2: Fill in the form**
-- Entry date (defaults to today)
-- Title (e.g., "Day 2: Paper Reading")
-- Summary (one line)
-- Tags (optional: research, papers, learning)
-- Content (your research notes in markdown)
+- Access: `login.html`
+- Only authenticated users can view and create entries
+- Session stored in browser localStorage
+- Logout button available on research page
 
-**Step 3: Create the file**
-- Click "Generate Markdown"
-- Copy the markdown to clipboard
-- Create file: `/content/research-internship/YYYY-MM-DD.md`
-- Paste and commit to GitHub
+### 📁 Folder Structure (Two Internships)
 
-Done! Your entry appears automatically.
-
----
-
-### Manual: Adding a new research internship entry
-
-If you prefer to create files manually:
+Entries are organized by location:
 
 ```
 /content/research-internship/
+├── iiit-kottayam/          ← IIIT Kottayam (CSE DEPT)
+│   ├── 2026-05-20.md
+│   ├── 2026-05-21.md
+│   └── ...
+└── iit-palakkad/           ← IIT Palakkad (Maths Dept)
+    ├── 2026-05-20.md
+    ├── 2026-05-21.md
+    └── ...
 ```
 
-Use this naming format:
+### ⚡ Quick Start: Add a new entry (3 steps)
+
+**Step 1: Login & Open Form**
+- Go to `research-internship.html` (auto-prompts login if needed)
+- Click "+ New Entry"
+
+**Step 2: Fill the Form**
+- Select internship location from dropdown
+- Entry date (defaults to today)
+- Title (e.g., "Day 2: Paper Reading")
+- Summary (one line)
+- Tags (optional)
+- Content (markdown format)
+
+**Step 3: Create File**
+- Click "Generate Markdown"
+- Copy to clipboard
+- Create: `/content/research-internship/{location}/YYYY-MM-DD.md`
+- Paste & commit to GitHub
+
+Your entry appears automatically on the **Research page**, **grouped by internship location**.
+
+### 📖 Manual: Adding entries (if you prefer)
+
+Create a new Markdown file inside the appropriate location folder:
 
 ```
-YYYY-MM-DD.md
+/content/research-internship/{location}/YYYY-MM-DD.md
 ```
 
-**Example:**
+Where `{location}` is:
+- `iiit-kottayam` → IIIT Kottayam (CSE DEPT)
+- `iit-palakkad` → IIT Palakkad (Maths Dept)
 
+**Examples:**
 ```
-2026-05-21.md
-2026-05-22.md
+/content/research-internship/iiit-kottayam/2026-05-21.md
+/content/research-internship/iit-palakkad/2026-05-22.md
 ```
 
 ### Markdown file format
@@ -95,6 +117,7 @@ Each `.md` file should include frontmatter at the top, followed by Markdown cont
 ---
 title: "Day 2: Paper Reading and Analysis"
 date: "2026-05-21"
+location: "IIIT Kottayam (CSE DEPT)"
 tags: ["research", "papers", "learning"]
 summary: "Read papers related to my research topic and took detailed notes."
 ---
@@ -117,6 +140,9 @@ What did you learn today?
 
 - **title** (required): Entry title
 - **date** (required): Entry date in `YYYY-MM-DD` format
+- **location** (required): Internship location
+  - `"IIIT Kottayam (CSE DEPT)"` 
+  - `"IIT Palakkad (Maths Dept)"`
 - **tags** (optional): Array of tags like `["tag1", "tag2"]`
 - **summary** (optional): One-line summary of the entry
 

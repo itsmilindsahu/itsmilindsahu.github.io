@@ -240,6 +240,15 @@
     <div class="entry-form-container fade-in">
       <form id="entryForm">
         <div class="form-group">
+          <label for="entryLocation">Internship Location *</label>
+          <select id="entryLocation" required style="width: 100%; padding: 12px; background: var(--white); border: 1px solid var(--light-grey); font-family: var(--font-mono); font-size: 13px; color: var(--black);">
+            <option value="">Select location...</option>
+            <option value="iiit-kottayam">IIIT Kottayam (CSE DEPT)</option>
+            <option value="iit-palakkad">IIT Palakkad (Maths Dept)</option>
+          </select>
+          <div class="form-helper-text">Choose which internship location this entry is for</div>
+        </div>
+        <div class="form-group">
           <label for="entryDate">Entry Date *</label>
           <input type="date" id="entryDate" required>
           <div class="form-helper-text">Format: YYYY-MM-DD (e.g., 2026-05-21)</div>
@@ -298,14 +307,34 @@
 </main>
 <script src="script.js"></script>
 <script>
-  // Set today's date as default
-  const today = new Date();
-  const yyyy = today.getFullYear();
-  const mm = String(today.getMonth() + 1).padStart(2, '0');
-  const dd = String(today.getDate()).padStart(2, '0');
-  document.getElementById('entryDate').value = `${yyyy}-${mm}-${dd}`;
+  // Check if user is logged in
+  function checkLogin() {
+    const isLoggedIn = localStorage.getItem('research-portal-logged-in') === 'true';
+    if (!isLoggedIn) {
+      sessionStorage.setItem('research-return-url', 'new-research-entry.html');
+      window.location.href = 'login.html';
+    }
+  }
+
+  // Check login on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    checkLogin();
+    
+    // Set today's date as default
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    document.getElementById('entryDate').value = `${yyyy}-${mm}-${dd}`;
+
+    // Fade in
+    document.querySelectorAll('.fade-in').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 50);
+    });
+  });
 
   function generateMarkdown() {
+    const location = document.getElementById('entryLocation').value;
     const date = document.getElementById('entryDate').value;
     const title = document.getElementById('entryTitle').value;
     const summary = document.getElementById('entrySummary').value;
@@ -313,10 +342,14 @@
     const content = document.getElementById('entryContent').value;
 
     // Validation
-    if (!date || !title || !summary || !content) {
+    if (!location || !date || !title || !summary || !content) {
       alert('Please fill in all required fields (marked with *)');
       return;
     }
+
+    // Get location name
+    const locationSelect = document.getElementById('entryLocation');
+    const locationName = locationSelect.options[locationSelect.selectedIndex].text;
 
     // Parse tags
     const tags = tagsInput
@@ -329,6 +362,7 @@
     const markdown = `---
 title: "${title}"
 date: "${date}"
+location: "${locationName}"
 tags: ${tagsArray}
 summary: "${summary}"
 ---
@@ -338,7 +372,7 @@ ${content}
 
     // Show preview
     document.getElementById('previewCode').textContent = markdown;
-    document.getElementById('suggestedFilename').textContent = `${date}.md`;
+    document.getElementById('suggestedFilename').textContent = `content/research-internship/${location}/${date}.md`;
     document.getElementById('previewSection').classList.add('active');
 
     // Scroll to preview
@@ -363,18 +397,16 @@ ${content}
     });
   }
 
-  // Allow Enter to generate (Ctrl+Enter or Cmd+Enter in textarea)
-  document.getElementById('entryContent').addEventListener('keydown', function(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      generateMarkdown();
+  // Allow Ctrl+Enter in textarea
+  document.addEventListener('DOMContentLoaded', () => {
+    const contentArea = document.getElementById('entryContent');
+    if (contentArea) {
+      contentArea.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          generateMarkdown();
+        }
+      });
     }
-  });
-
-  // Fade in
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.fade-in').forEach(el => {
-      setTimeout(() => el.classList.add('visible'), 50);
-    });
   });
 </script>
 </body>
