@@ -105,6 +105,11 @@
       color: var(--accent);
       font-weight: 700;
       transition: gap 0.2s;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: var(--font-mono);
+      padding: 0;
     }
 
     .research-entry-link:hover {
@@ -144,14 +149,80 @@
       color: var(--black);
     }
 
-    @media (max-width: 768px) {
-      .research-entry {
-        padding: 24px;
-      }
+    /* Full-page note modal */
+    .note-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 3000;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+    .note-modal-overlay.open { display: flex; }
+    .note-modal {
+      background: var(--white);
+      width: 100%;
+      max-width: 720px;
+      padding: 48px;
+      position: relative;
+      animation: modalIn .2s ease-out;
+    }
+    @keyframes modalIn {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .note-modal-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: none; border: none;
+      font-size: 22px; cursor: pointer;
+      color: var(--dark-grey);
+      font-family: var(--font-mono);
+      line-height: 1;
+    }
+    .note-modal-date {
+      font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .note-modal-title {
+      font-size: 26px; font-weight: 700;
+      letter-spacing: 0.5px; color: var(--black);
+      margin-bottom: 8px;
+    }
+    .note-modal-location {
+      font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--mid-grey);
+      margin-bottom: 24px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-grey);
+    }
+    .note-modal-body {
+      font-size: 13px; line-height: 1.8;
+      color: var(--dark-grey);
+    }
+    .note-modal-body h2 { font-size: 16px; font-weight: 700; margin: 24px 0 10px; color: var(--black); }
+    .note-modal-body h3 { font-size: 14px; font-weight: 700; margin: 20px 0 8px; color: var(--black); }
+    .note-modal-body ul, .note-modal-body ol { padding-left: 20px; margin: 10px 0; }
+    .note-modal-body li { margin-bottom: 4px; }
+    .note-modal-body code { background: var(--off-white); padding: 2px 6px; font-family: var(--font-mono); font-size: 12px; border-radius: 2px; }
+    .note-modal-body pre { background: var(--black); color: #00c896; padding: 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 12px; margin: 16px 0; }
+    .note-modal-body pre code { background: none; padding: 0; color: inherit; }
+    .note-modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--light-grey); }
 
-      .research-entry-title {
-        font-size: 16px;
-      }
+    .entry-source-badge {
+      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 2px; font-weight: 700;
+      margin-bottom: 10px; display: inline-block;
+    }
+    .entry-source-local { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+
+    @media (max-width: 768px) {
+      .research-entry { padding: 24px; }
+      .research-entry-title { font-size: 16px; }
+      .note-modal { padding: 32px 24px; }
     }
   </style>
 </head>
@@ -200,10 +271,37 @@
     </div>
   </div>
 </section>
-</maiCheck if user is logged in
+</main>
+
+<!-- Full note read modal -->
+<div class="note-modal-overlay" id="noteModal" onclick="closeModal(event)">
+  <div class="note-modal" id="noteModalInner">
+    <button class="note-modal-close" onclick="closeNoteModal()">✕</button>
+    <div class="note-modal-date" id="modalDate"></div>
+    <div class="note-modal-title" id="modalTitle"></div>
+    <div class="note-modal-location" id="modalLocation"></div>
+    <div class="note-modal-body" id="modalBody"></div>
+    <div class="note-modal-tags" id="modalTags"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" fill="#0d0d0b"/><path d="M4 36L16 8L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/><line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/><line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/><line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/></svg><div class="logo-text">AX<span>L</span></div></div>
+        <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span></div>
+  </div>
+</footer>
+<button class="theme-toggle" title="Toggle dark/light">◑</button>
+<script src="script.js"></script>
+<script>
+  // ── Auth ──────────────────────────────────────────────
   function checkLogin() {
-    const isLoggedIn = localStorage.getItem('research-portal-logged-in') === 'true';
-    if (!isLoggedIn) {
+    if (localStorage.getItem('research-portal-logged-in') !== 'true') {
       sessionStorage.setItem('research-return-url', 'research-internship.html');
       window.location.href = 'login.html';
     }
@@ -215,184 +313,199 @@
     window.location.href = 'login.html';
   }
 
-  // Simple frontmatter parser
-  function parseFrontmatter(text) {
-    if (!text.startsWith('---')) {
-      return { data: {}, content: text };
-    }
-    
-    const lines = text.split('\n');
-    let endIdx = -1;
-    for (let i = 1; i < lines.length; i++) {
-      if (lines[i].trim() === '---') {
-        endIdx = i;
-        break;
-      }
-    }
-    
-    if (endIdx === -1) {
-      return { data: {}, content: text };
-    }
-    
-    const frontmatterText = lines.slice(1, endIdx).join('\n');
-    const content = lines.slice(endIdx + 1).join('\n');
-    
-    const data = {};
-    const lines_fm = frontmatterText.split('\n');
-    for (const line of lines_fm) {
-      const match = line.match(/^([^:]+):\s*(.+)$/);
-      if (match) {
-        let value = match[2].trim();
-        if ((value.startsWith('"') && value.endsWith('"')) || 
-            (value.startsWith("'") && value.endsWith("'"))) {
-          value = value.slice(1, -1);
-        }
-        if (value.startsWith('[') && value.endsWith(']')) {
-          value = value.slice(1, -1)
-            .split(',')
-            .map(v => v.trim().replace(/^["']|["']$/g, ''));
-        }
-        data[match[1].trim()] = value;
-      }
-    }
-    
-    return { data, content };
+  // ── Helpers ───────────────────────────────────────────
+  function escapeHtml(text) {
+    const d = document.createElement('div');
+    d.textContent = text || '';
+    return d.innerHTML;
   }
 
-  // Load and display research entries
+  function parseFrontmatter(text) {
+    if (!text.startsWith('---')) return { data: {}, content: text };
+    const lines = text.split('\n');
+    let end = -1;
+    for (let i = 1; i < lines.length; i++) {
+      if (lines[i].trim() === '---') { end = i; break; }
+    }
+    if (end === -1) return { data: {}, content: text };
+    const data = {};
+    lines.slice(1, end).forEach(line => {
+      const m = line.match(/^([^:]+):\s*(.+)$/);
+      if (!m) return;
+      let v = m[2].trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1,-1);
+      if (v.startsWith('[') && v.endsWith(']')) {
+        v = v.slice(1,-1).split(',').map(x => x.trim().replace(/^["']|["']$/g,''));
+      }
+      data[m[1].trim()] = v;
+    });
+    return { data, content: lines.slice(end + 1).join('\n') };
+  }
+
+  // ── Load localStorage notes ───────────────────────────
+  function getLocalNotes() {
+    try {
+      return JSON.parse(localStorage.getItem('research-entries') || '[]');
+    } catch { return []; }
+  }
+
+  // ── Modal ─────────────────────────────────────────────
+  let _allEntries = [];
+
+  function openNoteModal(id) {
+    const entry = _allEntries.find(e => e.id === id);
+    if (!entry) return;
+    document.getElementById('modalDate').textContent =
+      new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+    document.getElementById('modalTitle').textContent = entry.title;
+    document.getElementById('modalLocation').textContent = '📍 ' + entry.locationName;
+    document.getElementById('modalBody').innerHTML = typeof marked !== 'undefined'
+      ? marked.parse(entry.content || '')
+      : escapeHtml(entry.content || '').replace(/\n/g, '<br>');
+    const tags = Array.isArray(entry.tags) ? entry.tags : [];
+    document.getElementById('modalTags').innerHTML = tags.map(t =>
+      `<span class="research-tag">${escapeHtml(t)}</span>`).join('');
+    document.getElementById('noteModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNoteModal() {
+    document.getElementById('noteModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('noteModal')) closeNoteModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNoteModal(); });
+
+  // ── Render entries ────────────────────────────────────
+  function renderEntries(allEntries) {
+    _allEntries = allEntries;
+    const listContainer = document.getElementById('research-list');
+
+    const locations = [
+      { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
+      { folder: 'iit-palakkad',  name: 'IIT Palakkad (Maths Dept)' }
+    ];
+
+    const grouped = {};
+    locations.forEach(l => { grouped[l.folder] = { name: l.name, entries: [] }; });
+    // bucket for entries with unknown folder
+    grouped['_other'] = { name: 'Other', entries: [] };
+
+    allEntries.forEach(e => {
+      if (grouped[e.folder]) grouped[e.folder].entries.push(e);
+      else grouped['_other'].entries.push(e);
+    });
+
+    // sort each group newest-first
+    Object.values(grouped).forEach(g => g.entries.sort((a,b) => new Date(b.date) - new Date(a.date)));
+
+    const totalEntries = allEntries.length;
+    if (totalEntries === 0) {
+      listContainer.innerHTML = `
+        <div class="research-empty">
+          <div class="research-empty-text">No research entries yet. Click "+ New Entry" to start!</div>
+        </div>`;
+      return;
+    }
+
+    let html = '';
+    [...locations.map(l => l.folder), '_other'].forEach(fk => {
+      const g = grouped[fk];
+      if (!g || g.entries.length === 0) return;
+      html += `<div class="research-section">
+        <h2 class="research-section-title">📍 ${escapeHtml(g.name)}</h2>
+        <div class="research-section-entries">
+          ${g.entries.map((entry, idx) => `
+            <article class="research-entry fade-in ${idx > 0 ? 'stagger-' + Math.min(idx,3) : ''}">
+              ${entry.source === 'local' ? '<span class="entry-source-badge entry-source-local">● Saved locally</span>' : ''}
+              <div class="research-entry-date">
+                ${new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}
+              </div>
+              <h3 class="research-entry-title">${escapeHtml(entry.title)}</h3>
+              <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
+              ${Array.isArray(entry.tags) && entry.tags.length > 0 ? `
+                <div class="research-entry-tags">
+                  ${entry.tags.map(t => `<span class="research-tag">${escapeHtml(t)}</span>`).join('')}
+                </div>` : ''}
+              <button class="research-entry-link" onclick="openNoteModal('${entry.id}')">
+                Read Entry <span>→</span>
+              </button>
+            </article>`).join('')}
+        </div>
+      </div>`;
+    });
+
+    listContainer.innerHTML = html;
+    document.querySelectorAll('.fade-in').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 50);
+    });
+  }
+
+  // ── Load all entries ──────────────────────────────────
   async function loadResearchEntries() {
     const listContainer = document.getElementById('research-list');
-    
-    try {
-      const locations = [
-        { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
-        { folder: 'iit-palakkad', name: 'IIT Palakkad (Maths Dept)' }
-      ];
 
-      const allEntries = {};
-      let totalEntries = 0;
+    // 1. Local (localStorage) entries — always available
+    const localEntries = getLocalNotes().map(e => ({ ...e, source: 'local' }));
 
-      // Load entries from both locations
-      for (const location of locations) {
-        allEntries[location.folder] = {
-          name: location.name,
-          entries: []
-        };
+    // 2. File-based entries (works on a web server / GitHub Pages)
+    const fileEntries = [];
+    const locations = [
+      { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
+      { folder: 'iit-palakkad',  name: 'IIT Palakkad (Maths Dept)' }
+    ];
 
-        try {
-          const response = await fetch(`./content/research-internship/${location.folder}/`);
-          const html = await response.text();
-          
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const links = Array.from(doc.querySelectorAll('a'))
-            .map(a => a.href)
-            .filter(href => href.endsWith('.md'))
-            .map(href => href.split('/').pop());
+    for (const loc of locations) {
+      try {
+        const res = await fetch(`./content/research-internship/${loc.folder}/`);
+        if (!res.ok) continue;
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const filenames = Array.from(doc.querySelectorAll('a'))
+          .map(a => a.getAttribute('href'))
+          .filter(h => h && h.endsWith('.md'))
+          .map(h => h.split('/').pop());
 
-          // Fetch and parse each file
-          for (const filename of links) {
-            try {
-              const mdResponse = await fetch(`./content/research-internship/${location.folder}/${filename}`);
-              const mdText = await mdResponse.text();
-              
-              const { data, content } = parseFrontmatter(mdText);
-              
-              const slug = filename.replace('.md', '');
-              allEntries[location.folder].entries.push({
+        for (const fn of filenames) {
+          try {
+            const mdRes = await fetch(`./content/research-internship/${loc.folder}/${fn}`);
+            if (!mdRes.ok) continue;
+            const mdText = await mdRes.text();
+            const { data, content } = parseFrontmatter(mdText);
+            const slug = fn.replace('.md', '');
+            // skip if already in localEntries (same folder + slug)
+            const duplicate = localEntries.some(e => e.folder === loc.folder && e.slug === slug);
+            if (!duplicate) {
+              fileEntries.push({
+                id: `file-${loc.folder}-${slug}`,
                 slug,
-                filename,
-                folder: location.folder,
+                folder: loc.folder,
+                locationName: loc.name,
                 title: data.title || 'Untitled',
                 date: data.date || new Date().toISOString().split('T')[0],
                 summary: data.summary || '',
                 tags: data.tags || [],
-                content: content.trim()
+                content: content.trim(),
+                source: 'file'
               });
-              totalEntries++;
-            } catch (err) {
-              console.warn(`Failed to load ${filename}:`, err);
             }
-          }
-
-          // Sort entries by date (newest first)
-          allEntries[location.folder].entries.sort((a, b) => new Date(b.date) - new Date(a.date));
-        } catch (err) {
-          console.warn(`Failed to load ${location.folder}:`, err);
+          } catch { /* skip bad file */ }
         }
-      }
-
-      // Render all entries
-      if (totalEntries === 0) {
-        listContainer.innerHTML = `
-          <div class="research-empty">
-            <div class="research-empty-text">No research entries yet. Click "+ New Entry" to start!</div>
-          </div>
-        `;
-        return;
-      }
-
-      let html = '';
-      for (const location of locations) {
-        const locationData = allEntries[location.folder];
-        if (locationData.entries.length === 0) continue;
-
-        html += `
-          <div class="research-section">
-            <h2 class="research-section-title">📍 ${locationData.name}</h2>
-            <div class="research-section-entries">
-              ${locationData.entries.map((entry, idx) => `
-                <article class="research-entry fade-in ${idx > 0 ? `stagger-${Math.min(idx, 3)}` : ''}">
-                  <div class="research-entry-date">${new Date(entry.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
-                  <h3 class="research-entry-title">${escapeHtml(entry.title)}</h3>
-                  <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
-                  ${Array.isArray(entry.tags) && entry.tags.length > 0 ? `
-                    <div class="research-entry-tags">
-                      ${entry.tags.map(tag => `<span class="research-tag">${escapeHtml(tag)}</span>`).join('')}
-                    </div>
-                  ` : ''}
-                  <a href="research-entry.html?slug=${entry.slug}&folder=${entry.folder}" class="research-entry-link">
-                    Read Entry <span>→</span>
-                  </a>
-                </article>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      listContainer.innerHTML = html;
-
-      // Trigger fade-in animations
-      document.querySelectorAll('.fade-in').forEach(el => {
-        if (!el.classList.contains('visible')) {
-          setTimeout(() => el.classList.add('visible'), 50);
-        }
-      });
-    } catch (err) {
-      console.error('Error loading research entries:', err);
-      listContainer.innerHTML = `
-        <div class="research-empty">
-          <div class="research-empty-text">Error loading research entries. Please check the /content/research-internship/ folder.</div>
-        </div>
-      `;
+      } catch { /* directory listing not available */ }
     }
+
+    renderEntries([...localEntries, ...fileEntries]);
   }
 
-  function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  // Load on page load
+  // ── Init ──────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     checkLogin();
     loadResearchEntries();
-  }
-
-  // Load entries when page loads
-  document.addEventListener('DOMContentLoaded', loadResearchEntries);
+  });
 </script>
 </body>
 </html>
