@@ -1,211 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Research Internship — Milind Sahu</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <style>
-    .research-listing {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Internship — Milind Sahu</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+/* ── Location accordion ──────────────────────────── */
+.location-block {
+  margin-bottom: 40px;
+  border: 1px solid var(--light-grey);
+}
 
-    .research-section {
-      margin-bottom: 48px;
-    }
+.location-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  background: var(--off-white);
+  cursor: pointer;
+  user-select: none;
+  border-bottom: 1px solid var(--light-grey);
+  transition: background 0.2s;
+}
+.location-header:hover { background: #ebebeb; }
 
-    .research-section-title {
-      font-size: 14px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 24px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--light-grey);
-      font-weight: 700;
-    }
+.location-header-left { display: flex; align-items: center; gap: 14px; }
+.location-pin { font-size: 18px; }
+.location-name {
+  font-size: 15px; font-weight: 700; letter-spacing: 0.5px; color: var(--black);
+}
+.location-count {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--mid-grey); margin-top: 3px;
+}
 
-    .research-section-entries {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
+.location-chevron {
+  font-size: 18px; color: var(--accent); transition: transform 0.25s;
+  line-height: 1;
+}
+.location-block.open .location-chevron { transform: rotate(180deg); }
 
-    .research-entry {
-      background: var(--white);
-      border: 1px solid var(--light-grey);
-      padding: 32px;
-      transition: all 0.2s;
-    }
+.location-body {
+  display: none;
+  padding: 0;
+}
+.location-block.open .location-body { display: block; }
 
-    .research-entry:hover {
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px rgba(26, 86, 219, 0.1);
-    }
+/* ── Week selector inside location ──────────────── */
+.week-selector-wrap {
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--light-grey);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.week-selector-label {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; white-space: nowrap;
+}
+.week-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.week-tab {
+  padding: 6px 14px;
+  background: var(--off-white);
+  border: 1px solid var(--light-grey);
+  font-family: var(--font-mono);
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--dark-grey); cursor: pointer; transition: all 0.18s;
+  border-radius: 2px;
+}
+.week-tab:hover { border-color: var(--accent); color: var(--accent); background: var(--white); }
+.week-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.week-tab.all { background: var(--black); color: #fff; border-color: var(--black); }
+.week-tab.all:hover { background: #333; border-color: #333; }
 
-    .research-entry-date {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
+/* ── Entries grid ────────────────────────────────── */
+.entries-container { padding: 20px 28px 28px; }
 
-    .research-entry-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: var(--black);
-      margin-bottom: 12px;
-    }
+.research-entry {
+  background: var(--white);
+  border: 1px solid var(--light-grey);
+  padding: 28px;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+.research-entry:last-child { margin-bottom: 0; }
+.research-entry:hover { border-color: var(--accent); box-shadow: 0 4px 12px rgba(26,86,219,0.08); }
 
-    .research-entry-summary {
-      font-size: 13px;
-      color: var(--dark-grey);
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
+.entry-week-badge {
+  display: inline-block;
+  font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--accent); color: #fff;
+  padding: 3px 8px; border-radius: 2px; margin-bottom: 10px;
+}
 
-    .research-entry-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
-    }
+.research-entry-date {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.research-entry-title {
+  font-size: 18px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--black); margin-bottom: 10px;
+}
+.research-entry-summary {
+  font-size: 13px; color: var(--dark-grey); line-height: 1.7; margin-bottom: 14px;
+}
+.research-entry-tags {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px;
+}
+.research-tag {
+  padding: 4px 10px; background: var(--off-white);
+  border: 1px solid var(--light-grey); border-radius: 2px;
+  font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--dark-grey); transition: all 0.2s;
+}
+.research-tag:hover { background: var(--black); color: var(--white); border-color: var(--black); }
 
-    .research-tag {
-      padding: 4px 10px;
-      background: var(--off-white);
-      border: 1px solid var(--light-grey);
-      border-radius: 2px;
-      font-size: 8px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--dark-grey);
-      transition: all 0.2s;
-    }
+.research-entry-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); font-weight: 700; transition: gap 0.2s;
+  cursor: pointer; background: none; border: none;
+  font-family: var(--font-mono); padding: 0;
+}
+.research-entry-link:hover { gap: 10px; }
 
-    .research-tag:hover {
-      background: var(--black);
-      color: var(--white);
-      border-color: var(--black);
-    }
+/* Empty state */
+.research-empty { padding: 48px 28px; text-align: center; color: var(--mid-grey); }
+.research-empty-text { font-size: 14px; letter-spacing: 1px; }
 
-    .research-entry-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--accent);
-      font-weight: 700;
-      transition: gap 0.2s;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: var(--font-mono);
-      padding: 0;
-    }
+/* ── Full-page note modal ─────────────────────────── */
+.note-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.65); z-index: 3000;
+  align-items: flex-start; justify-content: center;
+  padding: 40px 16px; overflow-y: auto;
+}
+.note-modal-overlay.open { display: flex; }
 
-    .research-entry-link:hover {
-      gap: 10px;
-    }
+.note-modal {
+  background: var(--white); width: 100%; max-width: 720px;
+  padding: 48px; position: relative;
+  animation: modalIn .2s ease-out;
+}
+@keyframes modalIn {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.note-modal-close {
+  position: absolute; top: 20px; right: 20px;
+  background: none; border: none; font-size: 22px; cursor: pointer;
+  color: var(--dark-grey); font-family: var(--font-mono); line-height: 1;
+}
+.note-modal-week {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--accent); color: #fff;
+  padding: 3px 8px; border-radius: 2px;
+  display: inline-block; margin-bottom: 12px;
+}
+.note-modal-date {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px;
+}
+.note-modal-title {
+  font-size: 26px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--black); margin-bottom: 8px;
+}
+.note-modal-location {
+  font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--mid-grey); margin-bottom: 24px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--light-grey);
+}
+.note-modal-body {
+  font-size: 13px; line-height: 1.8; color: var(--dark-grey);
+}
+.note-modal-body h2 { font-size: 16px; font-weight: 700; margin: 24px 0 10px; color: var(--black); }
+.note-modal-body h3 { font-size: 14px; font-weight: 700; margin: 20px 0 8px; color: var(--black); }
+.note-modal-body ul, .note-modal-body ol { padding-left: 20px; margin: 10px 0; }
+.note-modal-body li { margin-bottom: 4px; }
+.note-modal-body code { background: var(--off-white); padding: 2px 6px; font-family: var(--font-mono); font-size: 12px; border-radius: 2px; }
+.note-modal-body pre { background: var(--black); color: #00c896; padding: 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 12px; margin: 16px 0; }
+.note-modal-body pre code { background: none; padding: 0; color: inherit; }
+.note-modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--light-grey); }
 
-    .research-empty {
-      padding: 60px 32px;
-      text-align: center;
-      color: var(--mid-grey);
-    }
+/* Loading spinner */
+.loading-bar {
+  padding: 48px; text-align: center;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--mid-grey);
+}
 
-    .research-empty-text {
-      font-size: 14px;
-      letter-spacing: 1px;
-    }
-
-    /* Full-page note modal */
-    .note-modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 3000;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 40px 16px;
-      overflow-y: auto;
-    }
-    .note-modal-overlay.open { display: flex; }
-    .note-modal {
-      background: var(--white);
-      width: 100%;
-      max-width: 720px;
-      padding: 48px;
-      position: relative;
-      animation: modalIn .2s ease-out;
-    }
-    @keyframes modalIn {
-      from { opacity:0; transform:translateY(20px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .note-modal-close {
-      position: absolute;
-      top: 20px; right: 20px;
-      background: none; border: none;
-      font-size: 22px; cursor: pointer;
-      color: var(--dark-grey);
-      font-family: var(--font-mono);
-      line-height: 1;
-    }
-    .note-modal-date {
-      font-size: 10px; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--accent);
-      margin-bottom: 10px;
-    }
-    .note-modal-title {
-      font-size: 26px; font-weight: 700;
-      letter-spacing: 0.5px; color: var(--black);
-      margin-bottom: 8px;
-    }
-    .note-modal-location {
-      font-size: 10px; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--mid-grey);
-      margin-bottom: 24px; padding-bottom: 20px;
-      border-bottom: 1px solid var(--light-grey);
-    }
-    .note-modal-body {
-      font-size: 13px; line-height: 1.8;
-      color: var(--dark-grey);
-    }
-    .note-modal-body h2 { font-size: 16px; font-weight: 700; margin: 24px 0 10px; color: var(--black); }
-    .note-modal-body h3 { font-size: 14px; font-weight: 700; margin: 20px 0 8px; color: var(--black); }
-    .note-modal-body ul, .note-modal-body ol { padding-left: 20px; margin: 10px 0; }
-    .note-modal-body li { margin-bottom: 4px; }
-    .note-modal-body code { background: var(--off-white); padding: 2px 6px; font-family: var(--font-mono); font-size: 12px; border-radius: 2px; }
-    .note-modal-body pre { background: var(--black); color: #00c896; padding: 16px; overflow-x: auto; font-family: var(--font-mono); font-size: 12px; margin: 16px 0; }
-    .note-modal-body pre code { background: none; padding: 0; color: inherit; }
-    .note-modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--light-grey); }
-
-    .entry-source-badge {
-      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
-      padding: 3px 8px; border-radius: 2px; font-weight: 700;
-      margin-bottom: 10px; display: inline-block;
-    }
-    .entry-source-local { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
-
-    @media (max-width: 768px) {
-      .research-entry { padding: 24px; }
-      .research-entry-title { font-size: 16px; }
-      .note-modal { padding: 32px 24px; }
-    }
-  </style>
+@media (max-width: 768px) {
+  .location-header { padding: 16px 20px; }
+  .week-selector-wrap { padding: 14px 20px; }
+  .entries-container { padding: 16px 20px 20px; }
+  .research-entry { padding: 20px; }
+  .research-entry-title { font-size: 16px; }
+  .note-modal { padding: 32px 24px; }
+}
+</style>
 </head>
 <body>
 <div class="cursor"></div><div class="cursor-ring"></div>
+
 <nav>
   <a href="index.html" class="nav-logo">
     <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
@@ -223,34 +224,35 @@
   </ul>
   <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
 </nav>
+
 <main>
-<div class="page-hero">
-  <div class="page-hero-inner">
-    <a href="index.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back</a>
-    <h1 class="page-title">Research Internship<span style="color:var(--accent)">_</span></h1>
-    <p class="page-subtitle">Daily research journal · Progress tracking · Learning notes</p>
-  </div>
-</div>
-<section>
-  <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
-      <p class="section-label"><span class="num">—</span> Journal Entries</p>
-      <!-- Only shown when logged in -->
-      <a href="new-research-entry.html" id="newEntryBtn" class="btn btn-primary" style="display:none; align-items: center; gap: 8px; font-size:10px;">+ New Entry</a>
+  <div class="page-hero">
+    <div class="page-hero-inner">
+      <a href="index.html" class="back-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back</a>
+      <h1 class="page-title">Research Internship<span style="color:var(--accent)">_</span></h1>
+      <p class="page-subtitle">Daily research journal · Progress tracking · Learning notes</p>
     </div>
-    <div id="research-list" class="research-listing fade-in">
-      <div class="research-empty">
-        <div class="research-empty-text">Loading research entries...</div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+        <p class="section-label"><span class="num">—</span> Journal Entries</p>
+        <a href="new-research-entry.html" id="newEntryBtn" class="btn btn-primary" style="display:none; align-items: center; gap: 8px; font-size:10px;">+ New Entry</a>
+      </div>
+
+      <div id="research-list" class="fade-in">
+        <div class="loading-bar">Loading research entries…</div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 </main>
 
-<!-- Full note read modal -->
+<!-- Full note modal -->
 <div class="note-modal-overlay" id="noteModal" onclick="closeModal(event)">
   <div class="note-modal" id="noteModalInner">
     <button class="note-modal-close" onclick="closeNoteModal()">✕</button>
+    <div class="note-modal-week" id="modalWeek"></div>
     <div class="note-modal-date" id="modalDate"></div>
     <div class="note-modal-title" id="modalTitle"></div>
     <div class="note-modal-location" id="modalLocation"></div>
@@ -270,217 +272,262 @@
     <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span></div>
   </div>
 </footer>
+
 <button class="theme-toggle" title="Toggle dark/light">◑</button>
 <script src="script.js"></script>
 <script>
-  // ── Helpers ───────────────────────────────────────────
-  function escapeHtml(text) {
-    const d = document.createElement('div');
-    d.textContent = text || '';
-    return d.innerHTML;
-  }
+// ── Config ────────────────────────────────────────────
+const GITHUB_USER   = 'itsmilindsahu';
+const GITHUB_REPO   = 'itsmilindsahu.github.io';
+const GITHUB_BRANCH = 'main';
 
-  function parseFrontmatter(text) {
-    if (!text.startsWith('---')) return { data: {}, content: text };
-    const lines = text.split('\n');
-    let end = -1;
-    for (let i = 1; i < lines.length; i++) {
-      if (lines[i].trim() === '---') { end = i; break; }
+const LOCATIONS = [
+  { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)', pin: '🏛' },
+  { folder: 'iit-palakkad',  name: 'IIT Palakkad (Maths Dept)', pin: '📐' }
+];
+
+// ── Helpers ───────────────────────────────────────────
+function escapeHtml(text) {
+  const d = document.createElement('div');
+  d.textContent = text || '';
+  return d.innerHTML;
+}
+
+function parseFrontmatter(text) {
+  if (!text.startsWith('---')) return { data: {}, content: text };
+  const lines = text.split('\n');
+  let end = -1;
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() === '---') { end = i; break; }
+  }
+  if (end === -1) return { data: {}, content: text };
+  const data = {};
+  lines.slice(1, end).forEach(line => {
+    const m = line.match(/^([^:]+):\s*(.+)$/);
+    if (!m) return;
+    let v = m[2].trim();
+    if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+    if (v.startsWith('[') && v.endsWith(']')) {
+      v = v.slice(1,-1).split(',').map(x => x.trim().replace(/^["']|["']$/g, ''));
     }
-    if (end === -1) return { data: {}, content: text };
-    const data = {};
-    lines.slice(1, end).forEach(line => {
-      const m = line.match(/^([^:]+):\s*(.+)$/);
-      if (!m) return;
-      let v = m[2].trim();
-      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1,-1);
-      if (v.startsWith('[') && v.endsWith(']')) {
-        v = v.slice(1,-1).split(',').map(x => x.trim().replace(/^["']|["']$/g,''));
-      }
-      data[m[1].trim()] = v;
-    });
-    return { data, content: lines.slice(end + 1).join('\n') };
+    data[m[1].trim()] = v;
+  });
+  return { data, content: lines.slice(end + 1).join('\n') };
+}
+
+// ── Global entries store ──────────────────────────────
+let _allEntries = [];
+// Track which week tab is active per location
+const _activeWeek = {};  // folder -> 'all' | number
+
+// ── Modal ─────────────────────────────────────────────
+function openNoteModal(id) {
+  const entry = _allEntries.find(e => e.id === id);
+  if (!entry) return;
+  document.getElementById('modalWeek').textContent = entry.week ? `Week ${entry.week}` : '';
+  document.getElementById('modalDate').textContent =
+    new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  document.getElementById('modalTitle').textContent = entry.title;
+  document.getElementById('modalLocation').textContent = '📍 ' + entry.locationName;
+  document.getElementById('modalBody').innerHTML = typeof marked !== 'undefined'
+    ? marked.parse(entry.content || '')
+    : escapeHtml(entry.content || '').replace(/\n/g, '<br>');
+  const tags = Array.isArray(entry.tags) ? entry.tags : [];
+  document.getElementById('modalTags').innerHTML = tags.map(t =>
+    `<span class="research-tag">${escapeHtml(t)}</span>`).join('');
+  document.getElementById('noteModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeNoteModal() {
+  document.getElementById('noteModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('noteModal')) closeNoteModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNoteModal(); });
+
+// ── Week tab click handler ────────────────────────────
+function selectWeek(folder, week) {
+  _activeWeek[folder] = week;
+  renderEntriesForLocation(folder);
+
+  // Update tab styles
+  document.querySelectorAll(`.week-tab[data-folder="${folder}"]`).forEach(tab => {
+    const tw = tab.dataset.week;
+    tab.className = 'week-tab' +
+      (tw === 'all' && week === 'all' ? ' all' : '') +
+      (tw !== 'all' && parseInt(tw) === week ? ' active' : '') +
+      (tw === 'all' && week !== 'all' ? '' : '');
+    if (tw === 'all') tab.className = 'week-tab' + (week === 'all' ? ' all' : '');
+  });
+}
+
+// ── Render entries for one location (filtered by week) ─
+function renderEntriesForLocation(folder) {
+  const loc = LOCATIONS.find(l => l.folder === folder);
+  const entries = _allEntries
+    .filter(e => e.folder === folder)
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const activeWeek = _activeWeek[folder] || 'all';
+  const filtered = activeWeek === 'all'
+    ? entries
+    : entries.filter(e => Number(e.week) === activeWeek);
+
+  const container = document.getElementById(`entries-${folder}`);
+  if (!container) return;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div class="research-empty"><div class="research-empty-text">No entries${activeWeek !== 'all' ? ` for Week ${activeWeek}` : ''} yet.</div></div>`;
+    return;
   }
 
-  // ── Load localStorage notes ───────────────────────────
-  function getLocalNotes() {
-    try {
-      return JSON.parse(localStorage.getItem('research-entries') || '[]');
-    } catch { return []; }
-  }
-
-  // ── Modal ─────────────────────────────────────────────
-  let _allEntries = [];
-
-  function openNoteModal(id) {
-    const entry = _allEntries.find(e => e.id === id);
-    if (!entry) return;
-    document.getElementById('modalDate').textContent =
-      new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
-    document.getElementById('modalTitle').textContent = entry.title;
-    document.getElementById('modalLocation').textContent = '📍 ' + entry.locationName;
-    document.getElementById('modalBody').innerHTML = typeof marked !== 'undefined'
-      ? marked.parse(entry.content || '')
-      : escapeHtml(entry.content || '').replace(/\n/g, '<br>');
+  container.innerHTML = filtered.map(entry => {
+    const dateStr = new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
     const tags = Array.isArray(entry.tags) ? entry.tags : [];
-    document.getElementById('modalTags').innerHTML = tags.map(t =>
-      `<span class="research-tag">${escapeHtml(t)}</span>`).join('');
-    document.getElementById('noteModal').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    return `
+      <article class="research-entry">
+        ${entry.week ? `<span class="entry-week-badge">Week ${entry.week}</span>` : ''}
+        <div class="research-entry-date">${dateStr}</div>
+        <h3 class="research-entry-title">${escapeHtml(entry.title)}</h3>
+        <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
+        ${tags.length ? `<div class="research-entry-tags">${tags.map(t => `<span class="research-tag">${escapeHtml(t)}</span>`).join('')}</div>` : ''}
+        <button class="research-entry-link" onclick="openNoteModal('${entry.id}')">Read Entry <span>→</span></button>
+      </article>`;
+  }).join('');
+}
+
+// ── Build week tabs for a location ───────────────────
+function buildWeekTabs(folder, entries) {
+  const weeks = [...new Set(
+    entries.filter(e => e.folder === folder && e.week)
+           .map(e => Number(e.week))
+  )].sort((a, b) => a - b);
+
+  if (weeks.length === 0) return '';
+
+  const tabs = weeks.map(w =>
+    `<button class="week-tab" data-folder="${folder}" data-week="${w}" onclick="selectWeek('${folder}', ${w})">Week ${w}</button>`
+  ).join('');
+
+  return `
+    <div class="week-selector-wrap">
+      <span class="week-selector-label">Filter by week</span>
+      <div class="week-tabs">
+        <button class="week-tab all" data-folder="${folder}" data-week="all" onclick="selectWeek('${folder}', 'all')">All Weeks</button>
+        ${tabs}
+      </div>
+    </div>`;
+}
+
+// ── Render full page ──────────────────────────────────
+function renderPage(allEntries) {
+  _allEntries = allEntries;
+  const listContainer = document.getElementById('research-list');
+
+  const totalEntries = allEntries.length;
+  if (totalEntries === 0) {
+    listContainer.innerHTML = `
+      <div class="research-empty">
+        <div class="research-empty-text">No research entries yet. Click "+ New Entry" to start!</div>
+      </div>`;
+    return;
   }
 
-  function closeNoteModal() {
-    document.getElementById('noteModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
+  let html = '';
+  LOCATIONS.forEach(loc => {
+    const locEntries = allEntries.filter(e => e.folder === loc.folder);
+    const count = locEntries.length;
+    _activeWeek[loc.folder] = 'all'; // default all weeks shown
 
-  function closeModal(e) {
-    if (e.target === document.getElementById('noteModal')) closeNoteModal();
-  }
-
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNoteModal(); });
-
-  // ── Render entries ────────────────────────────────────
-  function renderEntries(allEntries) {
-    _allEntries = allEntries;
-    const listContainer = document.getElementById('research-list');
-
-    const locations = [
-      { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
-      { folder: 'iit-palakkad',  name: 'IIT Palakkad (Maths Dept)' }
-    ];
-
-    const grouped = {};
-    locations.forEach(l => { grouped[l.folder] = { name: l.name, entries: [] }; });
-    // bucket for entries with unknown folder
-    grouped['_other'] = { name: 'Other', entries: [] };
-
-    allEntries.forEach(e => {
-      if (grouped[e.folder]) grouped[e.folder].entries.push(e);
-      else grouped['_other'].entries.push(e);
-    });
-
-    // sort each group newest-first
-    Object.values(grouped).forEach(g => g.entries.sort((a,b) => new Date(b.date) - new Date(a.date)));
-
-    const totalEntries = allEntries.length;
-    if (totalEntries === 0) {
-      listContainer.innerHTML = `
-        <div class="research-empty">
-          <div class="research-empty-text">No research entries yet. Click "+ New Entry" to start!</div>
-        </div>`;
-      return;
-    }
-
-    let html = '';
-    [...locations.map(l => l.folder), '_other'].forEach(fk => {
-      const g = grouped[fk];
-      if (!g || g.entries.length === 0) return;
-      html += `<div class="research-section">
-        <h2 class="research-section-title">📍 ${escapeHtml(g.name)}</h2>
-        <div class="research-section-entries">
-          ${g.entries.map((entry, idx) => `
-            <article class="research-entry fade-in ${idx > 0 ? 'stagger-' + Math.min(idx,3) : ''}">
-              ${entry.source === 'local' ? '<span class="entry-source-badge entry-source-local">● Saved locally</span>' : ''}
-              <div class="research-entry-date">
-                ${new Date(entry.date + 'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}
-              </div>
-              <h3 class="research-entry-title">${escapeHtml(entry.title)}</h3>
-              <p class="research-entry-summary">${escapeHtml(entry.summary)}</p>
-              ${Array.isArray(entry.tags) && entry.tags.length > 0 ? `
-                <div class="research-entry-tags">
-                  ${entry.tags.map(t => `<span class="research-tag">${escapeHtml(t)}</span>`).join('')}
-                </div>` : ''}
-              <button class="research-entry-link" onclick="openNoteModal('${entry.id}')">
-                Read Entry <span>→</span>
-              </button>
-            </article>`).join('')}
+    html += `
+      <div class="location-block" id="loc-${loc.folder}">
+        <div class="location-header" onclick="toggleLocation('${loc.folder}')">
+          <div class="location-header-left">
+            <span class="location-pin">${loc.pin}</span>
+            <div>
+              <div class="location-name">${escapeHtml(loc.name)}</div>
+              <div class="location-count">${count} entr${count !== 1 ? 'ies' : 'y'}</div>
+            </div>
+          </div>
+          <span class="location-chevron">▾</span>
+        </div>
+        <div class="location-body">
+          ${buildWeekTabs(loc.folder, allEntries)}
+          <div class="entries-container" id="entries-${loc.folder}"></div>
         </div>
       </div>`;
-    });
-
-    listContainer.innerHTML = html;
-    document.querySelectorAll('.fade-in').forEach(el => {
-      setTimeout(() => el.classList.add('visible'), 50);
-    });
-  }
-
-  // ── Load all entries ──────────────────────────────────
-  // GitHub repo — update if you rename the repo
-  const GITHUB_USER   = 'itsmilindsahu';
-  const GITHUB_REPO   = 'itsmilindsahu.github.io';
-  const GITHUB_BRANCH = 'main'; // change to 'master' if your default branch differs
-
-  async function loadResearchEntries() {
-    const locations = [
-      { folder: 'iiit-kottayam', name: 'IIIT Kottayam (CSE DEPT)' },
-      { folder: 'iit-palakkad',  name: 'IIT Palakkad (Maths Dept)' }
-    ];
-
-    // 1. Show localStorage notes immediately (no waiting)
-    const localEntries = getLocalNotes().map(e => ({ ...e, source: 'local' }));
-    renderEntries(localEntries);
-
-    // 2. Fetch .md files via GitHub Contents API (works on GitHub Pages)
-    const fileEntries = [];
-
-    for (const loc of locations) {
-      try {
-        const apiUrl =
-          `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/content/research-internship/${loc.folder}?ref=${GITHUB_BRANCH}`;
-        const res = await fetch(apiUrl, { headers: { Accept: 'application/vnd.github.v3+json' } });
-        if (!res.ok) continue;
-
-        const files = await res.json();
-        if (!Array.isArray(files)) continue;
-
-        for (const file of files.filter(f => f.type === 'file' && f.name.endsWith('.md'))) {
-          try {
-            // raw.githubusercontent.com bypasses API rate limits
-            const rawUrl =
-              `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/research-internship/${loc.folder}/${file.name}`;
-            const mdRes = await fetch(rawUrl);
-            if (!mdRes.ok) continue;
-
-            const mdText = await mdRes.text();
-            const { data, content } = parseFrontmatter(mdText);
-            const slug = file.name.replace('.md', '');
-
-            // Skip if a localStorage note already covers this date+folder
-            if (localEntries.some(e => e.folder === loc.folder && e.slug === slug)) continue;
-
-            fileEntries.push({
-              id:           `file-${loc.folder}-${slug}`,
-              slug,
-              folder:       loc.folder,
-              locationName: loc.name,
-              title:        data.title   || slug,
-              date:         data.date    || slug,
-              summary:      data.summary || '',
-              tags:         Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
-              content:      content.trim(),
-              source:       'file'
-            });
-          } catch { /* skip unreadable file */ }
-        }
-      } catch { /* API unavailable or rate-limited */ }
-    }
-
-    // Re-render merging localStorage + file entries
-    if (fileEntries.length > 0) {
-      renderEntries([...localEntries, ...fileEntries]);
-    }
-  }
-
-  // ── Init ──────────────────────────────────────────────
-  document.addEventListener('DOMContentLoaded', () => {
-    // Show "+ New Entry" only if already logged in
-    if (localStorage.getItem('research-portal-logged-in') === 'true') {
-      const btn = document.getElementById('newEntryBtn');
-      if (btn) btn.style.display = 'inline-flex';
-    }
-    loadResearchEntries();
   });
+
+  listContainer.innerHTML = html;
+
+  // Render entries for each location
+  LOCATIONS.forEach(loc => renderEntriesForLocation(loc.folder));
+
+  // Auto-open first location that has entries
+  const firstWithEntries = LOCATIONS.find(l => allEntries.some(e => e.folder === l.folder));
+  if (firstWithEntries) {
+    document.getElementById('loc-' + firstWithEntries.folder).classList.add('open');
+  }
+}
+
+// ── Toggle location open/closed ───────────────────────
+function toggleLocation(folder) {
+  const block = document.getElementById('loc-' + folder);
+  block.classList.toggle('open');
+}
+
+// ── Load entries from GitHub API ──────────────────────
+async function loadResearchEntries() {
+  const fileEntries = [];
+
+  for (const loc of LOCATIONS) {
+    try {
+      const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/content/research-internship/${loc.folder}?ref=${GITHUB_BRANCH}`;
+      const res = await fetch(apiUrl, { headers: { Accept: 'application/vnd.github.v3+json' } });
+      if (!res.ok) continue;
+      const files = await res.json();
+      if (!Array.isArray(files)) continue;
+
+      for (const file of files.filter(f => f.type === 'file' && f.name.endsWith('.md'))) {
+        try {
+          const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/content/research-internship/${loc.folder}/${file.name}`;
+          const mdRes = await fetch(rawUrl);
+          if (!mdRes.ok) continue;
+          const mdText = await mdRes.text();
+          const { data, content } = parseFrontmatter(mdText);
+          const slug = file.name.replace('.md', '');
+
+          fileEntries.push({
+            id: `file-${loc.folder}-${slug}`,
+            slug,
+            folder: loc.folder,
+            locationName: loc.name,
+            title: data.title || slug,
+            date: data.date || slug,
+            week: data.week ? parseInt(data.week) : null,
+            summary: data.summary || '',
+            tags: Array.isArray(data.tags) ? data.tags : (data.tags ? [data.tags] : []),
+            content: content.trim(),
+            source: 'file'
+          });
+        } catch { /* skip unreadable file */ }
+      }
+    } catch { /* API unavailable */ }
+  }
+
+  renderPage(fileEntries);
+}
+
+// ── Init ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('research-portal-logged-in') === 'true') {
+    const btn = document.getElementById('newEntryBtn');
+    if (btn) btn.style.display = 'inline-flex';
+  }
+  loadResearchEntries();
+});
 </script>
 </body>
 </html>
