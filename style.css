@@ -596,3 +596,247 @@ main { animation: pageEnter .6s ease both; }
 section[id], div[id] {
   scroll-margin-top: calc(var(--nav-h) + 12px);
 }
+/* ═══════════════════════════════════════
+   ENHANCED CURSOR
+═══════════════════════════════════════ */
+.cursor {
+  position: fixed; width: 8px; height: 8px; border-radius: 50%;
+  background: #fff; mix-blend-mode: difference;
+  pointer-events: none; z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease;
+  box-shadow: 0 0 12px rgba(26,86,219,0.6);
+}
+.cursor.cursor-hover {
+  width: 24px; height: 24px;
+  background: rgba(26,86,219,0.9);
+  mix-blend-mode: normal;
+  box-shadow: 0 0 0 4px rgba(26,86,219,0.2), 0 0 20px rgba(26,86,219,0.6);
+}
+.cursor.cursor-click { transform: translate(-50%, -50%) scale(0.6); }
+.cursor-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1.5px solid rgba(255,255,255,0.6);
+  border-radius: 50%; pointer-events: none; z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: left 0.08s linear, top 0.08s linear, width 0.3s ease, height 0.3s ease, border-color 0.3s, opacity 0.3s;
+  mix-blend-mode: difference;
+}
+.cursor-ring.cursor-hover {
+  width: 56px; height: 56px;
+  border-color: rgba(26,86,219,0.8);
+  mix-blend-mode: normal;
+}
+.cursor-trail {
+  position: fixed; width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(26,86,219,0.4); pointer-events: none;
+  z-index: 99996; transform: translate(-50%,-50%);
+  animation: trailFade 0.5s ease forwards;
+}
+@keyframes trailFade { to { opacity: 0; transform: translate(-50%,-50%) scale(0); } }
+
+/* ═══════════════════════════════════════
+   PIXEL DOG INTRO OVERLAY
+═══════════════════════════════════════ */
+#dog-intro-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: #020206;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), visibility 0.7s;
+  overflow: hidden;
+}
+#dog-intro-overlay::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(26,86,219,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(26,86,219,.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  animation: gridDrift 20s linear infinite;
+}
+@keyframes gridDrift { to { background-position: 32px 32px; } }
+#dog-intro-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px);
+  pointer-events: none;
+}
+#dog-intro-overlay.exiting {
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+
+.dog-game-wrap {
+  position: relative; z-index: 1;
+  text-align: center;
+  animation: gameEntrance 0.8s cubic-bezier(0.2,0.8,0.2,1) both;
+}
+@keyframes gameEntrance {
+  from { opacity: 0; transform: translateY(32px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+.dog-intro-eyebrow {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.dog-intro-eyebrow::before, .dog-intro-eyebrow::after {
+  content: ''; display: block; width: 28px; height: 1px; background: var(--accent); opacity: 0.5;
+}
+.dog-intro-title {
+  font-family: var(--font-display); font-size: clamp(36px, 6vw, 64px);
+  color: #fff; line-height: 1; margin-bottom: 8px; letter-spacing: 4px;
+}
+.dog-intro-sub {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #444; margin-bottom: 36px;
+}
+
+/* Dog Style Picker */
+.dog-picker {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.dog-pick-btn {
+  background: #0a0a08; border: 1px solid #1e1e1c; padding: 12px 14px;
+  cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column;
+  align-items: center; gap: 8px; min-width: 90px;
+  position: relative; overflow: hidden;
+}
+.dog-pick-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(26,86,219,0) 0%, rgba(26,86,219,0.1) 100%);
+  opacity: 0; transition: opacity 0.2s;
+}
+.dog-pick-btn:hover { border-color: #1a56db; transform: translateY(-3px); box-shadow: 0 8px 24px rgba(26,86,219,0.2); }
+.dog-pick-btn:hover::before { opacity: 1; }
+.dog-pick-btn.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 24px rgba(26,86,219,0.3); }
+.dog-pick-canvas { image-rendering: pixelated; display: block; }
+.dog-pick-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #555; white-space: nowrap; }
+.dog-pick-btn.selected .dog-pick-label { color: var(--accent); }
+
+/* Game Stage */
+.dog-game-stage {
+  position: relative; width: 320px; height: 200px;
+  margin: 0 auto 24px;
+  background: #040408;
+  border: 1px solid #1a1a18;
+  overflow: hidden;
+}
+.dog-game-stage::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 40px;
+  background: repeating-linear-gradient(90deg, #0d2a0d 0px, #0d2a0d 8px, #0a220a 8px, #0a220a 16px);
+  border-top: 2px solid #1a4a1a;
+}
+.dog-stage-canvas {
+  position: absolute; inset: 0; image-rendering: pixelated;
+}
+.dog-stage-hearts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.heart-particle {
+  position: absolute; font-size: 16px;
+  animation: floatHeart 0.9s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes floatHeart {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-70px) scale(0.5) rotate(20deg); }
+}
+
+/* Happiness Bar */
+.happiness-wrap { margin-bottom: 20px; }
+.happiness-label {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #333;
+  margin-bottom: 6px; display: flex; justify-content: space-between;
+}
+.happiness-label span { color: var(--accent); }
+.happiness-track {
+  width: 320px; height: 8px; background: #0a0a08; border: 1px solid #1e1e1c;
+  position: relative; margin: 0 auto;
+  overflow: hidden;
+}
+.happiness-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: linear-gradient(90deg, #1a56db, #00c896);
+  transition: width 0.25s cubic-bezier(0.2,0.8,0.2,1);
+  box-shadow: 0 0 10px rgba(26,86,219,0.5);
+  width: 0%;
+}
+.happiness-fill::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 4px;
+  background: rgba(255,255,255,0.6);
+  animation: barShimmer 1s ease-in-out infinite;
+}
+@keyframes barShimmer { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
+/* Action Row */
+.dog-action-row {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 0;
+}
+.dog-pet-btn {
+  background: var(--accent); color: #fff;
+  border: none; padding: 12px 28px;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; cursor: pointer;
+  transition: all 0.15s; position: relative; overflow: hidden;
+}
+.dog-pet-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: translateX(-100%); transition: transform 0.3s;
+}
+.dog-pet-btn:hover::before { transform: translateX(0); }
+.dog-pet-btn:hover { background: #2a66eb; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,86,219,0.4); }
+.dog-pet-btn:active { transform: scale(0.96); }
+.dog-skip-btn {
+  background: transparent; color: #333; border: 1px solid #1a1a18;
+  padding: 12px 20px; font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
+  transition: all 0.2s;
+}
+.dog-skip-btn:hover { border-color: #444; color: #666; }
+
+/* Completion Burst */
+.dog-complete-msg {
+  position: absolute; inset: 0; z-index: 5;
+  background: rgba(2,2,6,0.92);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.4s;
+  pointer-events: none;
+}
+.dog-complete-msg.show { opacity: 1; }
+.dog-complete-title {
+  font-family: var(--font-display); font-size: 48px; color: var(--accent);
+  letter-spacing: 4px; margin-bottom: 8px;
+  text-shadow: 0 0 30px rgba(26,86,219,0.8);
+}
+.dog-complete-sub {
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #555;
+}
+
+/* ═══════════════════════════════════════
+   PERSISTENT PIXEL DOG PET
+═══════════════════════════════════════ */
+#persistent-dog {
+  position: fixed; bottom: 0; z-index: 9997;
+  pointer-events: none;
+  image-rendering: pixelated;
+  transition: left 0.5s cubic-bezier(0.2,0.8,0.2,1);
+  filter: drop-shadow(0 -4px 8px rgba(26,86,219,0.3));
+}
+#persistent-dog.dog-idle { animation: dogBob 2s ease-in-out infinite; }
+@keyframes dogBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+#persistent-dog.dog-running { animation: dogRun 0.25s steps(1) infinite; }
+#persistent-dog.dog-flipped canvas { transform: scaleX(-1); }
+
+/* Confetti particle */
+.confetti-piece {
+  position: fixed; width: 8px; height: 8px;
+  pointer-events: none; z-index: 10001;
+  animation: confettiFall 1.2s ease-in forwards;
+}
+@keyframes confettiFall {
+  from { opacity: 1; transform: translateY(0) rotate(0deg); }
+  to   { opacity: 0; transform: translateY(200px) rotate(720deg); }
+}
+
