@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KHND- — Research</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+  <style>
+    body { background: #0a0a0a; color: #e8e8e8; font-family: 'DM Mono', monospace; line-height: 1.7; margin: 0; padding: 0; }
+    .container-page { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
+    .back-link { display: inline-block; margin-bottom: 2rem; color: #888888; text-decoration: none; font-family: 'Space Mono', monospace; }
+    .back-link:hover { color: #c8ff00; }
+    .md-content h1, .md-content h2, .md-content h3 { color: #c8ff00; font-family: 'Space Mono', monospace; margin-top: 2rem; margin-bottom: 1rem; }
+    .md-content p { margin-bottom: 1.5rem; color: #e8e8e8; }
+    .md-content a { color: #ff6b35; text-decoration: none; cursor: pointer; }
+    .md-content a:hover { text-decoration: underline; }
+    .md-content pre { background: #111; padding: 1rem; border: 1px solid #222; overflow-x: auto; margin-bottom: 1.5rem; }
+    .md-content code { font-family: 'Space Mono', monospace; color: #7eb8f7; }
+    .md-content img { max-width: 100%; border: 1px solid #222; }
+
+    /* Modal Overlay */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-overlay.active { display: flex; }
+    .modal-content { background: #111; border: 1px solid #222; width: 100%; max-width: 900px; max-height: 90vh; border-radius: 4px; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid #222; background: #181818; }
+    .modal-title { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: #e8e8e8; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .modal-controls { display: flex; gap: 0.75rem; align-items: center; }
+    .modal-btn { background: none; border: 1px solid #2a2a2a; color: #888; font-family: 'Space Mono', monospace; font-size: 11px; padding: 0.5rem 0.75rem; cursor: pointer; transition: all 0.2s; border-radius: 2px; }
+    .modal-btn:hover { color: #c8ff00; border-color: #c8ff00; background: rgba(200, 255, 0, 0.06); }
+    .modal-body { flex: 1; overflow-y: auto; position: relative; background: #0a0a0a; }
+    .close-btn { background: none; border: none; color: #888; font-size: 20px; cursor: pointer; transition: color 0.2s; font-family: 'Space Mono', monospace; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+    .close-btn:hover { color: #c8ff00; }
+    .loading { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 2rem; color: #888; font-size: 12px; }
+    
+    .pdf-container { display: flex; flex-direction: column; height: 100%; }
+    .pdf-toolbar { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid #222; background: #181818; flex-wrap: wrap; }
+    .pdf-control-group { display: flex; align-items: center; gap: 0.5rem; }
+    .pdf-input { background: #0a0a0a; border: 1px solid #2a2a2a; color: #e8e8e8; font-family: 'Space Mono', monospace; font-size: 11px; padding: 0.4rem 0.6rem; border-radius: 2px; width: 60px; text-align: center; }
+    .pdf-viewer { flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 1rem; }
+    .pdf-page { margin: 0.5rem 0; }
+    .pdf-page canvas { max-width: 100%; border: 1px solid #222; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+  </style>
+</head>
+<body>
+  <div class="container-page">
+    <a href="../research-internship.html" class="back-link">← Back to Research</a>
+    <div id="content" class="md-content">Loading content...</div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">Document</span>
+        <div class="modal-controls">
+          <button class="modal-btn" id="externalBtn" style="display: none;">Download PDF ↓</button>
+          <button class="close-btn" id="closeBtn">×</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const markdownContent = `# Knowledge Hierarchies and Neural Depth
+
+### A Comparative Statics Analysis
+
+**Author:** Milind Sahu  
+**Institution:** IISER Tirupati
+
+---
+
+## Abstract
+
+This research investigates a mathematical connection between two independently developed theories:
+
+- Knowledge Hierarchies in Organizational Economics (Garicano, 2000)
+- Neural Depth Theory in Deep Learning (Telgarsky, 2016)
+
+The central hypothesis is that both systems optimize depth using the same underlying complexity-cost tradeoff.
+
+---
+
+## Research Questions
+
+1. Can organizational depth and neural network depth be described using a common complexity measure?
+2. Do both optimization problems produce identical comparative statics?
+3. What does this imply for AI-augmented organizations?
+
+---
+
+## Main Contribution
+
+We propose a unified optimization framework showing that organizational hierarchies and neural architectures may be governed by the same threshold condition.
+
+---
+
+## Paper
+
+📄 [Read the Paper](./RESEARCH_PROPOSAL_IIM.pdf)
+
+---
+
+## Author
+
+Milind Sahu  
+BS-MS Mathematics  
+Indian Institute of Science Education and Research Tirupati
+`;
+    document.getElementById('content').innerHTML = marked.parse(markdownContent);
+
+    // Modal Logic
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.getElementById('closeBtn');
+    const externalBtn = document.getElementById('externalBtn');
+
+    closeBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      modalBody.innerHTML = '';
+    }
+
+    window.openPDFModal = function(pdfUrl, title = 'Document') {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = '<div class="loading">Loading PDF...</div>';
+      externalBtn.style.display = 'block';
+      externalBtn.onclick = () => {
+        const a = document.createElement('a'); a.href = pdfUrl; a.download = title + '.pdf'; a.click();
+      };
+
+      const pdfContainer = document.createElement('div');
+      pdfContainer.className = 'pdf-container';
+      pdfContainer.innerHTML = `
+        <div class="pdf-toolbar">
+          <div class="pdf-control-group">
+            <button class="modal-btn" id="prevPageBtn">← Prev</button>
+            <input type="number" class="pdf-input" id="pageInput" value="1" min="1">
+            <span style="font-size: 11px; color: #888;" id="pageCount">/ 1</span>
+            <button class="modal-btn" id="nextPageBtn">Next →</button>
+          </div>
+          <div class="pdf-control-group" style="margin-left: auto;">
+            <button class="modal-btn" id="zoomOutBtn">− Zoom</button>
+            <button class="modal-btn" id="zoomInBtn">+ Zoom</button>
+          </div>
+        </div>
+        <div class="pdf-viewer" id="pdfViewer"></div>
+      `;
+      modalBody.innerHTML = '';
+      modalBody.appendChild(pdfContainer);
+
+      const pdf = pdfjsLib.getDocument(pdfUrl);
+      pdf.promise.then((pdfDoc) => {
+        window.pdfDoc = pdfDoc; window.currentPage = 1; window.scale = 1.5;
+        document.getElementById('pageCount').textContent = '/ ' + pdfDoc.numPages;
+        document.getElementById('pageInput').max = pdfDoc.numPages;
+
+        document.getElementById('prevPageBtn').onclick = () => { if(window.currentPage > 1) { window.currentPage--; updatePage(); } };
+        document.getElementById('nextPageBtn').onclick = () => { if(window.currentPage < pdfDoc.numPages) { window.currentPage++; updatePage(); } };
+        document.getElementById('pageInput').onchange = (e) => {
+          let p = parseInt(e.target.value) || 1;
+          if(p > pdfDoc.numPages) p = pdfDoc.numPages; if(p < 1) p = 1;
+          window.currentPage = p; updatePage();
+        };
+        document.getElementById('zoomInBtn').onclick = () => { window.scale += 0.2; renderPDF(window.currentPage); };
+        document.getElementById('zoomOutBtn').onclick = () => { if(window.scale > 0.5) { window.scale -= 0.2; renderPDF(window.currentPage); } };
+
+        function updatePage() {
+          document.getElementById('pageInput').value = window.currentPage;
+          renderPDF(window.currentPage);
+        }
+
+        renderPDF(1);
+      }).catch(err => {
+        modalBody.innerHTML = '<div class="loading" style="color:#ff6b35;">Failed to load PDF</div>';
+      });
+      modalOverlay.classList.add('active');
+    };
+
+    function renderPDF(pageNum) {
+      const viewer = document.getElementById('pdfViewer');
+      viewer.innerHTML = '<div class="loading">Rendering page...</div>';
+      window.pdfDoc.getPage(pageNum).then(page => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const viewport = page.getViewport({ scale: window.scale });
+        canvas.width = viewport.width; canvas.height = viewport.height;
+        page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+          viewer.innerHTML = '';
+          const div = document.createElement('div'); div.className = 'pdf-page'; div.appendChild(canvas);
+          viewer.appendChild(div);
+        });
+      });
+    }
+
+    // Intercept PDF links to open in modal
+    document.addEventListener('click', function(e) {
+      const link = e.target.closest('a');
+      if (link && link.href && link.href.toLowerCase().endsWith('.pdf')) {
+        e.preventDefault();
+        window.openPDFModal(link.href, link.textContent || 'Document');
+      }
+    });
+  </script>
+</body>
+</html>
