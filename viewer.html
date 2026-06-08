@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Page Viewer — Milind Sahu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --border: #222222;
+      --border2: #2a2a2a;
+      --text: #e8e8e8;
+      --text2: #888888;
+      --text3: #555555;
+      --accent: #c8ff00;
+      --accent2: #ff6b35;
+      --accent3: #7eb8f7;
+      --mono: 'Space Mono', monospace;
+      --body: 'DM Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* MODAL OVERLAY */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    .modal-title {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modal-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .modal-btn {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 2px;
+    }
+
+    .modal-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(200, 255, 0, 0.06);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--bg);
+    }
+
+    .modal-pdf {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .pdf-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .pdf-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
+      flex-wrap: wrap;
+    }
+
+    .pdf-control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pdf-input {
+      background: var(--bg);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 0.4rem 0.6rem;
+      border-radius: 2px;
+      width: 60px;
+      text-align: center;
+    }
+
+    .pdf-viewer {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--bg);
+    }
+
+    .pdf-page {
+      display: flex;
+      justify-content: center;
+      margin: 1rem 0;
+      cursor: pointer;
+    }
+
+    .pdf-page canvas {
+      max-width: 100%;
+      border: 1px solid var(--border);
+    }
+
+    .pdf-page:hover canvas {
+      border-color: var(--accent);
+    }
+
+    /* LOADING STATE */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 2rem;
+      color: var(--text2);
+      font-size: 12px;
+    }
+
+    .loading::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+      font-family: var(--mono);
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-btn:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      .modal-content {
+        max-height: 95vh;
+        border-radius: 0;
+      }
+
+      .modal-header {
+        padding: 1rem;
+      }
+
+      .modal-title {
+        font-size: 12px;
+      }
+
+      .pdf-toolbar {
+        padding: 0.75rem;
+        gap: 0.5rem;
+      }
+
+      .modal-btn {
+        font-size: 10px;
+        padding: 0.4rem 0.6rem;
+      }
+
+      .pdf-input {
+        width: 50px;
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">Loading...</span>
+        <div class="modal-controls">
+          <button class="modal-btn" id="externalBtn" style="display: none;">Open External ↗</button>
+          <button class="close-btn" id="closeBtn">×</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <div class="loading">Loading content...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PDF.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // Set PDF worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.getElementById('closeBtn');
+    const externalBtn = document.getElementById('externalBtn');
+
+    // Close modal on overlay click or close button
+    closeBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      modalBody.innerHTML = '<div class="loading">Loading content...</div>';
+    }
+
+    // Open page in modal
+    window.openPageModal = function(pagePath, title = 'Page') {
+      if (pagePath.startsWith('http')) {
+        window.open(pagePath, '_blank');
+        return;
+      }
+
+      modalTitle.textContent = title;
+      modalBody.innerHTML = '<div class="loading">Loading page...</div>';
+      externalBtn.style.display = 'none';
+
+      // Create iframe
+      const iframe = document.createElement('iframe');
+      iframe.className = 'modal-iframe';
+      iframe.src = pagePath;
+
+      iframe.onload = () => {
+        modalBody.innerHTML = '';
+        modalBody.appendChild(iframe);
+      };
+
+      iframe.onerror = () => {
+        modalBody.innerHTML = '<div class="loading" style="padding: 3rem;">Failed to load page</div>';
+      };
+
+      modalOverlay.classList.add('active');
+    };
+
+    // Open PDF in modal
+    window.openPDFModal = function(pdfUrl, title = 'Document') {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = '<div class="loading">Loading PDF...</div>';
+      externalBtn.style.display = 'block';
+      externalBtn.textContent = 'Download PDF ↓';
+      externalBtn.onclick = () => {
+        const a = document.createElement('a');
+        a.href = pdfUrl;
+        a.download = title + '.pdf';
+        a.click();
+      };
+
+      const pdfContainer = document.createElement('div');
+      pdfContainer.className = 'pdf-container';
+      pdfContainer.innerHTML = `
+        <div class="pdf-toolbar">
+          <div class="pdf-control-group">
+            <button class="modal-btn" id="prevPageBtn">← Prev</button>
+            <input type="number" class="pdf-input" id="pageInput" value="1" min="1">
+            <span style="font-size: 11px; color: var(--text2);" id="pageCount">/ 1</span>
+            <button class="modal-btn" id="nextPageBtn">Next →</button>
+          </div>
+          <div class="pdf-control-group" style="margin-left: auto;">
+            <button class="modal-btn" id="zoomOutBtn">− Zoom</button>
+            <button class="modal-btn" id="zoomInBtn">+ Zoom</button>
+          </div>
+        </div>
+        <div class="pdf-viewer" id="pdfViewer"></div>
+      `;
+
+      modalBody.innerHTML = '';
+      modalBody.appendChild(pdfContainer);
+
+      // Load PDF
+      const pdf = pdfjsLib.getDocument(pdfUrl);
+      pdf.promise.then((pdfDoc) => {
+        window.pdfDoc = pdfDoc;
+        window.currentPage = 1;
+        window.scale = 1.5;
+
+        document.getElementById('pageCount').textContent = '/ ' + pdfDoc.numPages;
+        document.getElementById('pageInput').max = pdfDoc.numPages;
+
+        document.getElementById('prevPageBtn').addEventListener('click', () => {
+          if (window.currentPage > 1) {
+            window.currentPage--;
+            document.getElementById('pageInput').value = window.currentPage;
+            renderPDF(window.currentPage);
+          }
+        });
+
+        document.getElementById('nextPageBtn').addEventListener('click', () => {
+          if (window.currentPage < pdfDoc.numPages) {
+            window.currentPage++;
+            document.getElementById('pageInput').value = window.currentPage;
+            renderPDF(window.currentPage);
+          }
+        });
+
+        document.getElementById('pageInput').addEventListener('change', () => {
+          window.currentPage = parseInt(document.getElementById('pageInput').value) || 1;
+          if (window.currentPage > pdfDoc.numPages) window.currentPage = pdfDoc.numPages;
+          if (window.currentPage < 1) window.currentPage = 1;
+          document.getElementById('pageInput').value = window.currentPage;
+          renderPDF(window.currentPage);
+        });
+
+        document.getElementById('zoomInBtn').addEventListener('click', () => {
+          window.scale += 0.2;
+          renderPDF(window.currentPage);
+        });
+
+        document.getElementById('zoomOutBtn').addEventListener('click', () => {
+          if (window.scale > 0.5) {
+            window.scale -= 0.2;
+            renderPDF(window.currentPage);
+          }
+        });
+
+        renderPDF(1);
+      }).catch((error) => {
+        modalBody.innerHTML = '<div class="loading" style="padding: 3rem; color: var(--accent2);">Failed to load PDF</div>';
+        console.error('PDF load error:', error);
+      });
+
+      modalOverlay.classList.add('active');
+    };
+
+    function renderPDF(pageNum) {
+      const pdfDoc = window.pdfDoc;
+      const viewer = document.getElementById('pdfViewer');
+      viewer.innerHTML = '<div class="loading">Rendering page...</div>';
+
+      pdfDoc.getPage(pageNum).then((page) => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const scale = window.scale;
+        const viewport = page.getViewport({ scale });
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        page.render({
+          canvasContext: ctx,
+          viewport: viewport,
+        }).promise.then(() => {
+          viewer.innerHTML = '';
+          const pageDiv = document.createElement('div');
+          pageDiv.className = 'pdf-page';
+          pageDiv.appendChild(canvas);
+          viewer.appendChild(pageDiv);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

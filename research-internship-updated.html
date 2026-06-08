@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Research — Milind Sahu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #181818;
+      --border: #222222;
+      --border2: #2a2a2a;
+      --text: #e8e8e8;
+      --text2: #888888;
+      --text3: #555555;
+      --accent: #c8ff00;
+      --accent2: #ff6b35;
+      --accent3: #7eb8f7;
+      --mono: 'Space Mono', monospace;
+      --body: 'DM Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--body);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2em;
+      height: 52px;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-brand span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text3);
+      text-decoration: none;
+      padding: 0 0.75rem;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      border-left: 1px solid var(--border);
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+      background: rgba(200, 255, 0, 0.04);
+    }
+
+    .hero {
+      margin-top: 52px;
+      padding: 5rem 2rem 3rem;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: 'RESEARCH';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--mono);
+      font-size: clamp(60px, 15vw, 180px);
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.015);
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: var(--mono);
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 span {
+      color: var(--text3);
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--text2);
+    }
+
+    .hero-meta div {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .dot.orange {
+      background: var(--accent2);
+    }
+
+    .dot.blue {
+      background: var(--accent3);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 3rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .section-header .num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    .section-header h2 {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    .section-header .line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* CLICKABLE RESEARCH CARD */
+    .research-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      margin-bottom: 2px;
+      position: relative;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.25s, background 0.25s, transform 0.15s;
+    }
+
+    .research-card:hover {
+      background: var(--bg3);
+      transform: translateX(3px);
+    }
+
+    .research-card.green:hover {
+      border-color: rgba(200, 255, 0, 0.3);
+    }
+
+    .research-card.orange:hover {
+      border-color: rgba(255, 107, 53, 0.3);
+    }
+
+    .research-card.blue:hover {
+      border-color: rgba(126, 184, 247, 0.3);
+    }
+
+    .card-header {
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: stretch;
+    }
+
+    .card-index {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 1.4rem;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text3);
+      border-right: 1px solid var(--border);
+    }
+
+    .card-main {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .card-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    .badge.ongoing {
+      background: rgba(200, 255, 0, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(200, 255, 0, 0.3);
+    }
+
+    .badge.preprint {
+      background: rgba(255, 107, 53, 0.12);
+      color: var(--accent2);
+      border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+
+    .badge.accepted {
+      background: rgba(126, 184, 247, 0.12);
+      color: var(--accent3);
+      border: 1px solid rgba(126, 184, 247, 0.3);
+    }
+
+    .badge.proposal {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text2);
+      border: 1px solid var(--border2);
+    }
+
+    .card-year {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    .card-title {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.3;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+
+    .card-affiliation {
+      font-size: 11px;
+      color: var(--text2);
+      margin-bottom: 0.75rem;
+    }
+
+    .card-affiliation span {
+      color: var(--text3);
+    }
+
+    .card-snippet {
+      font-size: 11.5px;
+      color: var(--text3);
+      line-height: 1.65;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-arrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text3);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s;
+    }
+
+    .research-card:hover .card-arrow {
+      color: var(--accent);
+    }
+
+    .card-side {
+      padding: 1.25rem 1rem;
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-start;
+      gap: 0.4rem;
+      min-width: 120px;
+    }
+
+    .card-field {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--text3);
+      text-align: right;
+      text-transform: uppercase;
+    }
+
+    .papers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+    }
+
+    .paper-card {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 1.5rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.25s, background 0.25s, transform 0.15s;
+    }
+
+    .paper-card:hover {
+      border-color: rgba(255, 107, 53, 0.3);
+      background: var(--bg3);
+      transform: translateX(3px);
+    }
+
+    .paper-num {
+      font-family: var(--mono);
+      font-size: 9px;
+      color: var(--text3);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.75rem;
+    }
+
+    .paper-card h3 {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .paper-sub {
+      font-size: 11px;
+      color: var(--text2);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .paper-desc {
+      font-size: 11px;
+      color: var(--text3);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .paper-arrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text3);
+      transition: color 0.2s;
+    }
+
+    .paper-card:hover .paper-arrow {
+      color: var(--accent2);
+    }
+
+    .skills-section {
+      border: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .skills-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--text3);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .skill-group h4 {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .skill-group p {
+      font-size: 11px;
+      color: var(--text3);
+      line-height: 1.6;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .axl-footer {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text3);
+      letter-spacing: 0.1em;
+    }
+
+    .axl-footer strong {
+      color: var(--accent);
+    }
+
+    footer p {
+      font-size: 10px;
+      color: var(--text3);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* MODAL OVERLAY */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal-content {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    .modal-title {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modal-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .modal-btn {
+      background: none;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 2px;
+    }
+
+    .modal-btn:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(200, 255, 0, 0.06);
+    }
+
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--bg);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text2);
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s;
+      font-family: var(--mono);
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-btn:hover {
+      color: var(--accent);
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 2rem;
+      color: var(--text2);
+      font-size: 12px;
+    }
+
+    .loading::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 0.3;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .papers-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card-header {
+        grid-template-columns: 36px 1fr;
+      }
+
+      .card-side {
+        display: none;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .modal-content {
+        max-height: 95vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="nav-brand" href="https://itsmilindsahu.github.io/index.html"><span>ΣM.S</span> MILIND SAHU</a>
+    <ul class="nav-links">
+      <li><a href="https://itsmilindsahu.github.io/index.html">Home</a></li>
+      <li><a href="https://itsmilindsahu.github.io/index.html#about">About</a></li>
+      <li><a href="https://itsmilindsahu.github.io/teaching.html">Teaching</a></li>
+      <li><a href="https://itsmilindsahu.github.io/projects.html">Projects</a></li>
+      <li><a href="https://itsmilindsahu.github.io/axiom-labs.html">AXL</a></li>
+      <li><a href="#" class="active">Research</a></li>
+      <li><a href="https://itsmilindsahu.github.io/index.html#gallery">Gallery</a></li>
+      <li><a href="https://itsmilindsahu.github.io/index.html#certificates">Certs</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="container">
+      <div class="hero-label">Research Portfolio</div>
+      <h1>Active Research<span>_</span></h1>
+      <div class="hero-meta">
+        <div><span class="dot"></span> 3 Active Research Projects</div>
+        <div><span class="dot orange"></span> 2 Working Papers / Preprints</div>
+        <div><span class="dot blue"></span> IISER Tirupati · BS-MS Mathematics</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-header fade-in">
+      <span class="num">01</span>
+      <h2>Research Experience</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="research-card green fade-in" data-page="research/gp-regression.html" data-title="Gaussian Process Regression">
+      <div class="card-header">
+        <div class="card-index">R1</div>
+        <div class="card-main">
+          <div class="card-status-bar">
+            <span class="badge ongoing">Ongoing</span>
+            <span class="badge accepted">Paid Fellowship</span>
+            <span class="card-year">2026 – Present</span>
+          </div>
+          <div class="card-title">Gaussian Process Regression for Distribution-Valued Inputs</div>
+          <div class="card-affiliation">IIT Palakkad, Dept. of Statistics <span>· Dr. Tanmay Sahoo</span></div>
+          <div class="card-snippet">Replicating &amp; extending Bachoc et al. (2018) — GP regression over Wasserstein input geometries, MLE fitting, Kriging prediction, and monotonicity-constrained GP theory.</div>
+          <div class="card-arrow">Open full page →</div>
+        </div>
+        <div class="card-side">
+          <div class="card-field">Wasserstein Geometry</div>
+          <div class="card-field">Gaussian Processes</div>
+          <div class="card-field">Kriging / MLE</div>
+          <div class="card-field">Optimal Transport</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="research-card blue fade-in" data-page="research/wasserstein-diffusion.html" data-title="Wasserstein Diffusion">
+      <div class="card-header">
+        <div class="card-index">R2</div>
+        <div class="card-main">
+          <div class="card-status-bar">
+            <span class="badge accepted">Proposal Accepted → Paper</span>
+            <span class="card-year">Jan 2026 – May 2026</span>
+          </div>
+          <div class="card-title">Wasserstein Diffusion on the Annotation Simplex</div>
+          <div class="card-affiliation">IIIT Kottayam, CSE <span>· Dr. Priyadarshani</span></div>
+          <div class="card-snippet">Identified a geometric flaw in DDPM-based video summarization — annotations live on a probability simplex, not Euclidean space. Designed a three-module Wasserstein correction framework.</div>
+          <div class="card-arrow">Open full page →</div>
+        </div>
+        <div class="card-side">
+          <div class="card-field">Diffusion Models</div>
+          <div class="card-field">Probability Simplex</div>
+          <div class="card-field">Optimal Transport</div>
+          <div class="card-field">Video Summarization</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="research-card green fade-in" data-page="research/knowledge-hierarchies.html" data-title="Knowledge Hierarchies">
+      <div class="card-header">
+        <div class="card-index">R3</div>
+        <div class="card-main">
+          <div class="card-status-bar">
+            <span class="badge proposal">Proposal Selected</span>
+            <span class="badge ongoing">Confirmation Pending</span>
+            <span class="card-year">2026 – Ongoing</span>
+          </div>
+          <div class="card-title">Knowledge Hierarchies &amp; Neural Depth Optimization</div>
+          <div class="card-affiliation">IIM Ranchi <span>· Independent Research</span></div>
+          <div class="card-snippet">Formal equivalence between Garicano's (2000) organizational hierarchy model and Telgarsky's (2016) neural depth theorem — both reduce to the same KKT inequality under a unified Lagrangian.</div>
+          <div class="card-arrow">Open full page →</div>
+        </div>
+        <div class="card-side">
+          <div class="card-field">Org. Economics</div>
+          <div class="card-field">ML Theory</div>
+          <div class="card-field">KKT / Lagrangian</div>
+          <div class="card-field">Comparative Statics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-header fade-in" style="margin-top: 1rem">
+      <span class="num">02</span>
+      <h2>Working Papers &amp; Preprints</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="papers-grid">
+      <div class="paper-card fade-in" data-page="research/hetgnn-fr.html" data-title="Fraud Ring Detection via HetGNN">
+        <div class="paper-num">WP · 01 · MANUSCRIPT IN PREPARATION</div>
+        <h3>Fraud Ring Detection via Heterogeneous Graph Neural Networks (HETGNN-FR)</h3>
+        <div class="paper-sub"><span class="badge preprint">Preprint</span> Graph ML · FinTech</div>
+        <div class="paper-desc">Graph Transformer + Time2Vec on heterogeneous account/device/merchant/IP graphs. Mean AUC 0.863 (5 seeds), ring recall 1.00, scaling to AUC 0.987 on 6,000-account graphs.</div>
+        <div class="paper-arrow">Open full page →</div>
+      </div>
+
+      <div class="paper-card fade-in" data-page="research/rscr.html" data-title="Reliability-Aware Survival ML">
+        <div class="paper-num">WP · 02 · RESEARCH PROPOSAL</div>
+        <h3>Reliability-Aware Survival ML for Credit Default &amp; Prepayment Risk (RSCR)</h3>
+        <div class="paper-sub"><span class="badge proposal">Proposal</span> Survival Analysis · Credit Risk</div>
+        <div class="paper-desc">Competing-risks time-to-event framing of mortgage default. RRSM with cohort-level hazard-ordering penalties + mean residual lifetime estimation. Ablation on Freddie Mac dataset.</div>
+        <div class="paper-arrow">Open full page →</div>
+      </div>
+    </div>
+
+    <div class="section-header fade-in" style="margin-top: 1rem">
+      <span class="num">03</span>
+      <h2>Mathematical &amp; Technical Foundation</h2>
+      <div class="line"></div>
+    </div>
+
+    <div class="skills-section fade-in">
+      <div class="skills-label">Research Competencies</div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Pure Mathematics</h4>
+          <p>Real Analysis · Linear Algebra · Probability Theory · Convex Optimization · Stochastic Processes</p>
+        </div>
+        <div class="skill-group">
+          <h4>Advanced Theory</h4>
+          <p>Gaussian Process Theory · KKT / Lagrangian Duality · Monotone Comparative Statics · Optimal Transport / Wasserstein Geometry</p>
+        </div>
+        <div class="skill-group">
+          <h4>ML / Deep Learning</h4>
+          <p>GNNs (HGT, GraphSAGE, Graph Transformer) · Denoising Diffusion (DDPM) · Survival Analysis · LSTM · Statistical Learning</p>
+        </div>
+        <div class="skill-group">
+          <h4>Tools &amp; Languages</h4>
+          <p>Python · PyTorch · PyTorch Geometric · geomloss · scikit-learn · LaTeX · C++ · Docker</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="axl-footer">AXL · <strong>Axiom Labs</strong> · Theory → Algorithms → Intelligence</div>
+    <p>© 2025 Milind Sahu · IISER Tirupati</p>
+  </footer>
+
+  <!-- MODAL SYSTEM -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">Loading...</span>
+        <div class="modal-controls">
+          <button class="modal-btn" id="externalBtn" style="display: none;">Open External ↗</button>
+          <button class="close-btn" id="closeBtn">×</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <div class="loading">Loading content...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    const closeBtn = document.getElementById('closeBtn');
+    const externalBtn = document.getElementById('externalBtn');
+
+    // Close modal
+    closeBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    function closeModal() {
+      modalOverlay.classList.remove('active');
+      modalBody.innerHTML = '<div class="loading">Loading content...</div>';
+    }
+
+    // Open page in modal
+    function openPageModal(pagePath, title) {
+      // Check if it's a GitHub link
+      if (pagePath.startsWith('http') && pagePath.includes('github')) {
+        window.open(pagePath, '_blank');
+        return;
+      }
+
+      modalTitle.textContent = title || 'Page';
+      modalBody.innerHTML = '<div class="loading">Loading page...</div>';
+      externalBtn.style.display = 'none';
+
+      const iframe = document.createElement('iframe');
+      iframe.className = 'modal-iframe';
+      iframe.src = pagePath;
+
+      iframe.onload = () => {
+        modalBody.innerHTML = '';
+        modalBody.appendChild(iframe);
+      };
+
+      iframe.onerror = () => {
+        modalBody.innerHTML = '<div class="loading" style="padding: 3rem;">Failed to load page</div>';
+      };
+
+      modalOverlay.classList.add('active');
+    }
+
+    // Card click handlers
+    document.querySelectorAll('[data-page]').forEach((card) => {
+      card.addEventListener('click', (e) => {
+        e.preventDefault();
+        const page = card.getAttribute('data-page');
+        const title = card.getAttribute('data-title') || 'Page';
+        openPageModal(page, title);
+      });
+    });
+
+    // Intersection Observer for fade-in
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-in').forEach((el) => obs.observe(el));
+  </script>
+</body>
+</html>
