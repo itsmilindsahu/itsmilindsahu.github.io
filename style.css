@@ -14,8 +14,70 @@ a{color:inherit;text-decoration:none;}
 img{display:block;max-width:100%;}
 ul{list-style:none;}
 
-.cursor{position:fixed;width:10px;height:10px;background:var(--black);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
-.cursor-ring{position:fixed;width:34px;height:34px;border:1.5px solid var(--black);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .12s ease;}
+.cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: transform 0.15s ease, background-color 0.2s;
+}
+.cursor-ring {
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: transform 0.08s ease-out, width 0.2s ease, height 0.2s ease, border-color 0.2s, background-color 0.2s;
+}
+.cursor.cursor-hover {
+  transform: translate(-50%, -50%) scale(1.5);
+  background-color: var(--accent);
+  mix-blend-mode: normal;
+}
+.cursor-ring.cursor-hover {
+  width: 44px;
+  height: 44px;
+  border-color: var(--accent);
+  background-color: rgba(26, 86, 219, 0.1);
+  mix-blend-mode: normal;
+}
+.cursor.cursor-click {
+  transform: translate(-50%, -50%) scale(0.6);
+}
+.cursor-ring.cursor-click {
+  width: 18px;
+  height: 18px;
+}
+.cursor-trail {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9996;
+  transform: translate(-50%, -50%);
+  animation: cursor-trail-fade 0.4s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+}
+@keyframes cursor-trail-fade {
+  0% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+}
 
 nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:rgba(245,244,240,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--light-grey);z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 48px;}
 .nav-logo{display:flex;align-items:center;gap:12px;}
