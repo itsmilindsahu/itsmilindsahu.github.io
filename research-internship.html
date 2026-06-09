@@ -871,7 +871,7 @@
         <div class="paper-sub"><span class="badge preprint">Preprint</span> Graph ML · FinTech</div>
         <div class="paper-desc">Graph Transformer + Time2Vec on heterogeneous account/device/merchant/IP graphs. Mean AUC 0.863 (5 seeds), ring recall 1.00, scaling to AUC 0.987 on 6,000-account graphs.</div>
         <div class="paper-actions">
-          <button class="paper-action" onclick="openPageModal('research/hetgnn-fr.html', 'HETGNN-FR')">📄 Details</button>
+          <button class="paper-action" onclick="window.location.href='research/hetgnn-fr.html'">📄 Details</button>
           <button class="paper-action" onclick="openPDFModal('research/hetgnn-fr.pdf', 'HETGNN-FR Preprint')">📋 PDF</button>
           <button class="paper-action" onclick="window.open('https://github.com/itsmilindsahu/hetgnn-fr', '_blank')">GitHub ↗</button>
         </div>
@@ -883,7 +883,7 @@
         <div class="paper-sub"><span class="badge proposal">Proposal</span> Survival Analysis · Credit Risk</div>
         <div class="paper-desc">Competing-risks time-to-event framing of mortgage default. RRSM with cohort-level hazard-ordering penalties + mean residual lifetime estimation. Ablation on Freddie Mac dataset.</div>
         <div class="paper-actions">
-          <button class="paper-action" onclick="openPageModal('research/rscr.html', 'RSCR')">📄 Details</button>
+          <button class="paper-action" onclick="window.location.href='research/rscr.html'">📄 Details</button>
           <button class="paper-action" onclick="openPDFModal('research/rscr-proposal.pdf', 'RSCR Proposal')">📋 PDF</button>
           <button class="paper-action" onclick="window.open('https://github.com/itsmilindsahu/rscr', '_blank')">GitHub ↗</button>
         </div>
@@ -1103,13 +1103,11 @@
       modalOverlay.classList.add('active');
     }
 
-    // Auto-wire data-page cards
+    // Auto-wire data-page cards → full-page navigation
     document.querySelectorAll('[data-page]').forEach((el) => {
+      el.style.cursor = 'pointer';
       el.addEventListener('click', () => {
-        openPageModal(
-          el.getAttribute('data-page'),
-          el.getAttribute('data-title') || 'Page'
-        );
+        window.location.href = el.getAttribute('data-page');
       });
     });
 

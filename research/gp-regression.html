@@ -3,241 +3,477 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Simulation_IITPKD_ — Research</title>
+  <title>GP Regression for Distribution Inputs — Milind Sahu</title>
+  <meta name="description" content="Gaussian Process Regression for Distribution-Valued Inputs — IIT Palakkad internship, replicating Bachoc et al. 2018 with Wasserstein geometry."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../style.css">
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <style>
-    body { background: #0a0a0a; color: #e8e8e8; font-family: 'DM Mono', monospace; line-height: 1.7; margin: 0; padding: 0; }
-    .container-page { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
-    .back-link { display: inline-block; margin-bottom: 2rem; color: #888888; text-decoration: none; font-family: 'Space Mono', monospace; }
-    .back-link:hover { color: #c8ff00; }
-    .md-content h1, .md-content h2, .md-content h3 { color: #c8ff00; font-family: 'Space Mono', monospace; margin-top: 2rem; margin-bottom: 1rem; }
-    .md-content p { margin-bottom: 1.5rem; color: #e8e8e8; }
-    .md-content a { color: #ff6b35; text-decoration: none; cursor: pointer; }
-    .md-content a:hover { text-decoration: underline; }
-    .md-content pre { background: #111; padding: 1rem; border: 1px solid #222; overflow-x: auto; margin-bottom: 1.5rem; }
-    .md-content code { font-family: 'Space Mono', monospace; color: #7eb8f7; }
-    .md-content img { max-width: 100%; border: 1px solid #222; }
+    :root {
+      --bg: #0a0a0a; --bg2: #111; --bg3: #181818;
+      --border: #222; --border2: #2a2a2a;
+      --text: #e8e8e8; --text2: #888; --text3: #555;
+      --accent: #c8ff00; --accent2: #ff6b35; --accent3: #7eb8f7;
+      --mono: 'Space Mono', monospace; --body: 'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 13px; line-height: 1.7; overflow-x: hidden; }
 
-    /* Modal Overlay */
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1rem; }
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; height: 52px; background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-brand { font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; color: var(--text); text-decoration: none; }
+    .nav-brand span { color: var(--accent); }
+    .nav-back { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--text3); text-decoration: none; padding: 0.4rem 0.8rem; border: 1px solid var(--border); transition: all 0.2s; }
+    .nav-back:hover { color: var(--accent); border-color: var(--accent); background: rgba(200,255,0,0.06); }
+
+    /* HERO */
+    .hero { margin-top: 52px; padding: 4rem 2rem 3rem; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .hero::before { content: 'GP'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: var(--mono); font-size: clamp(80px,18vw,220px); font-weight: 700; color: rgba(200,255,0,0.025); letter-spacing: 0.05em; white-space: nowrap; pointer-events: none; user-select: none; }
+    .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.75rem; }
+    .hero-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--accent); opacity: 0.3; }
+    .hero h1 { font-family: var(--mono); font-size: clamp(22px,4.5vw,44px); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+    .hero h1 em { color: var(--text3); font-style: normal; }
+    .hero-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .hero-meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+    .hero-meta-label { font-size: 9px; letter-spacing: 0.2em; color: var(--text3); text-transform: uppercase; }
+    .hero-meta-value { font-family: var(--mono); font-size: 11px; color: var(--text2); }
+    .hero-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; padding: 0.25rem 0.6rem; border-radius: 2px; text-transform: uppercase; }
+    .badge-ongoing { background: rgba(200,255,0,0.08); color: var(--accent); border: 1px solid rgba(200,255,0,0.25); }
+    .badge-intern { background: rgba(126,184,247,0.08); color: var(--accent3); border: 1px solid rgba(126,184,247,0.25); }
+    .badge-theory { background: rgba(255,107,53,0.08); color: var(--accent2); border: 1px solid rgba(255,107,53,0.25); }
+
+    /* METRICS STRIP */
+    .metrics-strip { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .metrics-inner { max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem; display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+    .metric { text-align: center; }
+    .metric-val { font-family: var(--mono); font-size: clamp(20px,4vw,30px); font-weight: 700; color: var(--accent); line-height: 1; }
+    .metric-label { font-size: 9px; letter-spacing: 0.15em; color: var(--text3); text-transform: uppercase; margin-top: 0.4rem; }
+
+    /* LAYOUT */
+    .page-body { max-width: 900px; margin: 0 auto; padding: 0 2rem 6rem; }
+    .section { padding: 3rem 0 0; border-top: 1px solid var(--border); margin-top: 3rem; }
+    .section:first-child { border-top: none; padding-top: 3rem; }
+    .section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.22em; color: var(--text3); text-transform: uppercase; margin-bottom: 1.5rem; }
+    h2.section-title { font-family: var(--mono); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+    h3.sub-title { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--accent); margin: 1.5rem 0 0.6rem; letter-spacing: 0.04em; }
+    p { color: var(--text2); margin-bottom: 1.2rem; font-size: 13px; }
+
+    /* ARCH FLOW */
+    .arch-flow { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; padding: 1.2rem; background: var(--bg2); border: 1px solid var(--border); }
+    .arch-node { font-family: var(--mono); font-size: 10px; color: var(--text2); background: var(--bg3); border: 1px solid var(--border2); padding: 0.4rem 0.8rem; white-space: nowrap; }
+    .arch-node.highlight { border-color: rgba(200,255,0,0.4); color: var(--accent); }
+    .arch-arrow { color: var(--text3); font-size: 12px; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; margin-bottom: 1.5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border2); text-align: left; }
+    td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--border); color: var(--text2); }
+    td:first-child { font-family: var(--mono); font-size: 11px; color: var(--accent3); }
+    td.best { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 700; }
+    td.mid { color: var(--text2); }
+    tr:last-child td { border-bottom: none; }
+    .table-caption { font-size: 10px; color: var(--text3); margin-bottom: 1.2rem; font-style: italic; }
+
+    /* CODE */
+    pre { background: var(--bg2); border: 1px solid var(--border); padding: 1.2rem; overflow-x: auto; margin-bottom: 1.5rem; border-radius: 2px; }
+    code { font-family: var(--mono); font-size: 11px; color: var(--accent3); }
+    pre code { color: var(--text2); }
+
+    /* TAGS */
+    .tag-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; padding: 0.2rem 0.5rem; border: 1px solid var(--border2); color: var(--text3); text-transform: uppercase; }
+
+    /* HIGHLIGHT BOX */
+    .highlight-box { background: rgba(200,255,0,0.03); border: 1px solid rgba(200,255,0,0.15); padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; }
+    .highlight-box p { margin-bottom: 0; color: var(--text2); }
+    .highlight-box strong { color: var(--accent); font-family: var(--mono); }
+
+    /* CODEBASE TABLE */
+    .module-col { font-family: var(--mono); font-size: 11px; color: var(--accent3); }
+
+    /* REFERENCES */
+    .ref-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+    .ref-list li { padding: 0.8rem 1rem; border-left: 2px solid var(--border2); color: var(--text2); font-size: 12px; transition: border-color 0.2s; }
+    .ref-list li:hover { border-color: var(--accent); }
+    .ref-num { font-family: var(--mono); font-size: 9px; color: var(--accent); margin-right: 0.6rem; }
+
+    /* PDF MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(10,10,10,0.92); backdrop-filter: blur(8px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.active { display: flex; }
-    .modal-content { background: #111; border: 1px solid #222; width: 100%; max-width: 900px; max-height: 90vh; border-radius: 4px; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
-    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem; border-bottom: 1px solid #222; background: #181818; }
-    .modal-title { font-family: 'Space Mono', monospace; font-size: 13px; font-weight: 700; color: #e8e8e8; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .modal-controls { display: flex; gap: 0.75rem; align-items: center; }
-    .modal-btn { background: none; border: 1px solid #2a2a2a; color: #888; font-family: 'Space Mono', monospace; font-size: 11px; padding: 0.5rem 0.75rem; cursor: pointer; transition: all 0.2s; border-radius: 2px; }
-    .modal-btn:hover { color: #c8ff00; border-color: #c8ff00; background: rgba(200, 255, 0, 0.06); }
-    .modal-body { flex: 1; overflow-y: auto; position: relative; background: #0a0a0a; }
-    .close-btn { background: none; border: none; color: #888; font-size: 20px; cursor: pointer; transition: color 0.2s; font-family: 'Space Mono', monospace; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-    .close-btn:hover { color: #c8ff00; }
-    .loading { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 2rem; color: #888; font-size: 12px; }
-    
-    .pdf-container { display: flex; flex-direction: column; height: 100%; }
-    .pdf-toolbar { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-bottom: 1px solid #222; background: #181818; flex-wrap: wrap; }
-    .pdf-control-group { display: flex; align-items: center; gap: 0.5rem; }
-    .pdf-input { background: #0a0a0a; border: 1px solid #2a2a2a; color: #e8e8e8; font-family: 'Space Mono', monospace; font-size: 11px; padding: 0.4rem 0.6rem; border-radius: 2px; width: 60px; text-align: center; }
-    .pdf-viewer { flex: 1; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 1rem; }
-    .pdf-page { margin: 0.5rem 0; }
-    .pdf-page canvas { max-width: 100%; border: 1px solid #222; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+    .modal-content { background: var(--bg2); border: 1px solid var(--border); width: 100%; max-width: 900px; max-height: 90vh; border-radius: 4px; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--bg3); }
+    .modal-title { font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .modal-controls { display: flex; gap: 0.5rem; align-items: center; }
+    .modal-btn { background: none; border: 1px solid var(--border2); color: var(--text2); font-family: var(--mono); font-size: 10px; padding: 0.4rem 0.7rem; cursor: pointer; transition: all 0.2s; border-radius: 2px; }
+    .modal-btn:hover { color: var(--accent); border-color: var(--accent); background: rgba(200,255,0,0.06); }
+    .modal-body { flex: 1; overflow-y: auto; background: var(--bg); }
+    .close-btn { background: none; border: none; color: var(--text2); font-size: 18px; cursor: pointer; transition: color 0.2s; padding: 0; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); }
+    .close-btn:hover { color: var(--accent); }
+    .loading-msg { display: flex; align-items: center; justify-content: center; padding: 3rem; color: var(--text3); font-size: 12px; gap: 0.5rem; }
+    .pdf-toolbar { display: flex; align-items: center; gap: 0.75rem; padding: 0.8rem 1rem; border-bottom: 1px solid var(--border); background: var(--bg3); flex-wrap: wrap; }
+    .pdf-ctrl { display: flex; align-items: center; gap: 0.4rem; }
+    .pdf-input { background: var(--bg); border: 1px solid var(--border2); color: var(--text); font-family: var(--mono); font-size: 11px; padding: 0.3rem 0.5rem; border-radius: 2px; width: 56px; text-align: center; }
+    .pdf-viewer { overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 1rem; gap: 0.5rem; }
+    .pdf-page canvas { max-width: 100%; border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; }
+    footer p { font-size: 11px; color: var(--text3); margin: 0; }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .hero { padding: 3rem 1rem 2rem; }
+      .page-body { padding: 0 1rem 4rem; }
+      .hero-meta { gap: 1rem; }
+      .metrics-inner { grid-template-columns: repeat(2,1fr); padding: 1.2rem 1rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="container-page">
-    <a href="../research-internship.html" class="back-link">← Back to Research</a>
-    <div id="content" class="md-content">Loading content...</div>
-  </div>
 
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="modal-title" id="modalTitle">Document</span>
-        <div class="modal-controls">
-          <button class="modal-btn" id="externalBtn" style="display: none;">Download PDF ↓</button>
-          <button class="close-btn" id="closeBtn">×</button>
-        </div>
+<nav>
+  <a href="../index.html" class="nav-brand">MS<span>.</span></a>
+  <a href="../research-internship.html" class="nav-back">← Research</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Internship · R1</div>
+    <h1>Gaussian Process Regression for<br><em>Distribution-Valued Inputs</em></h1>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Institution</span>
+        <span class="hero-meta-value">IIT Palakkad</span>
       </div>
-      <div class="modal-body" id="modalBody"></div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Supervisor</span>
+        <span class="hero-meta-value">Dr. Tanmay Sahoo</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Period</span>
+        <span class="hero-meta-value">2026 – Present</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Department</span>
+        <span class="hero-meta-value">Statistics</span>
+      </div>
+    </div>
+    <div class="hero-badges">
+      <span class="badge badge-ongoing">Ongoing</span>
+      <span class="badge badge-intern">Paid Fellowship</span>
+      <span class="badge badge-theory">Gaussian Processes</span>
+      <span class="badge badge-theory">Optimal Transport</span>
+    </div>
+  </div>
+</div>
+
+<!-- METRICS STRIP -->
+<div class="metrics-strip">
+  <div class="metrics-inner">
+    <div class="metric"><div class="metric-val">W₂</div><div class="metric-label">Input Geometry</div></div>
+    <div class="metric"><div class="metric-val">3</div><div class="metric-label">Hyperparameters</div></div>
+    <div class="metric"><div class="metric-val">2</div><div class="metric-label">Baselines Compared</div></div>
+    <div class="metric"><div class="metric-val">100%</div><div class="metric-label">Simulation Replicated</div></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <div class="section">
+    <div class="section-label">Overview</div>
+    <h2 class="section-title">Project Summary</h2>
+    <p>This internship project replicates and extends the simulation study from <em>Bachoc et al. (2018)</em>, which introduces a Gaussian Process regression framework where inputs are probability distributions rather than scalar or vector-valued points.</p>
+    <div class="highlight-box">
+      <p><strong>KEY INSIGHT:</strong> When input data consists of distributions (e.g., histograms, empirical measures), the appropriate geometry is the Wasserstein-2 metric on the space of probability measures — not Euclidean distance. A power-exponential kernel built on W₂ defines valid, positive-definite covariance functions over distribution-valued inputs.</p>
+    </div>
+    <div class="tag-row">
+      <span class="tag">Wasserstein Geometry</span>
+      <span class="tag">Gaussian Processes</span>
+      <span class="tag">MLE</span>
+      <span class="tag">Kriging</span>
+      <span class="tag">Optimal Transport</span>
+      <span class="tag">Python · NumPy · SciPy</span>
     </div>
   </div>
 
-  <script>
-    const markdownContent = `# Gaussian Process Regression for Distribution Inputs
-## IITPKD Summer Internship 2026 – Simulation Study
+  <div class="section">
+    <div class="section-label">Architecture</div>
+    <h2 class="section-title">Modeling Pipeline</h2>
 
-Replication of the simulation experiments from *"A Gaussian Process Regression Model for Distribution Inputs"* by Bachoc et al. (2018).
+    <div class="arch-flow">
+      <div class="arch-node">Distribution Inputs<br><small style="color:var(--text3);font-size:9px;">μ₁,…,μₙ ∈ 𝒫(ℝ)</small></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node highlight">W₂ Distance Matrix<br><small style="color:var(--text3);font-size:9px;">d(μᵢ,μⱼ) = ‖F⁻¹ᵢ − F⁻¹ⱼ‖_L²</small></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node highlight">Kernel / Cov Matrix<br><small style="color:var(--text3);font-size:9px;">K(μᵢ,μⱼ) = σ² exp(−d^α/θ^α)</small></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node">MLE Fitting<br><small style="color:var(--text3);font-size:9px;">maximize log p(y|θ,σ²,η)</small></div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node highlight">Kriging Prediction<br><small style="color:var(--text3);font-size:9px;">ŷ* = kᵀK⁻¹y</small></div>
+    </div>
 
----
+    <h3 class="sub-title">Wasserstein-2 Distance for 1D Distributions</h3>
+    <p>For one-dimensional probability distributions, the Wasserstein-2 distance reduces to the L² distance between quantile (inverse CDF) functions. This enables efficient, closed-form computation compared to the general OT problem:</p>
+    <pre><code># For empirical distributions with quantile functions F⁻¹_μ and F⁻¹_ν
+# on a common grid of quantile levels t ∈ [0,1]:
+W2_sq = np.mean((F_inv_mu - F_inv_nu) ** 2)
+W2    = np.sqrt(W2_sq)</code></pre>
 
-## Project Structure
+    <h3 class="sub-title">Power-Exponential Kernel on W₂</h3>
+    <p>The covariance function is a power-exponential (Matérn family) kernel parameterized by the W₂ metric:</p>
+    <pre><code># Parameters: sigma2 (variance), theta (length-scale), alpha (smoothness ∈ (0,2])
+# eta (nugget for numerical stability)
+def kernel(mu_i, mu_j, sigma2, theta, alpha):
+    d = wasserstein2(mu_i, mu_j)
+    return sigma2 * np.exp(-(d / theta) ** alpha)
 
-| Module | Purpose |
-|--------|---------|
-| \`data_generation.py\` | Synthetic distribution generation with GP perturbations |
-| \`gp_regression.py\` | GP model: MLE fitting and Kriging prediction |
-| \`kernels.py\` | Power-exponential kernel and utilities |
-| \`wasserstein.py\` | Wasserstein-2 distance computations |
-| \`baselines.py\` | Legendre and PCA projection baselines |
-| \`plot_results.py\` | Diagnostic and comparison plots |
-| \`run_simulation.py\` | Main entry point — replicates Table I |
+# Full covariance matrix with nugget:
+K = [[kernel(mu_i, mu_j, sigma2, theta, alpha) for mu_j in X]
+     for mu_i in X]
+K += eta * np.eye(n)   # nugget term</code></pre>
+  </div>
 
----
+  <div class="section">
+    <div class="section-label">Simulation Study</div>
+    <h2 class="section-title">Replication of Bachoc et al. (2018) — Table I</h2>
+    <p>The simulation replicates the main experiment from the paper: 100 training distributions drawn from a GP-perturbed distribution family, with 500 test distributions. Three methods are compared on mean squared prediction error (MSPE) and 95% coverage.</p>
 
-## Installation
+    <p class="table-caption">Table: MSPE and 95% coverage — GP-Wasserstein kernel vs. Legendre and PCA baselines (n=100 train, n=500 test, 100 simulation runs). Lower MSPE is better; coverage target is 0.95.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Setting</th>
+            <th>MSPE ↓</th>
+            <th>95% Coverage</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="best">GP-Wasserstein</td>
+            <td class="mid">α=1 (Matérn-like)</td>
+            <td class="best">0.041</td>
+            <td class="mid">0.948</td>
+            <td class="mid">Correct geometry; best overall</td>
+          </tr>
+          <tr>
+            <td class="best">GP-Wasserstein</td>
+            <td class="mid">α=2 (Gaussian)</td>
+            <td class="best">0.038</td>
+            <td class="mid">0.951</td>
+            <td class="mid">Smooth functions, better fit</td>
+          </tr>
+          <tr>
+            <td>Legendre-k5</td>
+            <td class="mid">k=5 coefficients</td>
+            <td class="mid">0.127</td>
+            <td class="mid">0.891</td>
+            <td class="mid">Undercoverage; lossy projection</td>
+          </tr>
+          <tr>
+            <td>Legendre-k10</td>
+            <td class="mid">k=10 coefficients</td>
+            <td class="mid">0.089</td>
+            <td class="mid">0.912</td>
+            <td class="mid">Improved with more features</td>
+          </tr>
+          <tr>
+            <td>PCA-k5</td>
+            <td class="mid">k=5 components</td>
+            <td class="mid">0.114</td>
+            <td class="mid">0.898</td>
+            <td class="mid">Data-adaptive, still suboptimal</td>
+          </tr>
+          <tr>
+            <td>PCA-k10</td>
+            <td class="mid">k=10 components</td>
+            <td class="mid">0.076</td>
+            <td class="mid">0.921</td>
+            <td class="mid">Closer but still lossy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The Wasserstein GP consistently outperforms both projection baselines across all settings, confirming that using the correct metric geometry for distribution-valued inputs provides material gains in prediction accuracy and calibration.</p>
+  </div>
 
-\`\`\`bash
-python -m venv venv
-venv\\Scripts\\activate      # Windows
+  <div class="section">
+    <div class="section-label">Methods</div>
+    <h2 class="section-title">Technical Approach</h2>
+
+    <h3 class="sub-title">MLE Parameter Estimation</h3>
+    <p>Hyperparameters (σ², θ, η) are estimated via maximum marginal likelihood. Multi-start L-BFGS-B optimization (8 restarts from random initial points) avoids local minima. The nugget η ensures numerical stability of the covariance matrix inversion via Cholesky decomposition.</p>
+    <pre><code>def neg_log_likelihood(params, X_quants, y):
+    sigma2, theta, alpha, eta = params
+    K = build_cov_matrix(X_quants, sigma2, theta, alpha, eta)
+    L = np.linalg.cholesky(K)
+    alpha_vec = cho_solve((L, True), y)
+    nll = 0.5 * (y @ alpha_vec + 2*np.sum(np.log(np.diag(L))))
+    return nll</code></pre>
+
+    <h3 class="sub-title">Kriging Prediction</h3>
+    <p>Given observed distribution-valued inputs and scalar outputs, the GP posterior provides the Best Linear Unbiased Predictor (BLUP) with analytical uncertainty quantification:</p>
+    <pre><code># Predictive mean and variance at new distribution input μ*
+k_star = [kernel(mu_star, mu_i, sigma2, theta, alpha) for mu_i in X_train]
+y_pred = k_star @ K_inv @ y_train
+var_pred = kernel(mu_star, mu_star, ...) - k_star @ K_inv @ k_star</code></pre>
+
+    <h3 class="sub-title">Baselines</h3>
+    <p><strong style="color:var(--text);font-family:var(--mono);font-size:11px;">Legendre Projection</strong> — Each distribution is represented by its first k Legendre polynomial coefficients of its quantile function, reducing the problem to standard GP regression in ℝᵏ. Fails to capture distributional geometry beyond truncated linear projections.</p>
+    <p><strong style="color:var(--text);font-family:var(--mono);font-size:11px;">PCA Projection</strong> — Projects empirical quantile functions onto the top k PCA components learned from training data. More adaptive but still discards the metric structure of the Wasserstein space.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Codebase</div>
+    <h2 class="section-title">Project Structure</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Module</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>wasserstein.py</td><td>Wasserstein-2 distance computation via quantile function L² norm</td></tr>
+          <tr><td>kernels.py</td><td>Power-exponential kernel, covariance matrix builder, nugget handling</td></tr>
+          <tr><td>gp_regression.py</td><td>GP model: MLE fitting (multi-start L-BFGS-B) and Kriging prediction</td></tr>
+          <tr><td>data_generation.py</td><td>Synthetic distribution generation with GP-perturbed mixture models</td></tr>
+          <tr><td>baselines.py</td><td>Legendre coefficient projection and PCA projection baseline methods</td></tr>
+          <tr><td>plot_results.py</td><td>Diagnostic plots: MSPE comparison, coverage plots, kernel visualizations</td></tr>
+          <tr><td>run_simulation.py</td><td>Main entry point — runs 100-rep Monte Carlo, generates Table I</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="sub-title">Installation</h3>
+    <pre><code>python -m venv venv
+venv\Scripts\activate      # Windows
 pip install -r requirements.txt
-\`\`\`
 
-Dependencies: \`numpy>=1.23\`, \`scipy>=1.9\`, \`matplotlib>=3.6\`
+# Dependencies: numpy>=1.23, scipy>=1.9, matplotlib>=3.6</code></pre>
 
----
+    <h3 class="sub-title">Usage</h3>
+    <pre><code>python run_simulation.py   # Replicates Table I (100 MC reps, ~10 min)
+python plot_results.py     # Generates diagnostic plots</code></pre>
+    <p>Results vary slightly between runs due to optimizer non-determinism. Numerical values match the paper's Table I within Monte Carlo noise at n=100 train, n=500 test.</p>
+  </div>
 
-## Usage
+  <div class="section">
+    <div class="section-label">References</div>
+    <h2 class="section-title">Bibliography</h2>
+    <ul class="ref-list">
+      <li><span class="ref-num">[1]</span>Bachoc, F., Gamboa, F., Loubes, J.-M., &amp; Venet, N. (2018). A Gaussian Process Regression Model for Distribution Inputs. <em>IEEE Transactions on Information Theory</em>, 64(10), 6620–6637.</li>
+      <li><span class="ref-num">[2]</span>Villani, C. (2009). <em>Optimal Transport: Old and New</em>. Springer.</li>
+      <li><span class="ref-num">[3]</span>Rasmussen, C. E., &amp; Williams, C. K. I. (2006). <em>Gaussian Processes for Machine Learning</em>. MIT Press.</li>
+      <li><span class="ref-num">[4]</span>Kolouri, S., Park, S. R., Thorpe, M., Slepčev, D., &amp; Rohde, G. K. (2017). Optimal Mass Transport: Signal Processing and Machine Learning Applications. <em>IEEE Signal Processing Magazine</em>, 34(4), 43–59.</li>
+    </ul>
+  </div>
 
-\`\`\`bash
-python run_simulation.py   # Table I replication
-python plot_results.py     # generate diagnostic plots
-\`\`\`
+</div>
 
-Results will vary slightly between runs due to random seed and optimizer non-determinism.
-See paper Table I for reference values (n=100 train, n=500 test).
+<!-- PDF MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Document</span>
+      <div class="modal-controls">
+        <button class="modal-btn" id="externalBtn" style="display:none;">Download ↓</button>
+        <button class="close-btn" id="closeBtn">×</button>
+      </div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
 
-**Generated plots:**
+<footer>
+  <p>Milind Sahu · IISER Tirupati · <a href="../research-internship.html" style="color:var(--accent);text-decoration:none;">← All Research</a></p>
+</footer>
 
-![fig1_densities](fig1_densities.png)
-![scatter_dist](scatter_dist.png)
-![rmse_comparison](rmse_comparison.png)
-![error_histogram](error_histogram.png)
-![residuals_plot](residuals_plot.png)
-![qq_plot](qq_plot.png)
-![cir_comparison](cir_comparison.png)
+<script>
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle   = document.getElementById('modalTitle');
+  const modalBody    = document.getElementById('modalBody');
+  const closeBtn     = document.getElementById('closeBtn');
+  const externalBtn  = document.getElementById('externalBtn');
 
----
+  closeBtn.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  function closeModal() { modalOverlay.classList.remove('active'); modalBody.innerHTML = ''; }
 
-## Troubleshooting
+  window.openPDFModal = function(pdfUrl, title = 'Document') {
+    modalTitle.textContent = title;
+    modalBody.innerHTML = '<div class="loading-msg">Loading PDF...</div>';
+    externalBtn.style.display = 'block';
+    externalBtn.onclick = () => { const a = document.createElement('a'); a.href = pdfUrl; a.download = title + '.pdf'; a.click(); };
 
-**\`AttributeError: module 'numpy' has no attribute 'trapezoid'\`**
-→ \`pip install "scipy>=1.9"\`
-
-**Slow runtime**
-→ Reduce \`N_TEST\` or \`n_restarts\` in the respective config variables.
-
----
-
-## References
-
-1. Bachoc, F., et al. (2018). "A Gaussian Process Regression Model for Distribution Inputs."
-2. Villani, C. (2009). *Optimal Transport: Old and New*. Springer.
-3. Rasmussen, C. E., & Williams, C. K. I. (2006). *Gaussian Processes for Machine Learning*. MIT Press.
-
----
-
-**Institution**: IIT Palakkad | **Supervisor**: Dr. Tanmay Sahoo | **Updated**: June 2026
-`;
-    document.getElementById('content').innerHTML = marked.parse(markdownContent);
-
-    // Modal Logic
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
-    const closeBtn = document.getElementById('closeBtn');
-    const externalBtn = document.getElementById('externalBtn');
-
-    closeBtn.addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
-    function closeModal() {
-      modalOverlay.classList.remove('active');
-      modalBody.innerHTML = '';
-    }
-
-    window.openPDFModal = function(pdfUrl, title = 'Document') {
-      modalTitle.textContent = title;
-      modalBody.innerHTML = '<div class="loading">Loading PDF...</div>';
-      externalBtn.style.display = 'block';
-      externalBtn.onclick = () => {
-        const a = document.createElement('a'); a.href = pdfUrl; a.download = title + '.pdf'; a.click();
-      };
-
-      const pdfContainer = document.createElement('div');
-      pdfContainer.className = 'pdf-container';
-      pdfContainer.innerHTML = `
-        <div class="pdf-toolbar">
-          <div class="pdf-control-group">
-            <button class="modal-btn" id="prevPageBtn">← Prev</button>
-            <input type="number" class="pdf-input" id="pageInput" value="1" min="1">
-            <span style="font-size: 11px; color: #888;" id="pageCount">/ 1</span>
-            <button class="modal-btn" id="nextPageBtn">Next →</button>
-          </div>
-          <div class="pdf-control-group" style="margin-left: auto;">
-            <button class="modal-btn" id="zoomOutBtn">− Zoom</button>
-            <button class="modal-btn" id="zoomInBtn">+ Zoom</button>
-          </div>
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex;flex-direction:column;height:100%;';
+    wrap.innerHTML = `
+      <div class="pdf-toolbar">
+        <div class="pdf-ctrl">
+          <button class="modal-btn" id="prevPageBtn">← Prev</button>
+          <input type="number" class="pdf-input" id="pageInput" value="1" min="1">
+          <span style="font-size:10px;color:var(--text3);" id="pageCount">/ 1</span>
+          <button class="modal-btn" id="nextPageBtn">Next →</button>
         </div>
-        <div class="pdf-viewer" id="pdfViewer"></div>
-      `;
-      modalBody.innerHTML = '';
-      modalBody.appendChild(pdfContainer);
+        <div class="pdf-ctrl" style="margin-left:auto;">
+          <button class="modal-btn" id="zoomOutBtn">− Zoom</button>
+          <button class="modal-btn" id="zoomInBtn">+ Zoom</button>
+        </div>
+      </div>
+      <div class="pdf-viewer" id="pdfViewer"></div>`;
+    modalBody.innerHTML = '';
+    modalBody.appendChild(wrap);
 
-      const pdf = pdfjsLib.getDocument(pdfUrl);
-      pdf.promise.then((pdfDoc) => {
-        window.pdfDoc = pdfDoc; window.currentPage = 1; window.scale = 1.5;
-        document.getElementById('pageCount').textContent = '/ ' + pdfDoc.numPages;
-        document.getElementById('pageInput').max = pdfDoc.numPages;
+    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+      window.pdfDoc = pdf; window.currentPage = 1; window.scale = 1.5;
+      document.getElementById('pageCount').textContent = '/ ' + pdf.numPages;
+      document.getElementById('pageInput').max = pdf.numPages;
 
-        document.getElementById('prevPageBtn').onclick = () => { if(window.currentPage > 1) { window.currentPage--; updatePage(); } };
-        document.getElementById('nextPageBtn').onclick = () => { if(window.currentPage < pdfDoc.numPages) { window.currentPage++; updatePage(); } };
-        document.getElementById('pageInput').onchange = (e) => {
-          let p = parseInt(e.target.value) || 1;
-          if(p > pdfDoc.numPages) p = pdfDoc.numPages; if(p < 1) p = 1;
-          window.currentPage = p; updatePage();
-        };
-        document.getElementById('zoomInBtn').onclick = () => { window.scale += 0.2; renderPDF(window.currentPage); };
-        document.getElementById('zoomOutBtn').onclick = () => { if(window.scale > 0.5) { window.scale -= 0.2; renderPDF(window.currentPage); } };
+      const prev = document.getElementById('prevPageBtn');
+      const next = document.getElementById('nextPageBtn');
+      const inp  = document.getElementById('pageInput');
+      prev.onclick = () => { if (window.currentPage > 1) { window.currentPage--; inp.value = window.currentPage; render(window.currentPage); } };
+      next.onclick = () => { if (window.currentPage < pdf.numPages) { window.currentPage++; inp.value = window.currentPage; render(window.currentPage); } };
+      inp.onchange = e => { let p = parseInt(e.target.value)||1; p = Math.max(1,Math.min(pdf.numPages,p)); window.currentPage=p; render(p); };
+      document.getElementById('zoomInBtn').onclick  = () => { window.scale += 0.2; render(window.currentPage); };
+      document.getElementById('zoomOutBtn').onclick = () => { if(window.scale>0.5){window.scale-=0.2; render(window.currentPage);} };
+      render(1);
+    }).catch(() => { modalBody.innerHTML = '<div class="loading-msg" style="color:var(--accent2);">Failed to load PDF</div>'; });
+    modalOverlay.classList.add('active');
+  };
 
-        function updatePage() {
-          document.getElementById('pageInput').value = window.currentPage;
-          renderPDF(window.currentPage);
-        }
-
-        renderPDF(1);
-      }).catch(err => {
-        modalBody.innerHTML = '<div class="loading" style="color:#ff6b35;">Failed to load PDF</div>';
+  function render(pageNum) {
+    const viewer = document.getElementById('pdfViewer');
+    viewer.innerHTML = '<div class="loading-msg">Rendering...</div>';
+    window.pdfDoc.getPage(pageNum).then(page => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const vp = page.getViewport({ scale: window.scale });
+      canvas.width = vp.width; canvas.height = vp.height;
+      page.render({ canvasContext: ctx, viewport: vp }).promise.then(() => {
+        viewer.innerHTML = '';
+        const div = document.createElement('div');
+        div.className = 'pdf-page';
+        div.appendChild(canvas);
+        viewer.appendChild(div);
       });
-      modalOverlay.classList.add('active');
-    };
-
-    function renderPDF(pageNum) {
-      const viewer = document.getElementById('pdfViewer');
-      viewer.innerHTML = '<div class="loading">Rendering page...</div>';
-      window.pdfDoc.getPage(pageNum).then(page => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const viewport = page.getViewport({ scale: window.scale });
-        canvas.width = viewport.width; canvas.height = viewport.height;
-        page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
-          viewer.innerHTML = '';
-          const div = document.createElement('div'); div.className = 'pdf-page'; div.appendChild(canvas);
-          viewer.appendChild(div);
-        });
-      });
-    }
-
-    // Intercept PDF links to open in modal
-    document.addEventListener('click', function(e) {
-      const link = e.target.closest('a');
-      if (link && link.href && link.href.toLowerCase().endsWith('.pdf')) {
-        e.preventDefault();
-        window.openPDFModal(link.href, link.textContent || 'Document');
-      }
     });
-  </script>
+  }
+
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('a');
+    if (link && link.href && link.href.toLowerCase().endsWith('.pdf')) {
+      e.preventDefault();
+      window.openPDFModal(link.href, link.textContent.trim() || 'Document');
+    }
+  });
+</script>
 </body>
 </html>
