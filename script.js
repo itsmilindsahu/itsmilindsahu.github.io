@@ -418,7 +418,7 @@ var DOG_DEFS = {
       '  DDAAAAAAB     ',
       '   DAAAAAAA     ',
       '   DAAAAAAA     ',
-      '   DAAAAAAAB    ',
+      '   DAAAAAEAB    ',
       '   BAAAAAAAB    ',
       '    DA   DA     ',
       '    DA   DA     ',
@@ -493,6 +493,110 @@ var DOG_DEFS = {
     ],
   },
 };
+
+// --- Web Audio Synthesizer (Retro 8-bit Sound Effects) ---
+var audioCtx = null;
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+function playSound(type) {
+  try {
+    var ctx = getAudioContext();
+    if (ctx.state === 'suspended') {
+      ctx.resume();
+    }
+    var now = ctx.currentTime;
+
+    if (type === 'pat') {
+      // Sweet arpeggio/rising love tone
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(320, now);
+      osc.frequency.exponentialRampToValueAtTime(640, now + 0.16);
+      
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.16);
+    } 
+    else if (type === 'throw') {
+      // Throw chirp: descending pitch
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(550, now);
+      osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+      
+      gain.gain.setValueAtTime(0.08, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.1);
+    } 
+    else if (type === 'catch') {
+      // Success/Catch note arpeggio
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(523, now); // C5
+      osc.frequency.setValueAtTime(659, now + 0.06); // E5
+      osc.frequency.setValueAtTime(784, now + 0.12); // G5
+      
+      gain.gain.setValueAtTime(0.06, now);
+      gain.gain.exponentialRampToValueAtTime(0.005, now + 0.22);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.22);
+    } 
+    else if (type === 'bark') {
+      // Retro bark sound
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(170, now);
+      osc.frequency.exponentialRampToValueAtTime(360, now + 0.04);
+      osc.frequency.exponentialRampToValueAtTime(200, now + 0.12);
+      
+      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.12);
+    } 
+    else if (type === 'chomp') {
+      // Eating/crunch noise
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(130, now);
+      osc.frequency.linearRampToValueAtTime(30, now + 0.06);
+      
+      gain.gain.setValueAtTime(0.15, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.06);
+    }
+  } catch (e) {
+    console.warn("Audio Context blocked or not supported", e);
+  }
+}
 
 function drawDog(ctx, def, px, frame, happy, offsetX, offsetY, facingLeft) {
   var grid = def.grid;
@@ -704,6 +808,7 @@ function buildDogOverlay() {
       dogY = 46;
       dogState = 'idle';
       facingLeft = false;
+      playSound('bark');
     });
     pickerBtns[key] = btn;
     picker.appendChild(btn);
@@ -862,6 +967,12 @@ function buildDogOverlay() {
           bubbleText = '*chomp chomp*';
           bubbleTimer = 1500;
           updateBar(happiness + 1);
+
+          // Play chewing sounds
+          playSound('chomp');
+          setTimeout(function() { playSound('chomp'); }, 150);
+          setTimeout(function() { playSound('chomp'); }, 300);
+          setTimeout(function() { playSound('chomp'); }, 450);
         }
       }
     }
@@ -910,6 +1021,7 @@ function buildDogOverlay() {
         happyTimer = 1000;
         updateBar(happiness + 2);
         spawnHeart();
+        playSound('catch');
       }
     }
 
@@ -982,6 +1094,9 @@ function buildDogOverlay() {
     bubbleTimer = 1500;
     updateBar(happiness + 1);
     spawnHeart();
+
+    playSound('pat');
+    setTimeout(function() { playSound('bark'); }, 80);
     
     // Quick pop scale animation
     stageCv.style.transition = 'transform 0.08s';
@@ -997,6 +1112,7 @@ function buildDogOverlay() {
     foodState = 'dropped';
     bubbleText = 'Treat! \u2665';
     bubbleTimer = 1200;
+    playSound('throw');
   });
 
   playBtn.addEventListener('click', function() {
@@ -1014,6 +1130,7 @@ function buildDogOverlay() {
     toyState = 'thrown';
     bubbleText = 'Ball!';
     bubbleTimer = 1200;
+    playSound('throw');
   });
 
   function spawnConfetti() {
@@ -1035,6 +1152,8 @@ function buildDogOverlay() {
   function onComplete() {
     completeMsg.classList.add('show');
     spawnConfetti();
+    playSound('catch');
+    setTimeout(function() { playSound('catch'); }, 150);
     setTimeout(function() { dismissOverlay(); }, 2000);
   }
 
@@ -1098,6 +1217,16 @@ function launchPersistentDog(dogKey) {
   // Intercept taps (Mobile)
   document.addEventListener('touchstart', function(e) {
     if (e.touches && e.touches[0]) {
+      // If tapping the dog itself, play bark sound
+      var rect = container.getBoundingClientRect();
+      var touch = e.touches[0];
+      if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+          touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+        playSound('bark');
+        bubbleText = 'Woof!';
+        bubbleTimer = 1200;
+      }
+      
       targetX = e.touches[0].clientX;
       lastMouseMoveT = Date.now();
     }
@@ -1108,6 +1237,16 @@ function launchPersistentDog(dogKey) {
     container.hideCloseTimer = setTimeout(function() {
       closeBtn.style.display = 'none';
     }, 3000);
+  });
+
+  // Intercept desktop clicks to bark
+  container.addEventListener('click', function(e) {
+    if (e.target !== closeBtn) {
+      playSound('bark');
+      bubbleText = 'Woof!';
+      bubbleTimer = 1200;
+      lastMouseMoveT = Date.now();
+    }
   });
 
   // Show close button on mouse hover
