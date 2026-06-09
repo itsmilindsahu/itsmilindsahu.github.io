@@ -530,6 +530,51 @@ function makeCanvas(w, h) {
 function buildDogOverlay() {
   if (document.getElementById('dog-intro-overlay')) return;
 
+  // Inject CSS if not already present
+  if (!document.getElementById('dog-system-css')) {
+    var s = document.createElement('style');
+    s.id = 'dog-system-css';
+    s.textContent = [
+      '#dog-intro-overlay{position:fixed;inset:0;z-index:10000;background:rgba(10,10,10,0.93);backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:center;animation:dogFadeIn 0.35s ease;}',
+      '#dog-intro-overlay.exiting{animation:dogFadeOut 0.7s ease forwards;}',
+      '@keyframes dogFadeIn{from{opacity:0;transform:scale(0.97)}to{opacity:1;transform:scale(1)}}',
+      '@keyframes dogFadeOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(0.95)}}',
+      '.dog-game-wrap{background:#111;border:1px solid #222;border-radius:6px;padding:2rem;width:min(420px,92vw);display:flex;flex-direction:column;align-items:center;gap:1rem;box-shadow:0 24px 80px rgba(0,0,0,0.6);}',
+      '.dog-intro-eyebrow{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.25em;color:#c8ff00;text-transform:uppercase;}',
+      '.dog-intro-title{font-family:"Space Mono",monospace;font-size:22px;font-weight:700;letter-spacing:0.06em;color:#e8e8e8;}',
+      '.dog-intro-sub{font-size:11px;color:#555;letter-spacing:0.05em;}',
+      '.dog-picker{display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;}',
+      '.dog-pick-btn{background:#181818;border:2px solid #2a2a2a;border-radius:4px;padding:0.6rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:0.4rem;transition:border-color 0.2s,background 0.2s;}',
+      '.dog-pick-btn:hover{border-color:#444;background:#222;}',
+      '.dog-pick-btn.selected{border-color:#c8ff00;background:rgba(200,255,0,0.06);}',
+      '.dog-pick-canvas{display:block;image-rendering:pixelated;}',
+      '.dog-pick-label{font-family:"Space Mono",monospace;font-size:8px;letter-spacing:0.15em;color:#888;text-transform:uppercase;}',
+      '.dog-pick-btn.selected .dog-pick-label{color:#c8ff00;}',
+      '.dog-game-stage{position:relative;width:100%;height:140px;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:4px;overflow:hidden;}',
+      '.dog-stage-canvas{position:absolute;image-rendering:pixelated;display:block;}',
+      '.dog-stage-hearts{position:absolute;inset:0;pointer-events:none;}',
+      '.heart-particle{position:absolute;color:#ff6b9d;pointer-events:none;animation:heartFloat 0.9s ease forwards;}',
+      '@keyframes heartFloat{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-42px) scale(0.6)}}',
+      '.dog-complete-msg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,10,0.88);opacity:0;pointer-events:none;transition:opacity 0.35s;}',
+      '.dog-complete-msg.show{opacity:1;}',
+      '.dog-complete-title{font-family:"Space Mono",monospace;font-size:16px;font-weight:700;color:#c8ff00;letter-spacing:0.12em;}',
+      '.dog-complete-sub{font-size:11px;color:#888;margin-top:0.3rem;}',
+      '.happiness-wrap{width:100%;}',
+      '.happiness-label{display:flex;justify-content:space-between;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:0.15em;color:#555;text-transform:uppercase;margin-bottom:0.4rem;}',
+      '#happy-pct{color:#c8ff00;}',
+      '.happiness-track{width:100%;height:4px;background:#1a1a1a;border-radius:2px;overflow:hidden;}',
+      '.happiness-fill{height:100%;background:linear-gradient(90deg,#c8ff00,#00ff88);border-radius:2px;width:0%;transition:width 0.3s ease;}',
+      '.dog-action-row{display:flex;gap:0.75rem;width:100%;}',
+      '.dog-pet-btn{flex:1;background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.4);color:#c8ff00;font-family:"Space Mono",monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;padding:0.75rem;border-radius:3px;cursor:pointer;transition:all 0.18s;}',
+      '.dog-pet-btn:hover{background:rgba(200,255,0,0.18);transform:scale(1.02);}',
+      '.dog-skip-btn{background:none;border:1px solid #2a2a2a;color:#555;font-family:"Space Mono",monospace;font-size:10px;letter-spacing:0.1em;padding:0.75rem 1rem;border-radius:3px;cursor:pointer;transition:all 0.18s;}',
+      '.dog-skip-btn:hover{color:#888;border-color:#444;}',
+      '.confetti-piece{position:fixed;z-index:10001;pointer-events:none;animation:confettiFall 1.8s ease forwards;}',
+      '@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(90px) rotate(400deg)}}'
+    ].join('');
+    document.head.appendChild(s);
+  }
+
   var PX_PICK = 5, PX_STAGE = 5, GRID = 16, GOAL = 10;
 
   var overlay = document.createElement('div');
@@ -768,7 +813,36 @@ function boot() {
   if (sessionStorage.getItem('dog-summoned')) {
     launchPersistentDog(localStorage.getItem('axl-dog') || 'corgi');
   }
+
+  // Auto-open the game overlay ONLY if they clicked the research tab/link to get here
+  if (sessionStorage.getItem('research-tab-clicked') === 'true') {
+    sessionStorage.removeItem('research-tab-clicked');
+    if (!sessionStorage.getItem('dog-summoned')) {
+      buildDogOverlay();
+    }
+  }
 }
+
+// Intercept Research link clicks to support automatic opening on navigation/click
+document.addEventListener('click', function(e) {
+  var link = e.target.closest('a');
+  if (link) {
+    var href = link.getAttribute('href') || '';
+    var text = link.textContent.trim().toLowerCase();
+    
+    if (text === 'research' || href.indexOf('research-internship') !== -1) {
+      if (window.location.pathname.indexOf('research-internship') !== -1) {
+        // If we are already on the research page, trigger the game directly
+        if (typeof window.triggerDogGame === 'function') {
+          window.triggerDogGame();
+        }
+      } else {
+        // If we are on another page, set a flag so it triggers automatically on load
+        sessionStorage.setItem('research-tab-clicked', 'true');
+      }
+    }
+  }
+});
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);

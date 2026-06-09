@@ -1093,16 +1093,19 @@
     });
 
     // Intersection observer for fade-in
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08 });
+    (function() {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
 
-    document.querySelectorAll('.fade-in').forEach((el) => obs.observe(el));
+      document.querySelectorAll('.fade-in').forEach((el) => obs.observe(el));
+    })();
   </script>
+  <script src="script.js"></script>
 </body>
 </html>

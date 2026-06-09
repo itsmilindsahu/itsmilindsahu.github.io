@@ -619,15 +619,19 @@
 
     .modal-body {
       flex: 1;
-      overflow-y: auto;
+      min-height: 0;
+      overflow: hidden;
       position: relative;
       background: var(--bg);
+      display: flex;
+      flex-direction: column;
     }
 
     .modal-iframe {
+      flex: 1;
       width: 100%;
-      height: 100%;
       border: none;
+      display: block;
     }
 
     .close-btn {
@@ -958,24 +962,41 @@
     }
 
     // Open page in modal
-    function openPageModal(pagePath, title = 'Page') {
+    function openPageModal(pagePath, title) {
+      title = title || 'Page';
       modalTitle.textContent = title;
-      modalBody.innerHTML = '<div class="loading">Loading page...</div>';
+      modalBody.innerHTML = '';
+      modalOverlay.classList.add('active');
 
+      // Loading indicator
+      const loading = document.createElement('div');
+      loading.className = 'loading';
+      loading.textContent = 'Loading page...';
+      modalBody.appendChild(loading);
+
+      // Append iframe to DOM FIRST so the load event actually fires
       const iframe = document.createElement('iframe');
       iframe.className = 'modal-iframe';
+      iframe.style.display = 'none';
+      modalBody.appendChild(iframe);
+
+      iframe.addEventListener('load', function() {
+        loading.remove();
+        iframe.style.display = '';
+      });
+
+      iframe.addEventListener('error', function() {
+        loading.remove();
+        const err = document.createElement('div');
+        err.className = 'loading';
+        err.style.padding = '3rem';
+        err.textContent = 'Failed to load page';
+        modalBody.appendChild(err);
+        iframe.remove();
+      });
+
+      // Set src AFTER appending to DOM
       iframe.src = pagePath;
-
-      iframe.onload = () => {
-        modalBody.innerHTML = '';
-        modalBody.appendChild(iframe);
-      };
-
-      iframe.onerror = () => {
-        modalBody.innerHTML = '<div class="loading" style="padding: 3rem;">Failed to load page</div>';
-      };
-
-      modalOverlay.classList.add('active');
     }
 
     // Open PDF in modal
@@ -1093,16 +1114,19 @@
     });
 
     // Intersection observer for fade-in
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08 });
+    (function() {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
 
-    document.querySelectorAll('.fade-in').forEach((el) => obs.observe(el));
+      document.querySelectorAll('.fade-in').forEach((el) => obs.observe(el));
+    })();
   </script>
+  <script src="script.js"></script>
 </body>
 </html>
