@@ -257,11 +257,77 @@
             white-space: nowrap;
         }
 
-        /* Trophy grid */
-        .trophy-grid {
+        /* Trophy Pyramid Layout */
+        .trophy-pyramid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            align-items: start;
+        }
+
+        /* Apex row: 1 card, centred, spanning 4/6 cols */
+        .trophy-pyramid .pyr-apex {
+            grid-column: 2 / span 4;
+        }
+
+        /* Mid row: 2 cards, each spanning 3/6 cols */
+        .trophy-pyramid .pyr-mid {
+            grid-column: span 3;
+        }
+
+        /* Base row: 3 cards, each spanning 2/6 cols */
+        .trophy-pyramid .pyr-base {
+            grid-column: span 2;
+        }
+
+        /* Apex card is visually bigger / more prominent */
+        .trophy-pyramid .pyr-apex .trophy-icon-wrap {
+            width: 90px;
+            height: 90px;
+        }
+
+        .trophy-pyramid .pyr-apex .trophy-svg {
+            width: 68px;
+            height: 68px;
+        }
+
+        .trophy-pyramid .pyr-apex .trophy-award {
+            font-size: 16px;
+        }
+
+        .trophy-pyramid .pyr-apex .trophy-event {
+            font-size: 12px;
+        }
+
+        /* Pyramid connector line (decorative) */
+        .trophy-pyramid .pyr-apex::after {
+            content: '';
+            position: absolute;
+            bottom: -9px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 8px;
+            background: linear-gradient(180deg, var(--tc), transparent);
+            opacity: .4;
+        }
+
+        @media(max-width: 900px) {
+            .trophy-pyramid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .trophy-pyramid .pyr-apex { grid-column: 1 / span 2; }
+            .trophy-pyramid .pyr-mid  { grid-column: span 1; }
+            .trophy-pyramid .pyr-base { grid-column: span 1; }
+        }
+
+        @media(max-width: 540px) {
+            .trophy-pyramid {
+                grid-template-columns: 1fr;
+            }
+            .trophy-pyramid .pyr-apex,
+            .trophy-pyramid .pyr-mid,
+            .trophy-pyramid .pyr-base { grid-column: span 1; }
         }
 
         /* Individual Trophy Card */
@@ -634,10 +700,10 @@
                     <span class="yr-count">9 Results</span>
                 </div>
 
-                <div class="trophy-grid fade-in">
+                <div class="trophy-pyramid fade-in">
 
-                    <!-- Gold: National Cloud Hackathon -->
-                    <div class="trophy-card tier-gold">
+                    <!-- APEX (row 1): Featured Gold trophy -->
+                    <div class="trophy-card tier-gold pyr-apex">
                         <div class="sparkle-wrap">
                             <span class="sp sp1"></span><span class="sp sp2"></span>
                             <span class="sp sp3"></span><span class="sp sp4"></span>
@@ -659,8 +725,8 @@
                         <div class="trophy-scale">1500+ Developers · May 2026</div>
                     </div>
 
-                    <!-- Gold: NILM NIT Meghalaya -->
-                    <div class="trophy-card tier-gold">
+                    <!-- ROW 2: 2 gold trophies (pyr-mid) -->
+                    <div class="trophy-card tier-gold pyr-mid">
                         <div class="sparkle-wrap">
                             <span class="sp sp1"></span><span class="sp sp2"></span>
                             <span class="sp sp3"></span><span class="sp sp4"></span>
@@ -682,8 +748,7 @@
                         <div class="trophy-scale">NIT Meghalaya</div>
                     </div>
 
-                    <!-- Gold: NILM INCI Challenge -->
-                    <div class="trophy-card tier-gold">
+                    <div class="trophy-card tier-gold pyr-mid">
                         <div class="sparkle-wrap">
                             <span class="sp sp1"></span><span class="sp sp2"></span>
                             <span class="sp sp3"></span><span class="sp sp4"></span>
@@ -705,8 +770,8 @@
                         <div class="trophy-scale">IIES 2026</div>
                     </div>
 
-                    <!-- Silver: TRACEWASTE -->
-                    <div class="trophy-card tier-silver">
+                    <!-- ROW 3: 3 cards (pyr-base) -->
+                    <div class="trophy-card tier-silver pyr-base">
                         <div class="trophy-icon-wrap">
                             <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
                                 <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".85"/>
@@ -723,8 +788,7 @@
                         <div class="trophy-scale">IIT Hyderabad · Elan &amp; nVision 2026</div>
                     </div>
 
-                    <!-- Ranked: Scalar Launchpad 4th -->
-                    <div class="trophy-card tier-ranked">
+                    <div class="trophy-card tier-ranked pyr-base">
                         <div class="trophy-icon-wrap">
                             <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
                                 <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
@@ -737,11 +801,10 @@
                         <div class="trophy-tier">🏅 4th Prize</div>
                         <div class="trophy-award">Scalar Launchpad</div>
                         <div class="trophy-event">4th Prize</div>
-                        <div class="trophy-scale">Scalar School of Technology · 500+ Teams</div>
+                        <div class="trophy-scale">Scalar · 500+ Teams</div>
                     </div>
 
-                    <!-- Ranked: Google Prompt War Top 50 -->
-                    <div class="trophy-card tier-ranked">
+                    <div class="trophy-card tier-ranked pyr-base">
                         <div class="trophy-icon-wrap">
                             <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
                                 <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
@@ -757,8 +820,8 @@
                         <div class="trophy-scale">Google, Bengaluru · 900+ Participants</div>
                     </div>
 
-                    <!-- Finalist: Fish Tank -->
-                    <div class="trophy-card tier-finalist">
+                    <!-- ROW 4 (base): 3 finalists -->
+                    <div class="trophy-card tier-finalist pyr-base">
                         <div class="trophy-icon-wrap">
                             <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
                                 <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".5"/>
@@ -770,12 +833,11 @@
                         </div>
                         <div class="trophy-tier">⭐ Finalist</div>
                         <div class="trophy-award">Fish Tank</div>
-                        <div class="trophy-event">Finalist — COMET'26 with TIDES</div>
+                        <div class="trophy-event">Finalist — COMET'26</div>
                         <div class="trophy-scale">IIT Roorkee · Apr 2026</div>
                     </div>
 
-                    <!-- Finalist: E-Summit Anantya'26 -->
-                    <div class="trophy-card tier-finalist">
+                    <div class="trophy-card tier-finalist pyr-base">
                         <div class="trophy-icon-wrap">
                             <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
                                 <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".5"/>
@@ -787,12 +849,11 @@
                         </div>
                         <div class="trophy-tier">⭐ Finalist</div>
                         <div class="trophy-award">E-Summit Anantya'26</div>
-                        <div class="trophy-event">Finalist — Business Model Competition</div>
+                        <div class="trophy-event">Finalist — Business Model</div>
                         <div class="trophy-scale">NIT Raipur · Apr 2026</div>
                     </div>
 
-                    <!-- Finalist: EcoCraft Policy -->
-                    <div class="trophy-card tier-finalist">
+                    <div class="trophy-card tier-finalist pyr-base">
                         <div class="trophy-icon-wrap">
                             <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
                                 <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".5"/>
@@ -810,68 +871,7 @@
 
                 </div>
 
-                <!-- ─── 2025 ─── -->
-                <div class="tr-year fade-in">
-                    <span class="yr-num" style="color:#e8e8e2">2025</span>
-                    <span class="yr-line" style="background:#222"></span>
-                    <span class="yr-count">3 Results</span>
-                </div>
 
-                <div class="trophy-grid fade-in">
-
-                    <!-- Bronze: NILM Energy Monitoring -->
-                    <div class="trophy-card tier-bronze">
-                        <div class="trophy-icon-wrap">
-                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
-                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".85"/>
-                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".7"/>
-                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".85"/>
-                                <circle cx="32" cy="22" r="5" fill="#fff" opacity=".18"/>
-                            </svg>
-                        </div>
-                        <div class="trophy-tier">🥉 Bronze · 3rd Prize</div>
-                        <div class="trophy-award">NILM Energy Monitoring</div>
-                        <div class="trophy-event">3rd Prize (national) — Entrepreneurship Summit</div>
-                        <div class="trophy-scale">IISERs · IISc · NISER · CEBS</div>
-                    </div>
-
-                    <!-- Ranked: EcoFusion Rank 5 -->
-                    <div class="trophy-card tier-ranked">
-                        <div class="trophy-icon-wrap">
-                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
-                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
-                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".6"/>
-                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".7"/>
-                            </svg>
-                        </div>
-                        <div class="trophy-tier">🏅 Rank 5</div>
-                        <div class="trophy-award">EcoFusion</div>
-                        <div class="trophy-event">Rank 5 — Hack Beyond Limits</div>
-                        <div class="trophy-scale">1000+ Participants · Solo</div>
-                    </div>
-
-                    <!-- Ranked: HEV Optimization Top 100 -->
-                    <div class="trophy-card tier-ranked">
-                        <div class="trophy-icon-wrap">
-                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
-                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
-                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
-                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".6"/>
-                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".7"/>
-                            </svg>
-                        </div>
-                        <div class="trophy-tier">📊 Top 100</div>
-                        <div class="trophy-award">HEV Optimization</div>
-                        <div class="trophy-event">Top 100 — CodeSynthesis National</div>
-                        <div class="trophy-scale">4000+ Teams</div>
-                    </div>
-
-                </div>
 
                 <!-- Summary bar -->
                 <div class="tr-summary fade-in">
