@@ -262,63 +262,66 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 16px;
-            align-items: start;
+            align-items: stretch;
+            max-width: 1040px;
+            margin: 0 auto;
         }
 
-        /* Apex row: 1 card, centred, spanning 4/6 cols */
+        /* Apex row: 1 card, centered (spans cols 3-4 out of 6) */
         .trophy-pyramid .pyr-apex {
-            grid-column: 2 / span 4;
+            grid-column: 3 / span 2;
         }
 
-        /* Mid row: 2 cards, each spanning 3/6 cols */
-        .trophy-pyramid .pyr-mid {
-            grid-column: span 3;
+        /* Mid row: 2 cards, centered (spans cols 2-3 and 4-5) */
+        .trophy-pyramid .pyr-mid:nth-child(2) {
+            grid-column: 2 / span 2;
+        }
+        .trophy-pyramid .pyr-mid:nth-child(3) {
+            grid-column: 4 / span 2;
         }
 
-        /* Base row: 3 cards, each spanning 2/6 cols */
+        /* Base row: 3 cards per row (auto-placement takes 2 cols each) */
         .trophy-pyramid .pyr-base {
             grid-column: span 2;
         }
 
-        /* Apex card is visually bigger / more prominent */
+        /* Apex card is visually slightly more prominent */
         .trophy-pyramid .pyr-apex .trophy-icon-wrap {
-            width: 90px;
-            height: 90px;
+            width: 84px;
+            height: 84px;
         }
 
         .trophy-pyramid .pyr-apex .trophy-svg {
-            width: 68px;
-            height: 68px;
+            width: 60px;
+            height: 60px;
         }
 
         .trophy-pyramid .pyr-apex .trophy-award {
             font-size: 16px;
         }
 
-        .trophy-pyramid .pyr-apex .trophy-event {
-            font-size: 12px;
-        }
-
-        /* Pyramid connector line (decorative) */
+        /* Decorative connector line from apex to mid row gap */
         .trophy-pyramid .pyr-apex::after {
             content: '';
             position: absolute;
-            bottom: -9px;
+            bottom: -16px;
             left: 50%;
             transform: translateX(-50%);
             width: 2px;
-            height: 8px;
+            height: 16px;
             background: linear-gradient(180deg, var(--tc), transparent);
             opacity: .4;
         }
 
+        /* Responsive Breakpoints */
         @media(max-width: 900px) {
             .trophy-pyramid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(4, 1fr);
             }
-            .trophy-pyramid .pyr-apex { grid-column: 1 / span 2; }
-            .trophy-pyramid .pyr-mid  { grid-column: span 1; }
-            .trophy-pyramid .pyr-base { grid-column: span 1; }
+            .trophy-pyramid .pyr-apex { grid-column: 2 / span 2; }
+            .trophy-pyramid .pyr-mid:nth-child(2) { grid-column: 1 / span 2; }
+            .trophy-pyramid .pyr-mid:nth-child(3) { grid-column: 3 / span 2; }
+            .trophy-pyramid .pyr-base { grid-column: span 2; }
         }
 
         @media(max-width: 540px) {
@@ -326,8 +329,11 @@
                 grid-template-columns: 1fr;
             }
             .trophy-pyramid .pyr-apex,
-            .trophy-pyramid .pyr-mid,
-            .trophy-pyramid .pyr-base { grid-column: span 1; }
+            .trophy-pyramid .pyr-mid:nth-child(2),
+            .trophy-pyramid .pyr-mid:nth-child(3),
+            .trophy-pyramid .pyr-base { 
+                grid-column: 1 / span 1; 
+            }
         }
 
         /* Individual Trophy Card */
