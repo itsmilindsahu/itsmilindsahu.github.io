@@ -1,287 +1,1076 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AXL — Axiom Labs</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
-  <style>
-    .axl-hero-full{min-height:100vh;background:var(--black);display:flex;align-items:center;position:relative;overflow:hidden;}
-    .axl-hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(26,86,219,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.07) 1px,transparent 1px);background-size:48px 48px;}
-    .axl-hero-glow{position:absolute;top:50%;left:50%;width:700px;height:700px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 65%);pointer-events:none;}
-    .axl-hero-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto;padding:0 48px;width:100%;}
-    .axl-big-name{font-family:var(--font-display);font-size:clamp(80px,14vw,160px);line-height:.85;color:var(--white);letter-spacing:4px;margin-bottom:12px;}
-    .axl-big-name span{color:var(--accent);}
-    .axl-full-name{font-size:16px;letter-spacing:8px;text-transform:uppercase;color:#777;margin-bottom:28px;}
-    .axl-big-tag{font-family:var(--font-display);font-size:26px;color:#444;letter-spacing:4px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:40px;}
-    .axl-big-tag .arr{color:var(--accent);}
-    .axl-pillars-dark{display:flex;flex-wrap:wrap;gap:8px;}
-    .axl-pill-dark{padding:7px 16px;border:1px solid #222;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#555;transition:all .2s;}
-    .axl-pill-dark:hover{border-color:var(--accent);color:var(--accent);}
-    nav.dark-nav{background:rgba(13,13,11,.96)!important;border-bottom-color:#1a1a18!important;}
-    nav.dark-nav .name-full{color:var(--white)!important;}
-    nav.dark-nav .nav-links a{color:#555!important;}
-    nav.dark-nav .nav-links a:hover,nav.dark-nav .nav-links a.active{color:var(--white)!important;}
-    nav.dark-nav .hamburger span{background:var(--white)!important;}
-    .mission-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--light-grey);}
-    .mission-card{background:var(--white);padding:40px 32px;transition:all .2s;position:relative;}
-    .mission-card::before{content:'';position:absolute;top:0;left:0;right:0;height:0;background:var(--accent);transition:height .2s;}
-    .mission-card:hover{background:var(--off-white);}
-    .mission-card:hover::before{height:3px;}
-    .mission-icon{font-family:var(--font-display);font-size:48px;color:var(--accent);margin-bottom:16px;}
-    .mission-title{font-size:15px;font-weight:700;margin-bottom:12px;}
-    .mission-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AXL — Axiom Labs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="axl-favicon.svg" type="image/svg+xml">
+    <style>
+        .axl-hero-full {
+            min-height: 100vh;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* Trophy Cabinet */
-    .tr-legend{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin:-24px 0 44px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid-grey);}
-    .tr-legend .lg-item{display:flex;align-items:center;gap:7px;}
-    .tr-legend .lg-swatch{width:16px;height:16px;flex-shrink:0;}
-    .tr-year{display:flex;align-items:baseline;gap:16px;margin:0 0 24px;}
-    .tr-year:not(:first-child){margin-top:60px;}
-    .tr-year .yr-num{font-family:var(--font-display);font-size:42px;line-height:1;color:var(--black);}
-    .tr-year .yr-line{flex:1;height:1px;background:var(--light-grey);}
-    .tr-year .yr-count{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mid-grey);white-space:nowrap;}
+        .axl-hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(26, 86, 219, .07) 1px, transparent 1px), linear-gradient(90deg, rgba(26, 86, 219, .07) 1px, transparent 1px);
+            background-size: 48px 48px;
+        }
 
-    .tr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:18px;}
-    .tr-card{background:var(--white);border:1px solid var(--light-grey);padding:26px 20px 22px;text-align:center;position:relative;overflow:hidden;transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s,border-color .28s;}
-    .tr-card:hover{transform:translateY(-6px);box-shadow:0 16px 32px rgba(13,13,11,.12);border-color:var(--tier-c);}
-    .tr-card.is-open{border-style:dashed;}
+        .axl-hero-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 700px;
+            height: 700px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(26, 86, 219, .12) 0%, transparent 65%);
+            pointer-events: none;
+        }
 
-    .tr-glow{position:absolute;top:-30%;left:50%;width:160px;height:160px;transform:translateX(-50%);background:radial-gradient(circle,var(--tier-c) 0%,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none;}
-    .tr-card.tier-gold .tr-glow{opacity:.18;}
-    .tr-card:hover .tr-glow{opacity:.32;}
+        .axl-hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: var(--max-w);
+            margin: 0 auto;
+            padding: 0 48px;
+            width: 100%;
+        }
 
-    .tr-visual{position:relative;width:64px;height:64px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
-    .tr-icon{width:44px;height:44px;color:var(--tier-c);filter:drop-shadow(0 3px 6px rgba(0,0,0,.12));transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
-    .tr-card:hover .tr-icon{transform:scale(1.12) rotate(-6deg);}
+        .axl-big-name {
+            font-family: var(--font-display);
+            font-size: clamp(80px, 14vw, 160px);
+            line-height: .85;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 12px;
+        }
 
-    .sparkle{position:absolute;color:var(--tier-c);font-size:11px;opacity:0;pointer-events:none;text-shadow:0 0 6px var(--tier-c);}
-    .tr-card.has-sparkle .sparkle{animation:sparkle-twinkle 2.6s ease-in-out infinite;}
-    .sp1{top:2px;left:6px;animation-delay:0s!important;}
-    .sp2{bottom:6px;right:2px;font-size:9px;animation-delay:.9s!important;}
-    .sp3{top:10px;right:10px;font-size:8px;animation-delay:1.7s!important;}
-    @keyframes sparkle-twinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0deg);}50%{opacity:1;transform:scale(1.15) rotate(25deg);}}
+        .axl-big-name span {
+            color: var(--accent);
+        }
 
-    .tr-rank{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--tier-c);font-weight:700;margin-bottom:8px;}
-    .tr-award{font-size:13.5px;font-weight:700;line-height:1.4;margin-bottom:6px;}
-    .tr-event{font-size:11px;color:var(--dark-grey);line-height:1.6;margin-bottom:8px;}
-    .tr-scale{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid-grey);}
+        .axl-full-name {
+            font-size: 16px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: #777;
+            margin-bottom: 28px;
+        }
 
-    .tr-summary{margin-top:44px;padding:22px 26px;background:var(--black);display:flex;gap:28px;flex-wrap:wrap;align-items:center;}
-    .tr-summary .ls-item{display:flex;align-items:baseline;gap:8px;}
-    .tr-summary .ls-num{font-family:var(--font-display);font-size:26px;color:var(--white);}
-    .tr-summary .ls-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#777;}
-    @media(max-width:640px){.axl-hero-inner{padding:0 20px;}.mission-grid{grid-template-columns:1fr;}.tr-legend{margin-top:0;}}
-  </style>
+        .axl-big-tag {
+            font-family: var(--font-display);
+            font-size: 26px;
+            color: #444;
+            letter-spacing: 4px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .axl-big-tag .arr {
+            color: var(--accent);
+        }
+
+        .axl-pillars-dark {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .axl-pill-dark {
+            padding: 7px 16px;
+            border: 1px solid #222;
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #555;
+            transition: all .2s;
+        }
+
+        .axl-pill-dark:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        nav.dark-nav {
+            background: rgba(13, 13, 11, .96) !important;
+            border-bottom-color: #1a1a18 !important;
+        }
+
+        nav.dark-nav .name-full {
+            color: var(--white) !important;
+        }
+
+        nav.dark-nav .nav-links a {
+            color: #555 !important;
+        }
+
+        nav.dark-nav .nav-links a:hover,
+        nav.dark-nav .nav-links a.active {
+            color: var(--white) !important;
+        }
+
+        nav.dark-nav .hamburger span {
+            background: var(--white) !important;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            background: var(--light-grey);
+        }
+
+        .mission-card {
+            background: var(--white);
+            padding: 40px 32px;
+            transition: all .2s;
+            position: relative;
+        }
+
+        .mission-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 0;
+            background: var(--accent);
+            transition: height .2s;
+        }
+
+        .mission-card:hover {
+            background: var(--off-white);
+        }
+
+        .mission-card:hover::before {
+            height: 3px;
+        }
+
+        .mission-icon {
+            font-family: var(--font-display);
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .mission-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .mission-desc {
+            font-size: 12px;
+            color: var(--dark-grey);
+            line-height: 1.85;
+        }
+
+        /* ═══════════════════════════════════════════
+           TROPHY CABINET — Premium Showcase
+           ═══════════════════════════════════════════ */
+
+        /* Shelf backdrop */
+        .trophy-cabinet {
+            background: linear-gradient(180deg, #0a0a08 0%, #111110 100%);
+            border-radius: 2px;
+            padding: 48px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trophy-cabinet::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(255,200,50,.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,200,50,.03) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        /* Legend */
+        .tr-legend {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: -24px 0 44px;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--mid-grey);
+        }
+
+        .tr-legend .lg-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .tr-legend .lg-swatch {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        /* Year dividers */
+        .tr-year {
+            display: flex;
+            align-items: baseline;
+            gap: 16px;
+            margin: 0 0 28px;
+        }
+
+        .tr-year:not(:first-child) {
+            margin-top: 64px;
+        }
+
+        .tr-year .yr-num {
+            font-family: var(--font-display);
+            font-size: 42px;
+            line-height: 1;
+            color: var(--black);
+        }
+
+        .tr-year .yr-line {
+            flex: 1;
+            height: 1px;
+            background: var(--light-grey);
+        }
+
+        .tr-year .yr-count {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--mid-grey);
+            white-space: nowrap;
+        }
+
+        /* Trophy grid */
+        .trophy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 20px;
+        }
+
+        /* Individual Trophy Card */
+        .trophy-card {
+            background: linear-gradient(160deg, #1a1a17 0%, #111110 100%);
+            border: 1px solid #252520;
+            border-radius: 4px;
+            padding: 28px 18px 22px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: default;
+            transition:
+                transform .32s cubic-bezier(.34,1.56,.64,1),
+                box-shadow .32s ease,
+                border-color .32s ease;
+        }
+
+        /* Tier color custom property */
+        .trophy-card { --tc: #ffc832; }
+        .trophy-card.tier-silver { --tc: #c0c0c0; }
+        .trophy-card.tier-bronze { --tc: #cd7f32; }
+        .trophy-card.tier-ranked { --tc: #6a6a60; }
+        .trophy-card.tier-finalist { --tc: #555550; }
+
+        /* Ambient top glow */
+        .trophy-card::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translateX(-50%);
+            background: radial-gradient(circle, var(--tc) 0%, transparent 70%);
+            opacity: .06;
+            pointer-events: none;
+            transition: opacity .3s;
+        }
+
+        .trophy-card:hover::before { opacity: .18; }
+
+        /* Bottom shelf line */
+        .trophy-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--tc), transparent);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .trophy-card:hover::after { opacity: 1; }
+
+        .trophy-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 24px 48px rgba(0,0,0,.5), 0 0 0 1px var(--tc)20;
+            border-color: color-mix(in srgb, var(--tc) 40%, transparent);
+        }
+
+        /* ── Trophy SVG icon ── */
+        .trophy-icon-wrap {
+            position: relative;
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trophy-svg {
+            width: 52px;
+            height: 52px;
+            filter:
+                drop-shadow(0 0 8px color-mix(in srgb, var(--tc) 60%, transparent))
+                drop-shadow(0 4px 8px rgba(0,0,0,.4));
+            transition: transform .35s cubic-bezier(.34,1.56,.64,1), filter .35s;
+            color: var(--tc);
+        }
+
+        .trophy-card:hover .trophy-svg {
+            transform: scale(1.15) rotate(-5deg);
+            filter:
+                drop-shadow(0 0 16px color-mix(in srgb, var(--tc) 80%, transparent))
+                drop-shadow(0 6px 12px rgba(0,0,0,.5));
+        }
+
+        /* ── Gold shimmer animation on the icon ── */
+        .trophy-card.tier-gold .trophy-svg {
+            animation: trophy-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes trophy-pulse {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(255,200,50,.6)) drop-shadow(0 4px 8px rgba(0,0,0,.4)); }
+            50%       { filter: drop-shadow(0 0 20px rgba(255,200,50,.9)) drop-shadow(0 0 40px rgba(255,180,0,.4)) drop-shadow(0 4px 8px rgba(0,0,0,.4)); }
+        }
+
+        /* ── Gold Sparkle particles ── */
+        .sparkle-wrap {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        .sp {
+            position: absolute;
+            display: none;
+            width: 6px;
+            height: 6px;
+        }
+
+        .trophy-card.tier-gold .sp { display: block; }
+
+        .sp::before {
+            content: '✦';
+            position: absolute;
+            color: #ffd700;
+            text-shadow: 0 0 8px #ffc832, 0 0 16px #ff9900;
+            font-size: inherit;
+            animation: sp-twinkle var(--dur, 2.8s) var(--del, 0s) ease-in-out infinite;
+            opacity: 0;
+        }
+
+        .sp1  { top: 4px;  left: 8px;  font-size: 10px; --dur:2.6s; --del:0s;   }
+        .sp2  { top: 12px; right: 6px; font-size: 8px;  --dur:3.2s; --del:.7s;  }
+        .sp3  { bottom:8px;left:14px;  font-size: 7px;  --dur:2.4s; --del:1.2s; }
+        .sp4  { bottom:4px;right:10px; font-size: 9px;  --dur:3.6s; --del:.4s;  }
+        .sp5  { top:40%;  left:2px;   font-size: 7px;  --dur:2.8s; --del:1.8s; }
+        .sp6  { top:30%;  right:4px;  font-size: 8px;  --dur:3.0s; --del:.9s;  }
+
+        @keyframes sp-twinkle {
+            0%,100% { opacity:0; transform: scale(.2) rotate(0deg); }
+            40%      { opacity:1; transform: scale(1.3) rotate(20deg); }
+            60%      { opacity:.8; transform: scale(1.1) rotate(30deg); }
+        }
+
+        /* Rising gold dust (pseudo-particles behind the icon) */
+        .trophy-card.tier-gold .trophy-icon-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 50%;
+            width: 80px; height: 80px;
+            transform: translateX(-50%);
+            background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255,200,50,.25) 0%, transparent 70%);
+            animation: dust-rise 2s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes dust-rise {
+            from { opacity:.3; transform:translateX(-50%) scaleY(.8); }
+            to   { opacity:.7; transform:translateX(-50%) scaleY(1.1); }
+        }
+
+        /* ── Card text ── */
+        .trophy-tier {
+            font-size: 8.5px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--tc);
+            font-weight: 700;
+            margin-bottom: 8px;
+            opacity: .85;
+        }
+
+        .trophy-award {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.45;
+            color: #e8e8e2;
+            margin-bottom: 6px;
+        }
+
+        .trophy-event {
+            font-size: 10.5px;
+            color: #555550;
+            line-height: 1.65;
+            margin-bottom: 10px;
+        }
+
+        .trophy-scale {
+            font-size: 9px;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: #3a3a35;
+        }
+
+        /* Finalist dashed border */
+        .trophy-card.tier-finalist {
+            border-style: dashed;
+            opacity: .75;
+        }
+
+        /* ── Summary bar ── */
+        .tr-summary {
+            margin-top: 56px;
+            padding: 24px 28px;
+            background: #060605;
+            border-top: 1px solid #1a1a17;
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .tr-summary .ls-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .tr-summary .ls-num {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--white);
+        }
+
+        .tr-summary .ls-label {
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #444;
+        }
+
+        @media(max-width:640px) {
+            .axl-hero-inner { padding: 0 20px; }
+            .mission-grid { grid-template-columns: 1fr; }
+            .trophy-grid { grid-template-columns: repeat(2,1fr); gap: 12px; }
+            .tr-legend { margin-top: 0; }
+        }
+    </style>
 </head>
+
 <body>
-<div class="cursor"></div><div class="cursor-ring"></div>
-<nav class="dark-nav">
-  <a href="index.html" class="nav-logo">
-    <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none"><rect width="30" height="32" fill="#0d0d0b"/><text x="15" y="19" font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white" text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace" font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text></svg></div>
-    <span class="name-full" style="color:white">MILIND <span>SAHU</span></span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="index.html#about">About</a></li>
-    <li><a href="projects.html">Projects</a></li>
-    <li><a href="axiom-labs.html" class="active">AXL</a></li>
-    <li><a href="teaching.html">Teaching</a></li>
-    <li><a href="research-internship.html">Research</a></li>
-    <li><a href="index.html#gallery">Gallery</a></li>
-  </ul>
-  <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-</nav>
-<main>
-<div class="axl-hero-full">
-  <div class="axl-hero-grid"></div>
-  <div class="axl-hero-glow"></div>
-  <div class="axl-hero-inner">
-    <div class="axl-big-name fade-in">AX<span>L</span></div>
-    <div class="axl-full-name fade-in stagger-1">— Axiom Labs</div>
-    <div class="axl-big-tag fade-in stagger-2"><span>Theory</span><span class="arr">→</span><span>Algorithms</span><span class="arr">→</span><span>Intelligence</span></div>
-    <div class="axl-pillars-dark fade-in stagger-3">
-      <span class="axl-pill-dark">Algorithms</span><span class="axl-pill-dark">Optimization</span>
-      <span class="axl-pill-dark">Machine Learning</span><span class="axl-pill-dark">Gaussian Processes</span>
-      <span class="axl-pill-dark">Graph Neural Networks</span><span class="axl-pill-dark">Energy Analytics</span>
-      <span class="axl-pill-dark">Policy Systems</span>
-    </div>
-  </div>
-</div>
-
-<section id="about">
-  <div class="container">
-    <p class="section-label"><span class="num">01</span> What is AXL</p>
-    <div class="about-layout">
-      <div class="about-text fade-in">
-        <p><strong>Axiom Labs (AXL)</strong> is an independent computational research identity — a one-person research collective operating at the intersection of pure mathematics, algorithms, and applied systems.</p>
-        <p>The name reflects a core principle: <strong>build from axioms</strong>. Every system should have a rigorous theoretical foundation before implementation. No shortcuts, no duct tape.</p>
-        <p>AXL is the identity under which I compete in national hackathons, develop independent research projects, and publish technical work. It allows me to maintain a <strong>coherent research identity</strong> across institutions, competitions, and collaborators.</p>
-        <p>Currently focused on: Gaussian Process theory and optimal transport, graph neural networks for fraud detection, survival modeling for credit risk, energy systems analytics, and machine learning with mathematical guarantees.</p>
-      </div>
-      <div class="about-right fade-in stagger-2">
-        <div class="stat-box"><div class="stat-num">5+</div><div class="stat-label">Projects Under AXL</div></div>
-        <div class="stat-box"><div class="stat-num">11</div><div class="stat-label">Awards &amp; Recognitions</div></div>
-        <div class="stat-box"><div class="stat-num">5K+</div><div class="stat-label">Competitors Beaten</div></div>
-        <div class="stat-box"><div class="stat-num" style="font-size:32px;color:var(--accent)">2025</div><div class="stat-label">Established</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section style="background:var(--off-white)">
-  <div class="container">
-    <p class="section-label"><span class="num">02</span> Research Pillars</p>
-    <div class="mission-grid">
-      <div class="mission-card fade-in"><div class="mission-icon">∑</div><div class="mission-title">Algorithms & Complexity</div><p class="mission-desc">Designing efficient algorithms with provable guarantees. Not just "it works" but "it works because..."</p></div>
-      <div class="mission-card fade-in stagger-1"><div class="mission-icon">min</div><div class="mission-title">Optimization Theory</div><p class="mission-desc">Convex and non-convex optimization for real-world systems — energy, infrastructure, logistics.</p></div>
-      <div class="mission-card fade-in stagger-2"><div class="mission-icon">∇θ</div><div class="mission-title">Machine Learning</div><p class="mission-desc">ML with mathematical foundations — not black-box models but systems you can reason about.</p></div>
-      <div class="mission-card fade-in stagger-3"><div class="mission-icon">ΔE</div><div class="mission-title">Energy Systems Analytics</div><p class="mission-desc">Computational tools for energy monitoring, disaggregation, and policy optimization.</p></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <p class="section-label"><span class="num">03</span> AXL Track Record</p>
-    <div class="ledger-legend fade-in">
-      <span class="lg-item"><span class="lg-swatch" style="background:#1a56db"></span>1st Prize</span>
-      <span class="lg-item"><span class="lg-swatch" style="background:#3d6fe0"></span>2nd Prize</span>
-      <span class="lg-item"><span class="lg-swatch" style="background:#6089e6"></span>3rd Prize</span>
-      <span class="lg-item"><span class="lg-swatch" style="background:#86a4ec"></span>4th Prize</span>
-      <span class="lg-item"><span class="lg-swatch" style="background:#3a3a36"></span>Ranked</span>
-      <span class="lg-item"><span class="lg-swatch" style="background:#9a9990;border:1px dashed #9a9990"></span>Finalist / In Progress</span>
-    </div>
-
-    <div class="ledger-year fade-in"><span class="yr-num">2026</span><span class="yr-line"></span><span class="yr-count">8 Results</span></div>
-    <div class="ledger-grid fade-in">
-      <div class="ledger-card" style="--tier:#1a56db"><div class="ledger-badge">I</div><div class="ledger-award">National Cloud Hackathon</div><div class="ledger-event">1st Prize — Idea Phase</div><div class="ledger-scale">1500+ Developers · May 2026</div></div>
-      <div class="ledger-card" style="--tier:#1a56db"><div class="ledger-badge">I</div><div class="ledger-award">NILM — NIT Meghalaya</div><div class="ledger-event">1st Prize — National Hackathon</div><div class="ledger-scale">NIT Meghalaya</div></div>
-      <div class="ledger-card" style="--tier:#1a56db"><div class="ledger-badge">I</div><div class="ledger-award">NILM — INCI Challenge</div><div class="ledger-event">1st Prize — Inter-IISER/IISc/NISER/CEBS</div><div class="ledger-scale">IIES 2026</div></div>
-      <div class="ledger-card" style="--tier:#3d6fe0"><div class="ledger-badge">II</div><div class="ledger-award">TRACEWASTE</div><div class="ledger-event">2nd Prize — Eco Champion Hackathon</div><div class="ledger-scale">IIT Hyderabad · Elan &amp; nVision 2026</div></div>
-      <div class="ledger-card" style="--tier:#86a4ec"><div class="ledger-badge">IV</div><div class="ledger-award">Scalar Launchpad</div><div class="ledger-event">4th Prize</div><div class="ledger-scale">Scalar School of Technology · 500+ Teams</div></div>
-      <div class="ledger-card" style="--tier:#3a3a36"><div class="ledger-badge">T50</div><div class="ledger-award">Google Prompt War</div><div class="ledger-event">Top 50</div><div class="ledger-scale">Google, Bengaluru · 900+ Participants</div></div>
-      <div class="ledger-card is-open" style="--tier:#9a9990"><div class="ledger-badge">FIN</div><div class="ledger-award">Fish Tank</div><div class="ledger-event">Finalist — COMET'26 with TIDES</div><div class="ledger-scale">IIT Roorkee · Apr 2026</div></div>
-      <div class="ledger-card is-open" style="--tier:#9a9990"><div class="ledger-badge">FIN</div><div class="ledger-award">E-Summit Anantya'26</div><div class="ledger-event">Finalist — Business Model Competition</div><div class="ledger-scale">NIT Raipur · Apr 2026</div></div>
-      <div class="ledger-card is-open" style="--tier:#9a9990"><div class="ledger-badge">R3</div><div class="ledger-award">EcoCraft Policy Challenge</div><div class="ledger-event">Round 3 — Policy Conclave '26</div><div class="ledger-scale">IIT Kanpur</div></div>
-    </div>
-
-    <div class="ledger-year fade-in"><span class="yr-num">2025</span><span class="yr-line"></span><span class="yr-count">3 Results</span></div>
-    <div class="ledger-grid fade-in">
-      <div class="ledger-card" style="--tier:#6089e6"><div class="ledger-badge">III</div><div class="ledger-award">NILM Energy Monitoring</div><div class="ledger-event">3rd Prize (national) — Entrepreneurship Summit</div><div class="ledger-scale">IISERs · IISc · NISER · CEBS</div></div>
-      <div class="ledger-card" style="--tier:#3a3a36"><div class="ledger-badge">R5</div><div class="ledger-award">EcoFusion</div><div class="ledger-event">Rank 5 — Hack Beyond Limits</div><div class="ledger-scale">1000+ Participants · Solo</div></div>
-      <div class="ledger-card" style="--tier:#3a3a36"><div class="ledger-badge">T100</div><div class="ledger-award">HEV Optimization</div><div class="ledger-event">Top 100 — CodeSynthesis National</div><div class="ledger-scale">4000+ Teams</div></div>
-    </div>
-
-    <div class="ledger-summary fade-in">
-      <div class="ls-item"><span class="ls-num">3</span><span class="ls-label">1st Prizes</span></div>
-      <div class="ls-item"><span class="ls-num">2</span><span class="ls-label">2nd / 3rd Prizes</span></div>
-      <div class="ls-item"><span class="ls-num">1</span><span class="ls-label">4th Prize</span></div>
-      <div class="ls-item"><span class="ls-num">3</span><span class="ls-label">Ranked Finishes</span></div>
-      <div class="ls-item"><span class="ls-num">2</span><span class="ls-label">Finalist Rounds</span></div>
-      <div class="ls-item"><span class="ls-num">11</span><span class="ls-label">Total</span></div>
-    </div>
-  </div>
-</section>
-
-<section id="projects" style="background:var(--white)">
-  <div class="container">
-    <p class="section-label" style="margin-bottom:40px;"><span class="num">04</span> AXL Projects</p>
-    <div class="projects-grid">
-      <article class="project-card">
-        <div class="project-img-wrap"><img src="nilm.jpg" alt="NILM" loading="lazy"><div class="project-img-overlay"></div><div class="project-img-badge">🥉 3rd Prize · Inter IISER Entrepreneurship Summit</div></div>
-        <div class="project-body">
-          <div class="project-category">Energy · ML · IoT</div>
-          <div class="project-title">NILM-Based Smart Energy Monitoring System</div>
-          <p class="project-desc">Non-Intrusive Load Monitoring framework for appliance-level energy disaggregation. Random Forest anomaly detection + LSTM load prediction. Smart plug with MQTT + FastAPI backend.</p>
-          <div class="method-tags"><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-ml">LSTM Networks</span><span class="mtag mtag-ml">Time-Series Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Anomaly Detection</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
+    <nav class="dark-nav">
+        <a href="index.html" class="nav-logo">
+            <div class="axl-badge"><svg viewBox="0 0 30 32" fill="none">
+                    <rect width="30" height="32" fill="#0d0d0b" /><text x="15" y="19"
+                        font-family="Space Mono, monospace" font-size="18" font-weight="700" fill="white"
+                        text-anchor="middle">Σ</text><text x="15" y="28" font-family="Space Mono, monospace"
+                        font-size="5.5" fill="#1a56db" text-anchor="middle" letter-spacing="1.5">M.S</text>
+                </svg></div>
+            <span class="name-full" style="color:white">MILIND <span>SAHU</span></span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="axiom-labs.html" class="active">AXL</a></li>
+            <li><a href="teaching.html">Teaching</a></li>
+            <li><a href="research-internship.html">Research</a></li>
+            <li><a href="index.html#gallery">Gallery</a></li>
+        </ul>
+        <button class="hamburger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </nav>
+    <main>
+        <div class="axl-hero-full">
+            <div class="axl-hero-grid"></div>
+            <div class="axl-hero-glow"></div>
+            <div class="axl-hero-inner">
+                <div class="axl-big-name fade-in">AX<span>L</span></div>
+                <div class="axl-full-name fade-in stagger-1">— Axiom Labs</div>
+                <div class="axl-big-tag fade-in stagger-2"><span>Theory</span><span
+                        class="arr">→</span><span>Algorithms</span><span class="arr">→</span><span>Intelligence</span>
+                </div>
+                <div class="axl-pillars-dark fade-in stagger-3">
+                    <span class="axl-pill-dark">Algorithms</span><span class="axl-pill-dark">Optimization</span>
+                    <span class="axl-pill-dark">Machine Learning</span><span class="axl-pill-dark">Gaussian
+                        Processes</span>
+                    <span class="axl-pill-dark">Graph Neural Networks</span><span class="axl-pill-dark">Energy
+                        Analytics</span>
+                    <span class="axl-pill-dark">Policy Systems</span>
+                </div>
+            </div>
         </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><img src="tracewaste.jpg" alt="TRACEWASTE" loading="lazy"><div class="project-img-overlay"></div><div class="project-img-badge">🥈 2nd Prize · IIT Hyderabad Eco Champion</div></div>
-        <div class="project-body">
-          <div class="project-category">Policy · Sustainability</div>
-          <div class="project-title">TRACEWASTE — Proof-Based Waste Traceability</div>
-          <p class="project-desc">Verification-first framework for post-collection waste accountability using QR-linked batch proofs, geotagging, and timestamped logs to close accountability gaps in waste management.</p>
-          <div class="method-tags"><span class="mtag mtag-policy">Systems Design</span><span class="mtag mtag-policy">Policy Analysis</span><span class="mtag mtag-math">Statistical Modeling</span><span class="mtag mtag-policy">Geo-Verification</span></div>
-          <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="project-link">LinkedIn →</a></div>
-        </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">EF</div><div class="sub">Optical Energy Monitor</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🏅 Rank 5 · Hack Beyond Limits — 1000+ Teams</div></div>
-        <div class="project-body">
-          <div class="project-category">Energy · Sensing · Solo</div>
-          <div class="project-title">EcoFusion — Optical Energy Monitoring System</div>
-          <p class="project-desc">Optical sensing-based system for appliance-level energy inference. Modeled consumption behavior using time-series patterns and cost analytics. Competed solo — Ranked 5th out of 1000+ participants.</p>
-          <div class="method-tags"><span class="mtag mtag-ml">Time-Series Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Signal Processing</span><span class="mtag mtag-ml">Anomaly Detection</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
-        </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">HEV</div><div class="sub">Hybrid EV Optimization</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🏆 Top 100 · CodeSynthesis — 4000+ Teams</div></div>
-        <div class="project-body">
-          <div class="project-category">Systems · Optimization · ML</div>
-          <div class="project-title">Hybrid Electric Vehicle Optimization</div>
-          <p class="project-desc">OBD-II telemetry pipelines for hybrid efficiency analysis. Rule-based hybrid mode switching strategies to maximize energy recovery and minimize fuel consumption.</p>
-          <div class="method-tags"><span class="mtag mtag-math">Optimization Theory</span><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-energy">Energy Systems</span><span class="mtag mtag-math">Linear Algebra</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">Repository →</a></div>
-        </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">SS</div><div class="sub">Solar X-ray Burst Detection</div></div><div class="project-img-overlay"></div><div class="project-img-badge">🔭 IIT Jammu Research Collaboration</div></div>
-        <div class="project-body">
-          <div class="project-category">ML · Signal Processing · Space Science</div>
-          <div class="project-title">Solar Sentinel — AI-Powered Solar X-ray Burst Detection</div>
-          <p class="project-desc">Real-time detection and classification of solar X-ray flares fusing ISRO XSM/Chandrayaan-2, ESA PROBA-2/LYRA, and NASA GOES XRS data. Rolling-minimum background estimation, Savitzky-Golay smoothing, Bayesian confidence scoring, and a calibrated 16-feature Random Forest classifier.</p>
-          <div class="method-tags"><span class="mtag mtag-math">Bayesian Inference</span><span class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-math">Signal Processing</span><span class="mtag mtag-energy">Space Weather</span></div>
-          <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank" class="project-link">GitHub →</a></div>
-        </div>
-      </article>
-      <article class="project-card">
-        <div class="project-img-wrap"><div class="project-img-placeholder"><div class="big-letter">EC</div><div class="sub">Policy Analysis</div></div><div class="project-img-overlay"></div><div class="project-img-badge">⭐ Round 3 · IIT Kanpur Policy Conclave 26</div></div>
-        <div class="project-body">
-          <div class="project-category">Policy · Sustainability</div>
-          <div class="project-title">EcoCraft Policy Challenge</div>
-          <p class="project-desc">Competed in the EcoCraft Policy Challenge at IIT Kanpur Policy Conclave 2026. Reached Round 3 with proposals at the intersection of environmental policy and computational analysis.</p>
-          <div class="method-tags"><span class="mtag mtag-policy">Policy Analysis</span><span class="mtag mtag-math">Statistical Inference</span><span class="mtag mtag-policy">Optimization</span><span class="mtag mtag-policy">Quantitative Systems</span></div>
-          <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="project-link">LinkedIn →</a></div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
 
-<section style="background:var(--black);text-align:center;padding:80px 0;">
-  <div class="container">
-    <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;margin-bottom:16px;">AXL — Axiom Labs</p>
-    <h2 style="font-family:var(--font-display);font-size:clamp(48px,7vw,88px);letter-spacing:4px;color:white;margin-bottom:12px;">THEORY FIRST<span style="color:var(--accent)">.</span></h2>
-    <p style="font-size:13px;color:#444;max-width:480px;margin:0 auto 32px;line-height:1.9;">Every system built under AXL starts from axioms, not assumptions.</p>
-    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-primary">GitHub →</a>
-      <a href="index.html" class="btn btn-ghost">Back to Home</a>
-    </div>
-  </div>
-</section>
-</main>
-<footer>
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none"><rect width="44" height="44" fill="#0d0d0b"/><path d="M4 36 L16 8 L28 36" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="square"/><line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5"/><line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/><line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5" stroke-linecap="square"/></svg><div class="logo-text">AX<span>L</span></div></div>
-        <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
-      </div>
-      <div class="footer-links">
-        <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link">GitHub</a>
-        <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link">LinkedIn</a>
-        <a href="https://www.instagram.com/its_milindsahu/" target="_blank" class="footer-link">Instagram</a>
-        <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link">Email</a>
-      </div>
-    </div>
-    <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span></div>
-  </div>
-</footer>
-<button class="theme-toggle" title="Toggle dark/light mode">◑</button>
-<script src="script.js"></script>
+        <section id="about">
+            <div class="container">
+                <p class="section-label"><span class="num">01</span> What is AXL</p>
+                <div class="about-layout">
+                    <div class="about-text fade-in">
+                        <p><strong>Axiom Labs (AXL)</strong> is an independent computational research identity — a
+                            one-person research collective operating at the intersection of pure mathematics,
+                            algorithms, and applied systems.</p>
+                        <p>The name reflects a core principle: <strong>build from axioms</strong>. Every system should
+                            have a rigorous theoretical foundation before implementation. No shortcuts, no duct tape.
+                        </p>
+                        <p>AXL is the identity under which I compete in national hackathons, develop independent
+                            research projects, and publish technical work. It allows me to maintain a <strong>coherent
+                                research identity</strong> across institutions, competitions, and collaborators.</p>
+                        <p>Currently focused on: Gaussian Process theory and optimal transport, graph neural networks
+                            for fraud detection, survival modeling for credit risk, energy systems analytics, and
+                            machine learning with mathematical guarantees.</p>
+                    </div>
+                    <div class="about-right fade-in stagger-2">
+                        <div class="stat-box">
+                            <div class="stat-num">5+</div>
+                            <div class="stat-label">Projects Under AXL</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num">11</div>
+                            <div class="stat-label">Awards &amp; Recognitions</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num">5K+</div>
+                            <div class="stat-label">Competitors Beaten</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num" style="font-size:32px;color:var(--accent)">2025</div>
+                            <div class="stat-label">Established</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="background:var(--off-white)">
+            <div class="container">
+                <p class="section-label"><span class="num">02</span> Research Pillars</p>
+                <div class="mission-grid">
+                    <div class="mission-card fade-in">
+                        <div class="mission-icon">∑</div>
+                        <div class="mission-title">Algorithms & Complexity</div>
+                        <p class="mission-desc">Designing efficient algorithms with provable guarantees. Not just "it
+                            works" but "it works because..."</p>
+                    </div>
+                    <div class="mission-card fade-in stagger-1">
+                        <div class="mission-icon">min</div>
+                        <div class="mission-title">Optimization Theory</div>
+                        <p class="mission-desc">Convex and non-convex optimization for real-world systems — energy,
+                            infrastructure, logistics.</p>
+                    </div>
+                    <div class="mission-card fade-in stagger-2">
+                        <div class="mission-icon">∇θ</div>
+                        <div class="mission-title">Machine Learning</div>
+                        <p class="mission-desc">ML with mathematical foundations — not black-box models but systems you
+                            can reason about.</p>
+                    </div>
+                    <div class="mission-card fade-in stagger-3">
+                        <div class="mission-icon">ΔE</div>
+                        <div class="mission-title">Energy Systems Analytics</div>
+                        <p class="mission-desc">Computational tools for energy monitoring, disaggregation, and policy
+                            optimization.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="background:#0a0a08;">
+            <div class="container">
+                <p class="section-label" style="color:#555;"><span class="num" style="color:var(--accent)">03</span> Trophy Cabinet</p>
+
+                <!-- Legend -->
+                <div class="tr-legend fade-in">
+                    <span class="lg-item"><span class="lg-swatch" style="background:#ffc832;border-radius:2px"></span><span style="color:#888">1st · Gold</span></span>
+                    <span class="lg-item"><span class="lg-swatch" style="background:#c0c0c0;border-radius:2px"></span><span style="color:#888">2nd · Silver</span></span>
+                    <span class="lg-item"><span class="lg-swatch" style="background:#cd7f32;border-radius:2px"></span><span style="color:#888">3rd · Bronze</span></span>
+                    <span class="lg-item"><span class="lg-swatch" style="background:#6a6a60;border-radius:2px"></span><span style="color:#888">4th / Ranked</span></span>
+                    <span class="lg-item"><span class="lg-swatch" style="background:#333;border:1px dashed #555;border-radius:2px"></span><span style="color:#888">Finalist</span></span>
+                </div>
+
+                <!-- ─── 2026 ─── -->
+                <div class="tr-year fade-in">
+                    <span class="yr-num" style="color:#e8e8e2">2026</span>
+                    <span class="yr-line" style="background:#222"></span>
+                    <span class="yr-count">9 Results</span>
+                </div>
+
+                <div class="trophy-grid fade-in">
+
+                    <!-- Gold: National Cloud Hackathon -->
+                    <div class="trophy-card tier-gold">
+                        <div class="sparkle-wrap">
+                            <span class="sp sp1"></span><span class="sp sp2"></span>
+                            <span class="sp sp3"></span><span class="sp sp4"></span>
+                            <span class="sp sp5"></span><span class="sp sp6"></span>
+                        </div>
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".9"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".7"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".85"/>
+                                <circle cx="32" cy="22" r="5" fill="#fff" opacity=".25"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🥇 Gold · 1st Prize</div>
+                        <div class="trophy-award">National Cloud Hackathon</div>
+                        <div class="trophy-event">1st Prize — Idea Phase</div>
+                        <div class="trophy-scale">1500+ Developers · May 2026</div>
+                    </div>
+
+                    <!-- Gold: NILM NIT Meghalaya -->
+                    <div class="trophy-card tier-gold">
+                        <div class="sparkle-wrap">
+                            <span class="sp sp1"></span><span class="sp sp2"></span>
+                            <span class="sp sp3"></span><span class="sp sp4"></span>
+                            <span class="sp sp5"></span><span class="sp sp6"></span>
+                        </div>
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".9"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".7"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".85"/>
+                                <circle cx="32" cy="22" r="5" fill="#fff" opacity=".25"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🥇 Gold · 1st Prize</div>
+                        <div class="trophy-award">NILM — NIT Meghalaya</div>
+                        <div class="trophy-event">1st Prize — National Hackathon</div>
+                        <div class="trophy-scale">NIT Meghalaya</div>
+                    </div>
+
+                    <!-- Gold: NILM INCI Challenge -->
+                    <div class="trophy-card tier-gold">
+                        <div class="sparkle-wrap">
+                            <span class="sp sp1"></span><span class="sp sp2"></span>
+                            <span class="sp sp3"></span><span class="sp sp4"></span>
+                            <span class="sp sp5"></span><span class="sp sp6"></span>
+                        </div>
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".9"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".7"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".85"/>
+                                <circle cx="32" cy="22" r="5" fill="#fff" opacity=".25"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🥇 Gold · 1st Prize</div>
+                        <div class="trophy-award">NILM — INCI Challenge</div>
+                        <div class="trophy-event">1st Prize — Inter-IISER/IISc/NISER/CEBS</div>
+                        <div class="trophy-scale">IIES 2026</div>
+                    </div>
+
+                    <!-- Silver: TRACEWASTE -->
+                    <div class="trophy-card tier-silver">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".85"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".7"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".85"/>
+                                <circle cx="32" cy="22" r="5" fill="#fff" opacity=".2"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🥈 Silver · 2nd Prize</div>
+                        <div class="trophy-award">TRACEWASTE</div>
+                        <div class="trophy-event">2nd Prize — Eco Champion Hackathon</div>
+                        <div class="trophy-scale">IIT Hyderabad · Elan &amp; nVision 2026</div>
+                    </div>
+
+                    <!-- Ranked: Scalar Launchpad 4th -->
+                    <div class="trophy-card tier-ranked">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".6"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🏅 4th Prize</div>
+                        <div class="trophy-award">Scalar Launchpad</div>
+                        <div class="trophy-event">4th Prize</div>
+                        <div class="trophy-scale">Scalar School of Technology · 500+ Teams</div>
+                    </div>
+
+                    <!-- Ranked: Google Prompt War Top 50 -->
+                    <div class="trophy-card tier-ranked">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".6"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">📊 Top 50</div>
+                        <div class="trophy-award">Google Prompt War</div>
+                        <div class="trophy-event">Top 50</div>
+                        <div class="trophy-scale">Google, Bengaluru · 900+ Participants</div>
+                    </div>
+
+                    <!-- Finalist: Fish Tank -->
+                    <div class="trophy-card tier-finalist">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".5"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".4"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".5"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">⭐ Finalist</div>
+                        <div class="trophy-award">Fish Tank</div>
+                        <div class="trophy-event">Finalist — COMET'26 with TIDES</div>
+                        <div class="trophy-scale">IIT Roorkee · Apr 2026</div>
+                    </div>
+
+                    <!-- Finalist: E-Summit Anantya'26 -->
+                    <div class="trophy-card tier-finalist">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".5"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".4"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".5"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">⭐ Finalist</div>
+                        <div class="trophy-award">E-Summit Anantya'26</div>
+                        <div class="trophy-event">Finalist — Business Model Competition</div>
+                        <div class="trophy-scale">NIT Raipur · Apr 2026</div>
+                    </div>
+
+                    <!-- Finalist: EcoCraft Policy -->
+                    <div class="trophy-card tier-finalist">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".5"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".4"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".5"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🔷 Round 3</div>
+                        <div class="trophy-award">EcoCraft Policy Challenge</div>
+                        <div class="trophy-event">Round 3 — Policy Conclave '26</div>
+                        <div class="trophy-scale">IIT Kanpur</div>
+                    </div>
+
+                </div>
+
+                <!-- ─── 2025 ─── -->
+                <div class="tr-year fade-in">
+                    <span class="yr-num" style="color:#e8e8e2">2025</span>
+                    <span class="yr-line" style="background:#222"></span>
+                    <span class="yr-count">3 Results</span>
+                </div>
+
+                <div class="trophy-grid fade-in">
+
+                    <!-- Bronze: NILM Energy Monitoring -->
+                    <div class="trophy-card tier-bronze">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".85"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".7"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".85"/>
+                                <circle cx="32" cy="22" r="5" fill="#fff" opacity=".18"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🥉 Bronze · 3rd Prize</div>
+                        <div class="trophy-award">NILM Energy Monitoring</div>
+                        <div class="trophy-event">3rd Prize (national) — Entrepreneurship Summit</div>
+                        <div class="trophy-scale">IISERs · IISc · NISER · CEBS</div>
+                    </div>
+
+                    <!-- Ranked: EcoFusion Rank 5 -->
+                    <div class="trophy-card tier-ranked">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".6"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">🏅 Rank 5</div>
+                        <div class="trophy-award">EcoFusion</div>
+                        <div class="trophy-event">Rank 5 — Hack Beyond Limits</div>
+                        <div class="trophy-scale">1000+ Participants · Solo</div>
+                    </div>
+
+                    <!-- Ranked: HEV Optimization Top 100 -->
+                    <div class="trophy-card tier-ranked">
+                        <div class="trophy-icon-wrap">
+                            <svg class="trophy-svg" viewBox="0 0 64 64" fill="none">
+                                <path d="M20 8h24v20c0 8.837-5.373 16-12 16S20 36.837 20 28V8z" fill="currentColor" opacity=".7"/>
+                                <path d="M20 16H10c0 7.732 4.477 14 10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <path d="M44 16h10c0 7.732-4.477 14-10 14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+                                <rect x="26" y="44" width="12" height="6" rx="1" fill="currentColor" opacity=".6"/>
+                                <rect x="20" y="50" width="24" height="4" rx="2" fill="currentColor" opacity=".7"/>
+                            </svg>
+                        </div>
+                        <div class="trophy-tier">📊 Top 100</div>
+                        <div class="trophy-award">HEV Optimization</div>
+                        <div class="trophy-event">Top 100 — CodeSynthesis National</div>
+                        <div class="trophy-scale">4000+ Teams</div>
+                    </div>
+
+                </div>
+
+                <!-- Summary bar -->
+                <div class="tr-summary fade-in">
+                    <div class="ls-item"><span class="ls-num" style="color:#ffc832">3</span><span class="ls-label">Gold Trophies</span></div>
+                    <div class="ls-item"><span class="ls-num" style="color:#c0c0c0">1</span><span class="ls-label">Silver</span></div>
+                    <div class="ls-item"><span class="ls-num" style="color:#cd7f32">1</span><span class="ls-label">Bronze</span></div>
+                    <div class="ls-item"><span class="ls-num">3</span><span class="ls-label">Ranked Finishes</span></div>
+                    <div class="ls-item"><span class="ls-num">3</span><span class="ls-label">Finalist Rounds</span></div>
+                    <div class="ls-item"><span class="ls-num" style="color:var(--accent)">11</span><span class="ls-label">Total</span></div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <section id="projects" style="background:var(--white)">
+            <div class="container">
+                <p class="section-label" style="margin-bottom:40px;"><span class="num">04</span> AXL Projects</p>
+                <div class="projects-grid">
+                    <article class="project-card">
+                        <div class="project-img-wrap"><img src="nilm.jpg" alt="NILM" loading="lazy">
+                            <div class="project-img-overlay"></div>
+                            <div class="project-img-badge">🥉 3rd Prize · Inter IISER Entrepreneurship Summit</div>
+                        </div>
+                        <div class="project-body">
+                            <div class="project-category">Energy · ML · IoT</div>
+                            <div class="project-title">NILM-Based Smart Energy Monitoring System</div>
+                            <p class="project-desc">Non-Intrusive Load Monitoring framework for appliance-level energy
+                                disaggregation. Random Forest anomaly detection + LSTM load prediction. Smart plug with
+                                MQTT + FastAPI backend.</p>
+                            <div class="method-tags"><span class="mtag mtag-ml">Random Forest</span><span
+                                    class="mtag mtag-ml">LSTM Networks</span><span class="mtag mtag-ml">Time-Series
+                                    Modeling</span><span class="mtag mtag-energy">Energy Analytics</span><span
+                                    class="mtag mtag-math">Anomaly Detection</span></div>
+                            <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank"
+                                    class="project-link">GitHub →</a></div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-img-wrap"><img src="tracewaste.jpg" alt="TRACEWASTE" loading="lazy">
+                            <div class="project-img-overlay"></div>
+                            <div class="project-img-badge">🥈 2nd Prize · IIT Hyderabad Eco Champion</div>
+                        </div>
+                        <div class="project-body">
+                            <div class="project-category">Policy · Sustainability</div>
+                            <div class="project-title">TRACEWASTE — Proof-Based Waste Traceability</div>
+                            <p class="project-desc">Verification-first framework for post-collection waste
+                                accountability using QR-linked batch proofs, geotagging, and timestamped logs to close
+                                accountability gaps in waste management.</p>
+                            <div class="method-tags"><span class="mtag mtag-policy">Systems Design</span><span
+                                    class="mtag mtag-policy">Policy Analysis</span><span
+                                    class="mtag mtag-math">Statistical Modeling</span><span
+                                    class="mtag mtag-policy">Geo-Verification</span></div>
+                            <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank"
+                                    class="project-link">LinkedIn →</a></div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-img-wrap">
+                            <div class="project-img-placeholder">
+                                <div class="big-letter">EF</div>
+                                <div class="sub">Optical Energy Monitor</div>
+                            </div>
+                            <div class="project-img-overlay"></div>
+                            <div class="project-img-badge">🏅 Rank 5 · Hack Beyond Limits — 1000+ Teams</div>
+                        </div>
+                        <div class="project-body">
+                            <div class="project-category">Energy · Sensing · Solo</div>
+                            <div class="project-title">EcoFusion — Optical Energy Monitoring System</div>
+                            <p class="project-desc">Optical sensing-based system for appliance-level energy inference.
+                                Modeled consumption behavior using time-series patterns and cost analytics. Competed
+                                solo — Ranked 5th out of 1000+ participants.</p>
+                            <div class="method-tags"><span class="mtag mtag-ml">Time-Series Modeling</span><span
+                                    class="mtag mtag-energy">Energy Analytics</span><span class="mtag mtag-math">Signal
+                                    Processing</span><span class="mtag mtag-ml">Anomaly Detection</span></div>
+                            <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank"
+                                    class="project-link">GitHub →</a></div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-img-wrap">
+                            <div class="project-img-placeholder">
+                                <div class="big-letter">HEV</div>
+                                <div class="sub">Hybrid EV Optimization</div>
+                            </div>
+                            <div class="project-img-overlay"></div>
+                            <div class="project-img-badge">🏆 Top 100 · CodeSynthesis — 4000+ Teams</div>
+                        </div>
+                        <div class="project-body">
+                            <div class="project-category">Systems · Optimization · ML</div>
+                            <div class="project-title">Hybrid Electric Vehicle Optimization</div>
+                            <p class="project-desc">OBD-II telemetry pipelines for hybrid efficiency analysis.
+                                Rule-based hybrid mode switching strategies to maximize energy recovery and minimize
+                                fuel consumption.</p>
+                            <div class="method-tags"><span class="mtag mtag-math">Optimization Theory</span><span
+                                    class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-energy">Energy
+                                    Systems</span><span class="mtag mtag-math">Linear Algebra</span></div>
+                            <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank"
+                                    class="project-link">Repository →</a></div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-img-wrap">
+                            <div class="project-img-placeholder">
+                                <div class="big-letter">SS</div>
+                                <div class="sub">Solar X-ray Burst Detection</div>
+                            </div>
+                            <div class="project-img-overlay"></div>
+                            <div class="project-img-badge">🔭 IIT Jammu Research Collaboration</div>
+                        </div>
+                        <div class="project-body">
+                            <div class="project-category">ML · Signal Processing · Space Science</div>
+                            <div class="project-title">Solar Sentinel — AI-Powered Solar X-ray Burst Detection</div>
+                            <p class="project-desc">Real-time detection and classification of solar X-ray flares fusing
+                                ISRO XSM/Chandrayaan-2, ESA PROBA-2/LYRA, and NASA GOES XRS data. Rolling-minimum
+                                background estimation, Savitzky-Golay smoothing, Bayesian confidence scoring, and a
+                                calibrated 16-feature Random Forest classifier.</p>
+                            <div class="method-tags"><span class="mtag mtag-math">Bayesian Inference</span><span
+                                    class="mtag mtag-ml">Random Forest</span><span class="mtag mtag-math">Signal
+                                    Processing</span><span class="mtag mtag-energy">Space Weather</span></div>
+                            <div class="project-links"><a href="https://github.com/itsmilindsahu" target="_blank"
+                                    class="project-link">GitHub →</a></div>
+                        </div>
+                    </article>
+                    <article class="project-card">
+                        <div class="project-img-wrap">
+                            <div class="project-img-placeholder">
+                                <div class="big-letter">EC</div>
+                                <div class="sub">Policy Analysis</div>
+                            </div>
+                            <div class="project-img-overlay"></div>
+                            <div class="project-img-badge">⭐ Round 3 · IIT Kanpur Policy Conclave 26</div>
+                        </div>
+                        <div class="project-body">
+                            <div class="project-category">Policy · Sustainability</div>
+                            <div class="project-title">EcoCraft Policy Challenge</div>
+                            <p class="project-desc">Competed in the EcoCraft Policy Challenge at IIT Kanpur Policy
+                                Conclave 2026. Reached Round 3 with proposals at the intersection of environmental
+                                policy and computational analysis.</p>
+                            <div class="method-tags"><span class="mtag mtag-policy">Policy Analysis</span><span
+                                    class="mtag mtag-math">Statistical Inference</span><span
+                                    class="mtag mtag-policy">Optimization</span><span
+                                    class="mtag mtag-policy">Quantitative Systems</span></div>
+                            <div class="project-links"><a href="https://linkedin.com/in/itsmilindsahu" target="_blank"
+                                    class="project-link">LinkedIn →</a></div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section style="background:var(--black);text-align:center;padding:80px 0;">
+            <div class="container">
+                <p style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#333;margin-bottom:16px;">AXL
+                    — Axiom Labs</p>
+                <h2
+                    style="font-family:var(--font-display);font-size:clamp(48px,7vw,88px);letter-spacing:4px;color:white;margin-bottom:12px;">
+                    THEORY FIRST<span style="color:var(--accent)">.</span></h2>
+                <p style="font-size:13px;color:#444;max-width:480px;margin:0 auto 32px;line-height:1.9;">Every system
+                    built under AXL starts from axioms, not assumptions.</p>
+                <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                    <a href="https://github.com/itsmilindsahu" target="_blank" class="btn btn-primary">GitHub →</a>
+                    <a href="index.html" class="btn btn-ghost">Back to Home</a>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo-wrap"><svg viewBox="0 0 44 44" fill="none">
+                            <rect width="44" height="44" fill="#0d0d0b" />
+                            <path d="M4 36 L16 8 L28 36" stroke="white" stroke-width="2.5" fill="none"
+                                stroke-linecap="square" />
+                            <line x1="9" y1="25" x2="23" y2="25" stroke="white" stroke-width="2.5" />
+                            <line x1="30" y1="8" x2="40" y2="36" stroke="#1a56db" stroke-width="2.5"
+                                stroke-linecap="square" />
+                            <line x1="40" y1="8" x2="30" y2="36" stroke="#1a56db" stroke-width="2.5"
+                                stroke-linecap="square" />
+                        </svg>
+                        <div class="logo-text">AX<span>L</span></div>
+                    </div>
+                    <p>Axiom Labs · Theory → Algorithms → Intelligence</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/itsmilindsahu" target="_blank" class="footer-link">GitHub</a>
+                    <a href="https://linkedin.com/in/itsmilindsahu" target="_blank" class="footer-link">LinkedIn</a>
+                    <a href="https://www.instagram.com/its_milindsahu/" target="_blank"
+                        class="footer-link">Instagram</a>
+                    <a href="mailto:milind20251175@students.iisertirupati.ac.in" class="footer-link">Email</a>
+                </div>
+            </div>
+            <div class="footer-bottom"><span>© 2025 Milind Sahu · IISER Tirupati</span><span>AXL — Axiom Labs</span>
+            </div>
+        </div>
+    </footer>
+    <button class="theme-toggle" title="Toggle dark/light mode">◑</button>
+    <script src="script.js"></script>
 </body>
+
 </html>
