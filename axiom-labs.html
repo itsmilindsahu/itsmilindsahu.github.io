@@ -24,19 +24,36 @@
     nav.dark-nav .nav-links a:hover,nav.dark-nav .nav-links a.active{color:var(--white)!important;}
     nav.dark-nav .hamburger span{background:var(--white)!important;}
     .mission-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;background:var(--light-grey);}
-    .mission-card{background:var(--white);padding:40px 32px;transition:background .2s;}
+    .mission-card{background:var(--white);padding:40px 32px;transition:all .2s;position:relative;}
+    .mission-card::before{content:'';position:absolute;top:0;left:0;right:0;height:0;background:var(--accent);transition:height .2s;}
     .mission-card:hover{background:var(--off-white);}
+    .mission-card:hover::before{height:3px;}
     .mission-icon{font-family:var(--font-display);font-size:48px;color:var(--accent);margin-bottom:16px;}
     .mission-title{font-size:15px;font-weight:700;margin-bottom:12px;}
     .mission-desc{font-size:12px;color:var(--dark-grey);line-height:1.85;}
-    .timeline{position:relative;padding-left:32px;}
-    .timeline::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:1px;background:var(--light-grey);}
-    .timeline-item{position:relative;margin-bottom:40px;}
-    .timeline-item::before{content:'';position:absolute;left:-36px;top:6px;width:9px;height:9px;background:var(--accent);border-radius:50%;}
-    .timeline-date{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
-    .timeline-event{font-size:15px;font-weight:700;margin-bottom:6px;}
-    .timeline-detail{font-size:12px;color:var(--dark-grey);}
-    @media(max-width:640px){.axl-hero-inner{padding:0 20px;}.mission-grid{grid-template-columns:1fr;}}
+
+    /* Award Ledger */
+    .ledger-legend{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin:-24px 0 44px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid-grey);}
+    .ledger-legend .lg-item{display:flex;align-items:center;gap:7px;}
+    .ledger-legend .lg-swatch{width:10px;height:10px;flex-shrink:0;}
+    .ledger-year{display:flex;align-items:baseline;gap:16px;margin:0 0 20px;}
+    .ledger-year:not(:first-child){margin-top:56px;}
+    .ledger-year .yr-num{font-family:var(--font-display);font-size:42px;line-height:1;color:var(--black);}
+    .ledger-year .yr-line{flex:1;height:1px;background:var(--light-grey);}
+    .ledger-year .yr-count{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mid-grey);white-space:nowrap;}
+    .ledger-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:1px;background:var(--light-grey);}
+    .ledger-card{background:var(--white);padding:24px 22px;position:relative;transition:background .2s,transform .2s;border-left:3px solid var(--tier,var(--accent));}
+    .ledger-card:hover{background:var(--off-white);transform:translateY(-2px);}
+    .ledger-card.is-open{border-left-style:dashed;}
+    .ledger-badge{font-family:var(--font-display);font-size:32px;line-height:1;color:var(--tier,var(--accent));margin-bottom:12px;}
+    .ledger-award{font-size:14px;font-weight:700;line-height:1.4;margin-bottom:6px;}
+    .ledger-event{font-size:11.5px;color:var(--dark-grey);line-height:1.65;margin-bottom:12px;}
+    .ledger-scale{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--mid-grey);}
+    .ledger-summary{margin-top:40px;padding:20px 24px;background:var(--black);display:flex;gap:28px;flex-wrap:wrap;align-items:center;}
+    .ledger-summary .ls-item{display:flex;align-items:baseline;gap:8px;}
+    .ledger-summary .ls-num{font-family:var(--font-display);font-size:26px;color:var(--white);}
+    .ledger-summary .ls-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#777;}
+    @media(max-width:640px){.axl-hero-inner{padding:0 20px;}.mission-grid{grid-template-columns:1fr;}.ledger-legend{margin-top:0;}}
   </style>
 </head>
 <body>
@@ -109,24 +126,42 @@
 <section>
   <div class="container">
     <p class="section-label"><span class="num">03</span> AXL Track Record</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;">
-      <div class="timeline fade-in">
-        <div class="timeline-item"><div class="timeline-date">2025 · IIES</div><div class="timeline-event">🥉 NILM Energy Monitoring</div><div class="timeline-detail">3rd Prize (national) — Inter IISER Entrepreneurship Summit. IISERs · IISc · NISER · CEBS.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · NIT Meghalaya</div><div class="timeline-event">🥇 NILM — 1st Prize</div><div class="timeline-detail">NIT Meghalaya National Hackathon.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIES</div><div class="timeline-event">🥇 NILM — 1st Prize</div><div class="timeline-detail">INCI Inter-IISER/IISc/NISER/CEBS Challenge.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIT Hyderabad</div><div class="timeline-event">🥈 TRACEWASTE</div><div class="timeline-detail">2nd Prize — Eco Champion Hackathon. Elan &amp; nVision 2026.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2025 · Solo</div><div class="timeline-event">🏅 EcoFusion — Rank 5</div><div class="timeline-detail">Hack Beyond Limits. 1000+ participants. Solo project under AXL.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIT Jammu</div><div class="timeline-event">🔭 Solar Sentinel</div><div class="timeline-detail">AI-powered solar X-ray burst detection. Research collaboration.</div></div>
-      </div>
-      <div class="timeline fade-in stagger-2">
-        <div class="timeline-item"><div class="timeline-date">2025 · National</div><div class="timeline-event">🏆 HEV Optimization — Top 100</div><div class="timeline-detail">CodeSynthesis National Challenge. 4000+ teams.</div></div>
-        <div class="timeline-item"><div class="timeline-date">May 2026</div><div class="timeline-event">🥇 National Cloud Hackathon</div><div class="timeline-detail">1st Prize — Idea Phase. 1500+ developers.</div></div>
-        <div class="timeline-item"><div class="timeline-date">May 2026</div><div class="timeline-event">🏅 Scalar Launchpad — 4th Prize</div><div class="timeline-detail">Scalar School of Technology. 500+ teams.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · Bengaluru</div><div class="timeline-event">🏅 Google Prompt War — Top 50</div><div class="timeline-detail">Google, Bengaluru. 900+ participants.</div></div>
-        <div class="timeline-item"><div class="timeline-date">Apr 2026 · IIT Roorkee</div><div class="timeline-event">⭐ Fish Tank — Finalist</div><div class="timeline-detail">COMET'26 with TIDES, IIT Roorkee.</div></div>
-        <div class="timeline-item"><div class="timeline-date">Apr 2026 · NIT Raipur</div><div class="timeline-event">⭐ E-Summit Anantya'26 — Finalist</div><div class="timeline-detail">Business Model Competition, NIT Raipur.</div></div>
-        <div class="timeline-item"><div class="timeline-date">2026 · IIT Kanpur</div><div class="timeline-event">⭐ EcoCraft — Round 3</div><div class="timeline-detail">Policy Conclave '26. Environmental policy analysis.</div></div>
-      </div>
+    <div class="ledger-legend fade-in">
+      <span class="lg-item"><span class="lg-swatch" style="background:#1a56db"></span>1st Prize</span>
+      <span class="lg-item"><span class="lg-swatch" style="background:#3d6fe0"></span>2nd Prize</span>
+      <span class="lg-item"><span class="lg-swatch" style="background:#6089e6"></span>3rd Prize</span>
+      <span class="lg-item"><span class="lg-swatch" style="background:#86a4ec"></span>4th Prize</span>
+      <span class="lg-item"><span class="lg-swatch" style="background:#3a3a36"></span>Ranked</span>
+      <span class="lg-item"><span class="lg-swatch" style="background:#9a9990;border:1px dashed #9a9990"></span>Finalist / In Progress</span>
+    </div>
+
+    <div class="ledger-year fade-in"><span class="yr-num">2026</span><span class="yr-line"></span><span class="yr-count">8 Results</span></div>
+    <div class="ledger-grid fade-in">
+      <div class="ledger-card" style="--tier:#1a56db"><div class="ledger-badge">I</div><div class="ledger-award">National Cloud Hackathon</div><div class="ledger-event">1st Prize — Idea Phase</div><div class="ledger-scale">1500+ Developers · May 2026</div></div>
+      <div class="ledger-card" style="--tier:#1a56db"><div class="ledger-badge">I</div><div class="ledger-award">NILM — NIT Meghalaya</div><div class="ledger-event">1st Prize — National Hackathon</div><div class="ledger-scale">NIT Meghalaya</div></div>
+      <div class="ledger-card" style="--tier:#1a56db"><div class="ledger-badge">I</div><div class="ledger-award">NILM — INCI Challenge</div><div class="ledger-event">1st Prize — Inter-IISER/IISc/NISER/CEBS</div><div class="ledger-scale">IIES 2026</div></div>
+      <div class="ledger-card" style="--tier:#3d6fe0"><div class="ledger-badge">II</div><div class="ledger-award">TRACEWASTE</div><div class="ledger-event">2nd Prize — Eco Champion Hackathon</div><div class="ledger-scale">IIT Hyderabad · Elan &amp; nVision 2026</div></div>
+      <div class="ledger-card" style="--tier:#86a4ec"><div class="ledger-badge">IV</div><div class="ledger-award">Scalar Launchpad</div><div class="ledger-event">4th Prize</div><div class="ledger-scale">Scalar School of Technology · 500+ Teams</div></div>
+      <div class="ledger-card" style="--tier:#3a3a36"><div class="ledger-badge">T50</div><div class="ledger-award">Google Prompt War</div><div class="ledger-event">Top 50</div><div class="ledger-scale">Google, Bengaluru · 900+ Participants</div></div>
+      <div class="ledger-card is-open" style="--tier:#9a9990"><div class="ledger-badge">FIN</div><div class="ledger-award">Fish Tank</div><div class="ledger-event">Finalist — COMET'26 with TIDES</div><div class="ledger-scale">IIT Roorkee · Apr 2026</div></div>
+      <div class="ledger-card is-open" style="--tier:#9a9990"><div class="ledger-badge">FIN</div><div class="ledger-award">E-Summit Anantya'26</div><div class="ledger-event">Finalist — Business Model Competition</div><div class="ledger-scale">NIT Raipur · Apr 2026</div></div>
+      <div class="ledger-card is-open" style="--tier:#9a9990"><div class="ledger-badge">R3</div><div class="ledger-award">EcoCraft Policy Challenge</div><div class="ledger-event">Round 3 — Policy Conclave '26</div><div class="ledger-scale">IIT Kanpur</div></div>
+    </div>
+
+    <div class="ledger-year fade-in"><span class="yr-num">2025</span><span class="yr-line"></span><span class="yr-count">3 Results</span></div>
+    <div class="ledger-grid fade-in">
+      <div class="ledger-card" style="--tier:#6089e6"><div class="ledger-badge">III</div><div class="ledger-award">NILM Energy Monitoring</div><div class="ledger-event">3rd Prize (national) — Entrepreneurship Summit</div><div class="ledger-scale">IISERs · IISc · NISER · CEBS</div></div>
+      <div class="ledger-card" style="--tier:#3a3a36"><div class="ledger-badge">R5</div><div class="ledger-award">EcoFusion</div><div class="ledger-event">Rank 5 — Hack Beyond Limits</div><div class="ledger-scale">1000+ Participants · Solo</div></div>
+      <div class="ledger-card" style="--tier:#3a3a36"><div class="ledger-badge">T100</div><div class="ledger-award">HEV Optimization</div><div class="ledger-event">Top 100 — CodeSynthesis National</div><div class="ledger-scale">4000+ Teams</div></div>
+    </div>
+
+    <div class="ledger-summary fade-in">
+      <div class="ls-item"><span class="ls-num">3</span><span class="ls-label">1st Prizes</span></div>
+      <div class="ls-item"><span class="ls-num">2</span><span class="ls-label">2nd / 3rd Prizes</span></div>
+      <div class="ls-item"><span class="ls-num">1</span><span class="ls-label">4th Prize</span></div>
+      <div class="ls-item"><span class="ls-num">3</span><span class="ls-label">Ranked Finishes</span></div>
+      <div class="ls-item"><span class="ls-num">2</span><span class="ls-label">Finalist Rounds</span></div>
+      <div class="ls-item"><span class="ls-num">11</span><span class="ls-label">Total</span></div>
     </div>
   </div>
 </section>
