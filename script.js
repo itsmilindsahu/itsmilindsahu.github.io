@@ -1182,7 +1182,13 @@ function launchPersistentDog(dogKey) {
   
   var cv = makeCanvas(W, H);
   cv.style.pointerEvents = 'none'; // Clicks pass through the canvas
+  cv.style.transformOrigin = 'center bottom';
   container.appendChild(cv);
+
+  var progressPill = document.createElement('div');
+  progressPill.id = 'reading-progress-pill';
+  progressPill.style.cssText = 'position:fixed;bottom:' + (H + 12) + 'px;left:0;z-index:9998;padding:5px 10px;border:1px solid #2c2c2c;background:#101010;color:#d8ff4d;font-family:Space Mono,monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;border-radius:999px;pointer-events:none;white-space:nowrap;display:none;';
+  document.body.appendChild(progressPill);
 
   // Close Button for mobile / desktop
   var closeBtn = document.createElement('button');
@@ -1202,11 +1208,21 @@ function launchPersistentDog(dogKey) {
   
   var lastMouseMoveT = Date.now();
   var wanderTargetX = dogX;
-  var wanderState = 'idle'; // 'idle', 'walking', 'sleeping', 'barking'
+  var wanderState = 'idle'; // 'idle', 'walking', 'sleeping', 'barking', 'stretch', 'sniff', 'hop'
   var wanderTimer = 0;
+  var turnTimer = 0;
+  var turnDirection = facingLeft ? -1 : 1;
+  var targetSpeed = 0;
   
   var bubbleText = '';
   var bubbleTimer = 0;
+
+  container.petReact = function(text) {
+    bubbleText = text;
+    bubbleTimer = 1800;
+    wanderState = 'barking';
+    wanderTimer = 1500;
+  };
 
   // Intercept cursor moves (Desktop)
   document.addEventListener('mousemove', function(e) {
@@ -1261,75 +1277,107 @@ function launchPersistentDog(dogKey) {
 
   function animDog(ts) {
     var now = Date.now();
-    var isWandering = (now - lastMouseMoveT > 6000); // 6s of inactivity starts wander mode
+    var isWandering = (now - lastMouseMoveT > 3500);
 
-    // --- Wander AI Logic (Perfect for Mobile!) ---
     if (isWandering) {
       wanderTimer -= 16;
       if (wanderTimer <= 0) {
         var rand = Math.random();
-        if (rand < 0.3) {
+        if (rand < 0.24) {
           wanderState = 'walking';
           wanderTargetX = Math.random() * (window.innerWidth - W) + W/2;
-          wanderTimer = 3000 + Math.random() * 4000;
-        } else if (rand < 0.5) {
+          wanderTimer = 2200 + Math.random() * 2200;
+        } else if (rand < 0.38) {
+          wanderState = 'stretch';
+          wanderTimer = 1400 + Math.random() * 1200;
+          bubbleText = 'Stretch!';
+          bubbleTimer = 1000;
+        } else if (rand < 0.54) {
+          wanderState = 'sniff';
+          wanderTimer = 1400 + Math.random() * 1200;
+          bubbleText = 'Sniff!';
+          bubbleTimer = 1000;
+        } else if (rand < 0.68) {
+          wanderState = 'hop';
+          wanderTimer = 1000 + Math.random() * 1000;
+          bubbleText = 'Yip!';
+          bubbleTimer = 1000;
+        } else if (rand < 0.82) {
           wanderState = 'sleeping';
-          wanderTimer = 4000 + Math.random() * 4000;
+          wanderTimer = 2800 + Math.random() * 3000;
           bubbleText = 'z Z z';
           bubbleTimer = wanderTimer;
-        } else if (rand < 0.7) {
+        } else if (rand < 0.92) {
           wanderState = 'barking';
-          wanderTimer = 2000;
+          wanderTimer = 1400;
           bubbleText = 'Woof!';
-          bubbleTimer = 1200;
+          bubbleTimer = 1000;
         } else {
           wanderState = 'idle';
-          wanderTimer = 2000 + Math.random() * 2000;
+          wanderTimer = 1600 + Math.random() * 1400;
         }
       }
 
       if (wanderState === 'walking') {
         targetX = wanderTargetX;
       } else {
-        targetX = dogX; // sit still
+        targetX = dogX;
       }
     }
 
     var diff = targetX - dogX;
     var isMoving = Math.abs(diff) > 5;
-    var speed = Math.min(Math.abs(diff) * 0.05, isWandering ? 1.5 : 3.5);
+    var distance = Math.abs(diff);
+    var desiredSpeed = Math.min(Math.max(distance * 0.045, isWandering ? 0.8 : 0.35), isWandering ? 2.4 : 4.3);
+    targetSpeed = targetSpeed + (desiredSpeed - targetSpeed) * 0.2;
 
     if (isMoving) {
-      facingLeft = diff < 0;
-      dogX += (diff > 0 ? 1 : -1) * speed;
+      var newFacing = diff < 0;
+      if (newFacing !== facingLeft) {
+        facingLeft = newFacing;
+        turnDirection = newFacing ? -1 : 1;
+        turnTimer = 80;
+        cv.style.transition = 'transform 80ms ease';
+        cv.style.transform = 'scaleX(0)';
+        setTimeout(function() {
+          cv.style.transform = facingLeft ? 'scaleX(-1)' : 'scaleX(1)';
+        }, 80);
+      }
+      dogX += (diff > 0 ? 1 : -1) * targetSpeed;
     }
+
     dogX = Math.max(W / 2, Math.min(window.innerWidth - W / 2, dogX));
     container.style.left = (dogX - W / 2) + 'px';
-    cv.style.transform = facingLeft ? 'scaleX(-1)' : 'scaleX(1)';
+    if (turnTimer > 0) {
+      turnTimer -= 16;
+      if (turnTimer <= 0) {
+        cv.style.transition = 'none';
+        cv.style.transform = facingLeft ? 'scaleX(-1)' : 'scaleX(1)';
+      }
+    }
 
-    var frameDelay = isMoving ? 130 : 600;
+    var frameDelay = isMoving ? 120 : 560;
     if (ts - lastFrameT > frameDelay) {
       frame = isMoving ? (frame + 1) % 4 : 0;
-      
-      // Redraw pet
       ctx.clearRect(0, 0, W, H);
-      var isHappy = (wanderState === 'barking');
-      drawDog(ctx, def, PX, frame, isHappy, 0, 16, false); // drawn at offsetY = 16 to leave space for bubble
-      
-      // Draw speech bubble
+      var isHappy = (wanderState === 'barking' || wanderState === 'hop');
+      var bobOffsetY = isMoving ? (Math.sin((frame / 4) * Math.PI * 2) * 1.2) : (Math.sin(idleT) * 1.4);
+      if (wanderState === 'hop') {
+        bobOffsetY -= 3;
+      }
+      drawDog(ctx, def, PX, frame, isHappy, 0, 16 + bobOffsetY, false);
+
       if (bubbleText && isWandering) {
         ctx.fillStyle = '#111';
         ctx.strokeStyle = '#c8ff00';
         ctx.lineWidth = 1;
         ctx.fillRect(W/2 - 18, 2, 36, 12);
         ctx.strokeRect(W/2 - 18, 2, 36, 12);
-        
         ctx.fillStyle = '#fff';
         ctx.font = '7px "Space Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText(bubbleText, W/2, 10);
       }
-      
       lastFrameT = ts;
     }
 
@@ -1338,7 +1386,7 @@ function launchPersistentDog(dogKey) {
       container.style.marginBottom = (Math.sin(idleT) * 1.5) + 'px';
     } else {
       idleT = 0;
-      container.style.marginBottom = '0px';
+      container.style.marginBottom = (Math.sin((frame / 4) * Math.PI * 2) * 1.1) + 'px';
     }
 
     if (bubbleText) {
@@ -1346,13 +1394,161 @@ function launchPersistentDog(dogKey) {
       if (bubbleTimer <= 0) bubbleText = '';
     }
 
+    if (progressPill) {
+      progressPill.style.left = Math.max(12, Math.min(window.innerWidth - 120, dogX - 40)) + 'px';
+      progressPill.style.bottom = (H + 16) + 'px';
+    }
+
     requestAnimationFrame(animDog);
   }
   
-  // Clear and draw initial frame
   ctx.clearRect(0, 0, W, H);
   drawDog(ctx, def, PX, 0, false, 0, 16, false);
   requestAnimationFrame(animDog);
+}
+
+function initReadingTracker() {
+  try {
+    if (!window.IntersectionObserver) return;
+    if (!document.querySelector('.research-card') && !document.querySelector('.paper-card')) return;
+
+    var cardNodes = Array.prototype.slice.call(document.querySelectorAll('.research-card, .paper-card'));
+    if (!cardNodes.length) return;
+
+    var totalCards = cardNodes.length;
+    var progressPill = document.getElementById('reading-progress-pill');
+    var petEl = document.getElementById('persistent-dog');
+
+    function safeStorage(key, fallback) {
+      try {
+        var value = localStorage.getItem(key);
+        return value === null ? fallback : value;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function saveProgress(items) {
+      try {
+        localStorage.setItem('axl-reading-progress', JSON.stringify(items));
+      } catch (e) {}
+    }
+
+    function getProgress() {
+      try {
+        var raw = safeStorage('axl-reading-progress', '[]');
+        var parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    var progress = getProgress();
+    var progressSet = new Set(progress);
+    var cardStates = {};
+    var rafId = null;
+
+    function getCardId(card) {
+      if (card.getAttribute('data-title')) return card.getAttribute('data-title');
+      var heading = card.querySelector('h3');
+      if (heading) {
+        var title = heading.textContent.trim();
+        return title.length > 20 ? title.slice(0, 20) + '…' : title;
+      }
+      return card.className || ('card-' + Math.random().toString(36).slice(2, 8));
+    }
+
+    function updateProgressPill() {
+      if (!progressPill) return;
+      var count = progress.length;
+      progressPill.textContent = '📖 ' + count + '/' + totalCards + ' read';
+      progressPill.style.display = count > 0 ? 'inline-block' : 'inline-block';
+    }
+
+    function markRead(card, id, label) {
+      if (!id || progressSet.has(id)) return;
+      progress.push(id);
+      progressSet.add(id);
+      saveProgress(progress);
+      updateProgressPill();
+      card.classList.add('read');
+
+      var pet = document.getElementById('persistent-dog');
+      if (pet && pet.petReact) {
+        pet.petReact('Read: ' + (label || id) + ' ✓');
+      }
+
+      if (progress.length === totalCards) {
+        var completeFlag = safeStorage('axl-reading-complete', '0');
+        if (completeFlag !== '1') {
+          try { localStorage.setItem('axl-reading-complete', '1'); } catch (e) {}
+          spawnConfetti();
+          playSound('catch');
+          setTimeout(function() { playSound('catch'); }, 180);
+          if (pet && pet.petReact) {
+            pet.petReact('You read everything! 🎓');
+          }
+        }
+      }
+    }
+
+    cardNodes.forEach(function(card) {
+      var id = getCardId(card);
+      var label = id;
+      var isRead = progressSet.has(id);
+      if (isRead) {
+        card.classList.add('read');
+      }
+      cardStates[id] = {
+        card: card,
+        id: id,
+        label: label,
+        visible: false,
+        visibleSince: 0,
+        accumulated: 0,
+        read: isRead
+      };
+    });
+
+    updateProgressPill();
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        var card = entry.target;
+        var id = getCardId(card);
+        var state = cardStates[id];
+        if (!state || state.read) return;
+        if (entry.isIntersecting) {
+          state.visible = true;
+          state.visibleSince = performance.now();
+        } else if (state.visible) {
+          state.accumulated += (performance.now() - state.visibleSince);
+          state.visible = false;
+        }
+      });
+    }, { threshold: [0, 0.2, 0.4, 0.6, 0.8] });
+
+    cardNodes.forEach(function(card) {
+      observer.observe(card);
+    });
+
+    function tickTracker() {
+      var now = performance.now();
+      Object.keys(cardStates).forEach(function(key) {
+        var state = cardStates[key];
+        if (!state || state.read || !state.visible) return;
+        var elapsed = state.accumulated + (now - state.visibleSince);
+        if (elapsed >= 2500) {
+          state.read = true;
+          markRead(state.card, state.id, state.label);
+        }
+      });
+      rafId = requestAnimationFrame(tickTracker);
+    }
+
+    rafId = requestAnimationFrame(tickTracker);
+  } catch (e) {}
 }
 
 window.triggerDogGame = function() {
@@ -1374,6 +1570,8 @@ function boot() {
   if (sessionStorage.getItem('dog-summoned')) {
     launchPersistentDog(localStorage.getItem('axl-dog') || 'corgi');
   }
+
+  initReadingTracker();
 
   // Auto-open the game overlay ONLY if they clicked the research tab/link to get here
   if (sessionStorage.getItem('research-tab-clicked') === 'true') {
