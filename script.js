@@ -143,20 +143,24 @@ function buildGalaxy() {
 
   // ── Canvas setup ──────────────────────────────────────────────────
   var cv = document.createElement('canvas');
-  // Do NOT set CSS width/height — let JS own all dimensions
   cv.style.display = 'block';
   el.appendChild(cv);
 
   var ctx = cv.getContext('2d');
   var W = 900, H = 540;
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  var isTouchDevice = ('ontouchstart' in window) || window.matchMedia('(pointer: coarse)').matches;
 
   function setSize() {
     W = el.offsetWidth || 900;
-    H = el.offsetHeight || 540;
-    cv.width  = W;   // raw pixels — no DPR scaling to keep math simple
-    cv.height = H;
-    cv.style.width  = W + 'px';
+    H = Math.max(320, Math.min(540, Math.round(window.innerWidth * 0.9)));
+    el.style.height = H + 'px';
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    cv.style.width = W + 'px';
     cv.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.imageSmoothingEnabled = true;
   }
   setSize();
 
@@ -172,193 +176,477 @@ function buildGalaxy() {
     {n:'Time-Series',       f:'Xₜ=μ+ΣφᵢXₜ₋ᵢ+εₜ',              c:'#7c5fe6', r:7,  o:330, s:.0005, ph:5.1,  t:.28},
     {n:'Anomaly Detection', f:'score(x)=−log P(x|θ)',           c:'#a07af8', r:6,  o:358, s:.0004, ph:1.9,  t:.10},
   ];
-  P.forEach(function(p){p.a=p.ph;});
+  P.forEach(function(p){ p.a = p.ph; p.trail = []; });
 
   // Stars
-  var stars=[];
-  for(var i=0;i<180;i++) stars.push({x:Math.random(),y:Math.random(),r:.3+Math.random()*.9,b:Math.random()*Math.PI*2});
+  var stars = [];
+  for (var i = 0; i < 180; i++) stars.push({x:Math.random(), y:Math.random(), r:.3 + Math.random() * .9, b:Math.random() * Math.PI * 2});
 
   // ── Camera ────────────────────────────────────────────────────────
-  var tilt=.32, rot=0, zoom=1, auto=true;
-  var drag=false, dx=0, dy=0;
+  var tilt = .32, rot = 0, zoom = 1, auto = true;
+  var drag = false, dx = 0, dy = 0;
+  var dragSpin = 0;
+  var dragLastX = 0, dragLastY = 0;
+  var pinchActive = false, pinchStartDist = 0, pinchStartZoom = 1;
+  var touchIds = [];
+  var activeInfoPlanet = null;
+  var sunPunch = 0;
+  var sunPulseStart = 0;
+  var shootingStar = null;
+  var shootingTimer = 0;
+  var shootNext = 4000 + Math.random() * 4000;
+  var comet = {angle:0.6, orbit:310, speed:0.0087, trail:[], color:'#d2f5ff'};
+  var lastFrameTime = performance.now();
 
-  cv.addEventListener('mousedown',function(e){drag=true;dx=e.clientX;dy=e.clientY;auto=false;cv.style.cursor='grabbing';});
-  window.addEventListener('mouseup',function(){drag=false;cv.style.cursor='grab';});
-  window.addEventListener('mousemove',function(e){
-    if(!drag)return;
-    rot+=(e.clientX-dx)*.006; dx=e.clientX;
-    tilt=Math.max(.05,Math.min(1.3,tilt-(e.clientY-dy)*.005)); dy=e.clientY;
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function beginDrag(x, y) {
+    drag = true;
+    dx = x;
+    dy = y;
+    dragLastX = x;
+    dragLastY = y;
+    dragSpin = 0;
+    auto = false;
+    cv.style.cursor = 'grabbing';
+  }
+
+  function updateDrag(x, y) {
+    if (!drag) return;
+    var ndx = x - dragLastX;
+    var ndy = y - dragLastY;
+    rot += ndx * .006;
+    tilt = clamp(tilt - ndy * .005, .05, 1.3);
+    dragSpin = ndx * .006;
+    dragLastX = x;
+    dragLastY = y;
+  }
+
+  function endDrag() {
+    drag = false;
+    cv.style.cursor = 'grab';
+    if (Math.abs(dragSpin) > 0.0001) {
+      dragSpin *= 0.94;
+    } else {
+      dragSpin = 0;
+    }
+  }
+
+  function setHint() {
+    var hint = document.querySelector('.graph-hint');
+    if (hint) {
+      hint.textContent = isTouchDevice ? 'Drag to rotate · Pinch to zoom · Tap a planet' : 'Drag to rotate · Scroll to zoom · Hover planets';
+    }
+  }
+  setHint();
+
+  cv.addEventListener('mousedown', function(e) {
+    beginDrag(e.clientX, e.clientY);
   });
-  cv.addEventListener('wheel',function(e){zoom=Math.max(.4,Math.min(2,zoom-e.deltaY*.0007));e.preventDefault();},{passive:false});
-  cv.style.cursor='grab';
+  window.addEventListener('mouseup', function() {
+    endDrag();
+  });
+  window.addEventListener('mousemove', function(e) {
+    if (!drag) return;
+    updateDrag(e.clientX, e.clientY);
+  });
+  cv.addEventListener('wheel', function(e) {
+    zoom = clamp(zoom - e.deltaY * .0007, .4, 2);
+    e.preventDefault();
+  }, {passive:false});
 
-  // ── Tooltip ───────────────────────────────────────────────────────
-  var tt=document.createElement('div');
-  tt.style.cssText='position:absolute;display:none;pointer-events:none;background:rgba(2,2,12,.97);border:1px solid #1a56db;padding:11px 15px;font-family:"Space Mono",monospace;font-size:10px;box-shadow:0 0 24px rgba(26,86,219,.5);z-index:200;max-width:250px;';
+  cv.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      pinchActive = true;
+      pinchStartDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      pinchStartZoom = zoom;
+      auto = false;
+      drag = false;
+      touchIds = [e.touches[0].identifier, e.touches[1].identifier];
+      return;
+    }
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      beginDrag(t.clientX, t.clientY);
+      e.preventDefault();
+    }
+  }, {passive:false});
+
+  cv.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2 && pinchActive) {
+      var dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      zoom = clamp(pinchStartZoom + (dist - pinchStartDist) * .002, .4, 2);
+      e.preventDefault();
+      return;
+    }
+    if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      updateDrag(t.clientX, t.clientY);
+      e.preventDefault();
+    }
+  }, {passive:false});
+
+  cv.addEventListener('touchend', function(e) {
+    if (e.touches.length < 2) {
+      pinchActive = false;
+      pinchStartDist = 0;
+    }
+    if (e.touches.length === 0) {
+      endDrag();
+    }
+  });
+  cv.style.cursor = 'grab';
+
+  // ── Tooltip / info panel ──────────────────────────────────────────
+  var tt = document.createElement('div');
+  tt.style.cssText = 'position:absolute;display:none;pointer-events:none;background:rgba(2,2,12,.97);border:1px solid #1a56db;padding:11px 15px;font-family:"Space Mono",monospace;font-size:10px;box-shadow:0 0 24px rgba(26,86,219,.5);z-index:200;max-width:250px;';
   el.appendChild(tt);
 
-  var hov=null;
-  cv.addEventListener('mousemove',function(e){
-    var r=el.getBoundingClientRect(), mx=e.clientX-r.left, my=e.clientY-r.top;
-    hov=null;
-    for(var i=0;i<P.length;i++){
-      var p=P[i];
-      if(!p.sx)continue;
-      var d=Math.sqrt((mx-p.sx)*(mx-p.sx)+(my-p.sy)*(my-p.sy));
-      if(d<p.sr+8){hov=p;break;}
+  var infoPanel = document.createElement('div');
+  infoPanel.style.cssText = 'position:absolute;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .28s ease;background:rgba(2,6,24,.95);border-top:1px solid rgba(26,86,219,.55);box-shadow:0 -14px 40px rgba(0,0,0,.45);padding:14px 16px 18px;z-index:210;backdrop-filter:blur(8px);color:#eef6ff;';
+  infoPanel.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;"><div><div style="font-family:monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#5a9fff;">Planet Focus</div><div id="planet-name" style="font-family:monospace;font-size:13px;font-weight:700;letter-spacing:1px;margin-top:3px;"></div></div><button id="planet-close" style="background:transparent;border:0;color:#8ab4ff;font-size:18px;cursor:pointer;padding:0;line-height:1;">×</button></div><div id="planet-formula" style="margin-top:10px;font-family:monospace;font-size:11px;line-height:1.7;color:#7fcdf5;"></div>';
+  el.appendChild(infoPanel);
+
+  var planetName = infoPanel.querySelector('#planet-name');
+  var planetFormula = infoPanel.querySelector('#planet-formula');
+  var planetClose = infoPanel.querySelector('#planet-close');
+
+  function openInfo(p) {
+    if (!p) return;
+    planetName.textContent = p.n;
+    planetFormula.textContent = p.f;
+    infoPanel.style.transform = 'translateY(0%)';
+    activeInfoPlanet = p;
+  }
+
+  function closeInfo() {
+    infoPanel.style.transform = 'translateY(100%)';
+    activeInfoPlanet = null;
+  }
+
+  planetClose.addEventListener('click', closeInfo);
+
+  var hov = null;
+  function hitPlanet(mx, my) {
+    for (var i = 0; i < P.length; i++) {
+      var p = P[i];
+      if (!p.sx) continue;
+      var d = Math.sqrt((mx - p.sx) * (mx - p.sx) + (my - p.sy) * (my - p.sy));
+      if (d < p.sr + 8) return p;
     }
-    if(hov){
-      tt.innerHTML='<div style="font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:6px;">'+hov.n+'</div><div style="color:#5a9fff;line-height:1.7;">'+hov.f+'</div>';
-      tt.style.display='block';
-      tt.style.left=(mx+245>W?mx-255:mx+12)+'px';
-      tt.style.top=Math.max(4,my-28)+'px';
-      cv.style.cursor='pointer';
+    return null;
+  }
+
+  cv.addEventListener('mousemove', function(e) {
+    if (isTouchDevice) return;
+    var r = el.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    hov = hitPlanet(mx, my);
+    if (hov) {
+      tt.innerHTML = '<div style="font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fff;margin-bottom:6px;">' + hov.n + '</div><div style="color:#5a9fff;line-height:1.7;">' + hov.f + '</div>';
+      tt.style.display = 'block';
+      tt.style.left = (mx + 245 > W ? mx - 255 : mx + 12) + 'px';
+      tt.style.top = Math.max(4, my - 28) + 'px';
+      cv.style.cursor = 'pointer';
     } else {
-      tt.style.display='none';
-      cv.style.cursor=drag?'grabbing':'grab';
+      tt.style.display = 'none';
+      cv.style.cursor = drag ? 'grabbing' : 'grab';
     }
   });
-  cv.addEventListener('mouseleave',function(){tt.style.display='none';hov=null;});
+  cv.addEventListener('mouseleave', function() {
+    tt.style.display = 'none';
+    hov = null;
+  });
+  cv.addEventListener('click', function(e) {
+    var r = el.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
+    var sunHit = Math.sqrt((mx - W / 2) * (mx - W / 2) + (my - H / 2) * (my - H / 2)) < (Math.max(14, 26 * zoom * Math.min(W, H) / 800) * 1.25);
+    if (sunHit) {
+      sunPunch = 1;
+      sunPulseStart = performance.now();
+      return;
+    }
+    var p = hitPlanet(mx, my);
+    if (p) {
+      openInfo(p);
+    } else {
+      closeInfo();
+    }
+  });
 
   // ── Legend ────────────────────────────────────────────────────────
-  var lg=document.createElement('div');
-  lg.style.cssText='position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:5px;pointer-events:none;z-index:10;';
+  var lg = document.createElement('div');
+  lg.style.cssText = 'position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:5px;pointer-events:none;z-index:10;';
   [['#1a56db','Math Foundations'],['#00c896','Applied Domains'],['#9c7ef0','ML Methods']].forEach(function(x){
     lg.insertAdjacentHTML('beforeend','<div style="display:flex;align-items:center;gap:6px;"><span style="width:7px;height:7px;border-radius:50%;background:'+x[0]+';box-shadow:0 0 6px '+x[0]+';flex-shrink:0;display:inline-block;"></span><span style="font-family:monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#444;">'+x[1]+'</span></div>');
   });
   el.appendChild(lg);
 
-  // ── Hint ──────────────────────────────────────────────────────────
-  var hint=el.previousElementSibling;
-  if(hint&&hint.classList.contains('graph-hint')) hint.textContent='Drag to rotate · Scroll to zoom · Hover planets';
-
   // ── Helpers ───────────────────────────────────────────────────────
-  function proj(orb,angle,t2){
-    var x3=Math.cos(angle+rot)*orb;
-    var z3=Math.sin(angle+rot)*orb;
-    var y3=Math.sin(angle*.65)*t2*16;
-    var yp=y3*Math.cos(tilt)-z3*Math.sin(tilt);
-    var zp=y3*Math.sin(tilt)+z3*Math.cos(tilt);
-    var sc=zoom*Math.min(W,H)/800;
-    return {x:W/2+x3*sc, y:H/2+yp*sc, z:zp, d:.7+.3*(zp/(orb+1))};
+  function proj(orb, angle, t2) {
+    var x3 = Math.cos(angle + rot) * orb;
+    var z3 = Math.sin(angle + rot) * orb;
+    var y3 = Math.sin(angle * .65) * t2 * 16;
+    var yp = y3 * Math.cos(tilt) - z3 * Math.sin(tilt);
+    var zp = y3 * Math.sin(tilt) + z3 * Math.cos(tilt);
+    var sc = zoom * Math.min(W, H) / 800;
+    return {x:W / 2 + x3 * sc, y:H / 2 + yp * sc, z:zp, d:.7 + .3 * (zp / (orb + 1))};
   }
 
-  function rgb(hex){
-    return parseInt(hex.slice(1,3),16)+','+parseInt(hex.slice(3,5),16)+','+parseInt(hex.slice(5,7),16);
+  function rgb(hex) {
+    return parseInt(hex.slice(1, 3), 16) + ',' + parseInt(hex.slice(3, 5), 16) + ',' + parseInt(hex.slice(5, 7), 16);
   }
 
-  function circle(x,y,r,fill){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=fill;ctx.fill();}
+  function circle(x, y, r, fill) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
 
-  function glow(x,y,r,col,a){
-    var g=ctx.createRadialGradient(x,y,0,x,y,r);
-    g.addColorStop(0,'rgba('+col+','+a+')');
-    g.addColorStop(.5,'rgba('+col+','+(a*.15)+')');
-    g.addColorStop(1,'rgba('+col+',0)');
-    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+  function glow(x, y, r, col, a) {
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, 'rgba(' + col + ',' + a + ')');
+    g.addColorStop(.5, 'rgba(' + col + ',' + (a * .15) + ')');
+    g.addColorStop(1, 'rgba(' + col + ',0)');
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = g;
+    ctx.fill();
+  }
+
+  function drawSunCorona(cx, cy, sr) {
+    var flare = performance.now() * 0.00006;
+    for (var i = 0; i < 3; i++) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(flare + i * 1.3);
+      var g = ctx.createRadialGradient(0, 0, sr * .2, 0, 0, sr * 3.6);
+      g.addColorStop(0, 'rgba(120,170,255,0)');
+      g.addColorStop(.35, 'rgba(90,130,255,0.06)');
+      g.addColorStop(1, 'rgba(90,130,255,0)');
+      ctx.beginPath();
+      ctx.moveTo(-sr * 2.4, 0);
+      ctx.quadraticCurveTo(-sr * .8, -sr * .45, 0, -sr * .14);
+      ctx.quadraticCurveTo(sr * .8, -sr * .45, sr * 2.4, 0);
+      ctx.quadraticCurveTo(sr * .8, sr * .45, 0, sr * .14);
+      ctx.quadraticCurveTo(-sr * .8, sr * .45, -sr * 2.4, 0);
+      ctx.closePath();
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function updateShootingStar(dt) {
+    shootingTimer += dt;
+    if (!shootingStar && shootingTimer >= shootNext) {
+      shootingStar = {
+        x: Math.random() * W * .8 + W * .1,
+        y: Math.random() * H * .25 + H * .08,
+        dx: (Math.random() * 180 + 140),
+        dy: (Math.random() * 90 + 60),
+        life: 0.4,
+        ttl: 0.4,
+        alpha: 1
+      };
+      shootingTimer = 0;
+      shootNext = 4000 + Math.random() * 4000;
+    }
+    if (shootingStar) {
+      shootingStar.x += shootingStar.dx * dt;
+      shootingStar.y += shootingStar.dy * dt;
+      shootingStar.life -= dt;
+      shootingStar.alpha = Math.max(0, shootingStar.life / shootingStar.ttl);
+      if (shootingStar.life <= 0) shootingStar = null;
+    }
   }
 
   // ── Main loop ─────────────────────────────────────────────────────
-  var tick=0;
-  function draw(){
+  var tick = 0;
+  function draw() {
     requestAnimationFrame(draw);
-    tick+=.014;
-    if(auto) rot+=.0006;
-    P.forEach(function(p){p.a+=p.s;});
+    var now = performance.now();
+    var dt = Math.min(.04, (now - lastFrameTime) / 1000);
+    lastFrameTime = now;
 
-    ctx.clearRect(0,0,W,H);
-    ctx.fillStyle='#020206';
-    ctx.fillRect(0,0,W,H);
+    tick += dt * 1.2;
+    if (auto) rot += dt * .0012;
+    if (!drag && Math.abs(dragSpin) > 0.00004) {
+      rot += dragSpin;
+      dragSpin *= .94;
+    }
+    if (sunPunch > 0) {
+      var pulseT = (now - sunPulseStart) / 420;
+      if (pulseT < 1) {
+        var eased = 1 - Math.pow(1 - pulseT, 3);
+        zoom = clamp(1 + (eased - .5) * .12, .4, 2);
+      } else {
+        sunPunch = 0;
+      }
+    }
+
+    P.forEach(function(p){ p.a += p.s; });
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#020206';
+    ctx.fillRect(0, 0, W, H);
+
+    updateShootingStar(dt);
 
     // Stars
-    stars.forEach(function(s){
-      s.b+=.018;
-      var a=.12+.25*Math.sin(s.b);
-      ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(160,180,255,'+a+')';ctx.fill();
+    stars.forEach(function(s) {
+      s.b += dt * 1.8;
+      var a = .12 + .25 * Math.sin(s.b);
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(160,180,255,' + a + ')';
+      ctx.fill();
     });
 
-    // Orbit rings
-    P.forEach(function(p){
-      var sc=zoom*Math.min(W,H)/800;
-      var orb=p.o*sc;
+    if (shootingStar) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(236,243,255,' + shootingStar.alpha + ')';
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
-      for(var a=0;a<=Math.PI*2+.05;a+=.04){
-        var pt=proj(p.o,a-rot,p.t);
-        a<.04?ctx.moveTo(pt.x,pt.y):ctx.lineTo(pt.x,pt.y);
+      ctx.moveTo(shootingStar.x, shootingStar.y);
+      ctx.lineTo(shootingStar.x - shootingStar.dx * .08, shootingStar.y - shootingStar.dy * .08);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Orbit rings
+    P.forEach(function(p) {
+      var sc = zoom * Math.min(W, H) / 800;
+      var orb = p.o * sc;
+      ctx.beginPath();
+      for (var a = 0; a <= Math.PI * 2 + .05; a += .04) {
+        var pt = proj(p.o, a - rot, p.t);
+        a < .04 ? ctx.moveTo(pt.x, pt.y) : ctx.lineTo(pt.x, pt.y);
       }
       ctx.closePath();
-      ctx.strokeStyle='rgba('+rgb(p.c)+',.12)';
-      ctx.lineWidth=.7;ctx.stroke();
+      ctx.strokeStyle = 'rgba(' + rgb(p.c) + ',.12)';
+      ctx.lineWidth = .7;
+      ctx.stroke();
     });
 
     // Compute positions
-    var pts=P.map(function(p){return proj(p.o,p.a,p.t);});
+    var pts = P.map(function(p) { return proj(p.o, p.a, p.t); });
 
     // Depth sort
-    var idx=P.map(function(_,i){return i;});
-    idx.sort(function(a,b){return pts[a].z-pts[b].z;});
+    var idx = P.map(function(_, i) { return i; });
+    idx.sort(function(a, b) { return pts[a].z - pts[b].z; });
 
     // Sun
-    var cx=W/2, cy=H/2;
-    var sr=Math.max(14,26*zoom*Math.min(W,H)/800);
-    var pulse=.85+.15*Math.sin(tick*2.8);
-    glow(cx,cy,sr*5,'26,86,219',.28*pulse);
-    var sg=ctx.createRadialGradient(cx-sr*.3,cy-sr*.3,sr*.05,cx,cy,sr);
-    sg.addColorStop(0,'rgba(130,170,255,1)');
-    sg.addColorStop(.55,'rgba(26,86,219,'+pulse+')');
-    sg.addColorStop(1,'rgba(8,30,110,.85)');
-    circle(cx,cy,sr,sg);
-    ctx.font='bold '+Math.max(13,Math.round(sr*.72))+'px monospace';
-    ctx.fillStyle='rgba(255,255,255,.95)';ctx.textAlign='center';
-    ctx.shadowColor='#1a56db';ctx.shadowBlur=14;
-    ctx.fillText('AXL',cx,cy+Math.max(13,Math.round(sr*.72))*.36);
-    ctx.shadowBlur=0;
+    var cx = W / 2, cy = H / 2;
+    var sr = Math.max(14, 26 * zoom * Math.min(W, H) / 800);
+    var pulse = .85 + .15 * Math.sin(tick * 2.8);
+    glow(cx, cy, sr * 5, '26,86,219', .28 * pulse);
+    drawSunCorona(cx, cy, sr);
+    var sg = ctx.createRadialGradient(cx - sr * .3, cy - sr * .3, sr * .05, cx, cy, sr);
+    sg.addColorStop(0, 'rgba(130,170,255,1)');
+    sg.addColorStop(.55, 'rgba(26,86,219,' + pulse + ')');
+    sg.addColorStop(1, 'rgba(8,30,110,.85)');
+    circle(cx, cy, sr, sg);
+    ctx.font = 'bold ' + Math.max(13, Math.round(sr * .72)) + 'px monospace';
+    ctx.fillStyle = 'rgba(255,255,255,.95)';
+    ctx.textAlign = 'center';
+    ctx.shadowColor = '#1a56db';
+    ctx.shadowBlur = 14;
+    ctx.fillText('AXL', cx, cy + Math.max(13, Math.round(sr * .72)) * .36);
+    ctx.shadowBlur = 0;
+
+    // Comet
+    comet.angle += comet.speed;
+    var cometBase = proj(comet.orbit, comet.angle, .22);
+    var cometX = cometBase.x + Math.sin(comet.angle * 1.6) * 24;
+    var cometY = cometBase.y + Math.cos(comet.angle * 0.8) * 12;
+    var cometZ = cometBase.z;
+    comet.trail.push({x:cometX, y:cometY, z:cometZ});
+    if (comet.trail.length > 20) comet.trail.shift();
+    for (var t = 1; t < comet.trail.length; t++) {
+      var a = comet.trail[t - 1];
+      var b = comet.trail[t];
+      var alpha = (t / comet.trail.length) * .5;
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.strokeStyle = 'rgba(210,245,255,' + alpha + ')';
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+    }
+    glow(cometX, cometY, 5, '210,245,255', .35);
+    circle(cometX, cometY, 2.2, 'rgba(255,255,255,.95)');
 
     // Planets
-    idx.forEach(function(i){
-      var p=P[i], pt=pts[i];
-      var sc=Math.min(W,H)/800;
-      var pr=Math.max(4, p.r*sc*zoom*(.72+.28*pt.d));
-      p.sx=pt.x; p.sy=pt.y; p.sr=pr;
-      var c=rgb(p.c), isH=(p===hov);
+    idx.forEach(function(i) {
+      var p = P[i], pt = pts[i];
+      var sc = Math.min(W, H) / 800;
+      var pr = Math.max(4, p.r * sc * zoom * (.72 + .28 * pt.d));
+      p.sx = pt.x;
+      p.sy = pt.y;
+      p.sr = pr;
+      var c = rgb(p.c), isH = (p === hov);
 
-      glow(pt.x,pt.y,pr*(isH?5:3),c,isH?.5:.18);
+      p.trail.push({x:pt.x, y:pt.y});
+      if (p.trail.length > 8) p.trail.shift();
+      if (p.trail.length > 1) {
+        ctx.beginPath();
+        ctx.moveTo(p.trail[0].x, p.trail[0].y);
+        for (var tr = 1; tr < p.trail.length; tr++) {
+          var trailAlpha = (tr / p.trail.length) * .22;
+          ctx.lineTo(p.trail[tr].x, p.trail[tr].y);
+        }
+        ctx.strokeStyle = 'rgba(' + c + ',.16)';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
 
-      var bg=ctx.createRadialGradient(pt.x-pr*.3,pt.y-pr*.3,pr*.05,pt.x,pt.y,pr);
-      bg.addColorStop(0,'rgba('+c+',.95)');
-      bg.addColorStop(.6,'rgba('+c+',.7)');
-      bg.addColorStop(1,'rgba('+c+',.25)');
-      circle(pt.x,pt.y,pr,bg);
+      glow(pt.x, pt.y, pr * (isH ? 5 : 3), c, isH ? .5 : .18);
 
-      if(p.ring){
-        ctx.save();ctx.translate(pt.x,pt.y);
-        ctx.scale(1,.3+.12*Math.abs(Math.sin(tilt)));
-        ctx.beginPath();ctx.arc(0,0,pr*2.1,0,Math.PI*2);
-        ctx.strokeStyle='rgba('+c+',.35)';ctx.lineWidth=pr*.6;ctx.stroke();
+      var bg = ctx.createRadialGradient(pt.x - pr * .3, pt.y - pr * .3, pr * .05, pt.x, pt.y, pr);
+      bg.addColorStop(0, 'rgba(' + c + ',.95)');
+      bg.addColorStop(.6, 'rgba(' + c + ',.7)');
+      bg.addColorStop(1, 'rgba(' + c + ',.25)');
+      circle(pt.x, pt.y, pr, bg);
+
+      if (p.ring) {
+        ctx.save();
+        ctx.translate(pt.x, pt.y);
+        ctx.scale(1, .3 + .12 * Math.abs(Math.sin(tilt)));
+        ctx.beginPath();
+        ctx.arc(0, 0, pr * 2.1, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(' + c + ',.35)';
+        ctx.lineWidth = pr * .6;
+        ctx.stroke();
         ctx.restore();
       }
 
-      var la=isH?1:(.4+.35*pt.d);
-      var fs=Math.max(7,8*sc*zoom);
-      ctx.font=fs+'px "Space Mono",monospace';
-      ctx.fillStyle='rgba('+c+','+la+')';ctx.textAlign='center';
-      ctx.shadowColor=p.c;ctx.shadowBlur=isH?8:3;
-      ctx.fillText(p.n,pt.x,pt.y+pr+fs*1.5);
-      ctx.shadowBlur=0;
+      var la = isH ? 1 : (.4 + .35 * pt.d);
+      var fs = Math.max(7, 8 * sc * zoom);
+      ctx.font = fs + 'px "Space Mono",monospace';
+      ctx.fillStyle = 'rgba(' + c + ',' + la + ')';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = p.c;
+      ctx.shadowBlur = isH ? 8 : 3;
+      ctx.fillText(p.n, pt.x, pt.y + pr + fs * 1.5);
+      ctx.shadowBlur = 0;
     });
   }
 
   draw();
 
-  window.addEventListener('resize',function(){setSize();});
+  window.addEventListener('resize', function() {
+    setSize();
+    closeInfo();
+  });
+  window.addEventListener('orientationchange', function() {
+    setTimeout(setSize, 120);
+  });
 }
 
 function initGalaxy(){
   var el=document.getElementById('research-graph');
   if(!el||el._built) return;
-  // Force explicit height so offsetHeight is never 0
-  el.style.height='540px';
-  // Give browser one frame to apply styles, then build
+  el.style.height = Math.max(320, Math.min(540, Math.round(window.innerWidth * 0.9))) + 'px';
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       buildGalaxy();
