@@ -176,9 +176,9 @@ function buildGalaxy() {
     {n:'Time-Series',       f:'Xₜ=μ+ΣφᵢXₜ₋ᵢ+εₜ',              c:'#7c5fe6', r:7,  o:330, s:.0005, ph:5.1,  t:.28},
     {n:'Anomaly Detection', f:'score(x)=−log P(x|θ)',           c:'#a07af8', r:6,  o:358, s:.0004, ph:1.9,  t:.10},
     {n:'Wasserstein Diffusion', f:'∂ₜP = ∇·(P∇δF/δP)',          c:'#6fd5ff', r:8,  o:392, s:.00036, ph:3.4, t:.16},
-    {n:'Knowledge Hierarchies', f:'KKT ≈ hierarchy depth',        c:'#ff8b4d', r:8,  o:418, s:.00032, ph:4.8, t:.14},
-    {n:'HETGNN-FR',           f:'GNN + Time2Vec on fraud graphs', c:'#ff5f7e', r:7,  o:446, s:.00029, ph:1.6, t:.13},
-    {n:'RSCR',                f:'survival ML for default & prepayment', c:'#5ee7a2', r:7, o:472, s:.00026, ph:2.6, t:.12},
+    {n:'Wasserstein GP', f:'GP on W₂ input space', c:'#ff8b4d', r:8,  o:418, s:.00032, ph:4.8, t:.14},
+    {n:'Capture-Price GP', f:'price–production as a measure', c:'#ff5f7e', r:7,  o:446, s:.00029, ph:1.6, t:.13},
+    {n:'Arbitrage-Free GP', f:'no-arbitrage covariance for IV surfaces', c:'#5ee7a2', r:7, o:472, s:.00026, ph:2.6, t:.12},
     {n:'NILM Energy',         f:'disaggregate load from aggregate signal', c:'#8fd8ff', r:7, o:500, s:.00024, ph:5.8, t:.15},
     {n:'Waste Traceability',  f:'proof systems + traceability logic', c:'#ffd267', r:7, o:524, s:.00022, ph:0.7, t:.13},
   ];

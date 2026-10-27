@@ -1,0 +1,14 @@
+/* research index: shared by research-internship.html and index.html */
+.rs-list{border-top:1px solid var(--light-grey)}
+.rs-item{display:grid;grid-template-columns:64px 1fr 190px;gap:28px;padding:30px 0 30px 20px;border-bottom:1px solid var(--light-grey);position:relative;transition:background .2s}
+.rs-item:before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
+.rs-item:hover{background:rgba(26,86,219,.04)}
+.rs-n{font-family:var(--font-display);font-size:38px;line-height:1;color:var(--c)}
+.rs-body h3{font-family:var(--font-display);font-size:30px;line-height:1.1;font-weight:400;margin-bottom:8px}
+.rs-body p{font-size:12.5px;line-height:1.75;color:var(--dark-grey);max-width:620px;margin-bottom:10px}
+.rs-meta{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--mid-grey);line-height:2}
+.rs-meta b{display:block;color:var(--black);font-weight:400}.rs-go{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-top:6px;display:inline-block}
+.rs-pub .rs-n{font-size:22px}.rs-doi{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent);margin-right:18px}
+.rs-found{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px;font-size:12px;line-height:1.8;color:var(--dark-grey)}.rs-found b{display:block;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:400;margin-bottom:6px}
+body.dark .rs-list,body.dark .rs-item{border-color:#222}body.dark .rs-body p,body.dark .rs-found{color:#aaa}body.dark .rs-meta b{color:#e0e0dc}body.dark .rs-item:hover{background:rgba(109,148,236,.06)}
+@media(max-width:760px){.rs-item{grid-template-columns:1fr;gap:10px}}
