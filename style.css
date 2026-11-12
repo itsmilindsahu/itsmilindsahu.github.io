@@ -566,6 +566,11 @@ body.dark .theme-toggle{background:#e0e0dc;color:#0d0d0b;border-color:#ccc;}
 @media(max-width:640px){.certs-grid-dark{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:520px){.project-proof-visual{grid-template-columns:.9fr 1.1fr;height:188px;}.project-proof-copy{padding:13px 13px 13px 16px;gap:5px;}.project-proof-copy p{font-size:7px;}.proof-context{font-size:5px;}.project-proof-certificates{gap:3px;padding:6px;}}
 
+.home-photo{border-color:#292927}
+.home-photo canvas{display:block}
+@media(max-width:960px){.hero-axl-card{display:block!important;max-width:430px;width:100%;margin:24px auto 0}}
+@media(max-width:520px){.home-photo{aspect-ratio:1.5}}
+
 /* CURSOR blend mode */
 .cursor{mix-blend-mode:difference;background:white !important;}
 .cursor-ring{mix-blend-mode:difference;border-color:white !important;}

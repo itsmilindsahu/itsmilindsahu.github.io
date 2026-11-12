@@ -1897,6 +1897,109 @@ document.addEventListener('click', function(e) {
   }
 });
 
+function drawPixelReveal(canvas, image, duration) {
+  var ctx = canvas.getContext('2d');
+  var buffer = document.createElement('canvas');
+  var bufferCtx = buffer.getContext('2d');
+  var width = 960;
+  var bounds = canvas.getBoundingClientRect();
+  var height = Math.max(300, Math.round(width * (bounds.height / bounds.width || 0.625)));
+  var start = null;
+  canvas.width = width;
+  canvas.height = height;
+  buffer.width = width;
+  buffer.height = height;
+
+  function draw(timestamp) {
+    if (start === null) start = timestamp;
+    var progress = Math.min(1, (timestamp - start) / duration);
+    var quality = 12 + Math.floor((width - 12) * progress);
+    var scaledHeight = Math.max(8, Math.round(quality * height / width));
+    buffer.width = quality;
+    buffer.height = scaledHeight;
+    bufferCtx.imageSmoothingEnabled = true;
+    bufferCtx.fillStyle = '#080908';
+    bufferCtx.fillRect(0, 0, quality, scaledHeight);
+    var scale = Math.min(quality / image.naturalWidth, scaledHeight / image.naturalHeight);
+    var drawWidth = image.naturalWidth * scale;
+    var drawHeight = image.naturalHeight * scale;
+    bufferCtx.drawImage(image, (quality - drawWidth) / 2, (scaledHeight - drawHeight) / 2, drawWidth, drawHeight);
+    ctx.imageSmoothingEnabled = false;
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(buffer, 0, 0, quality, scaledHeight, 0, 0, width, height);
+    if (progress < 1) window.requestAnimationFrame(draw);
+  }
+
+  window.requestAnimationFrame(draw);
+}
+
+function initHomePhoto() {
+  var frame = document.querySelector('.home-photo');
+  if (!frame) return;
+  var image = frame.querySelector('img');
+  var canvas = frame.querySelector('canvas');
+  function reveal() {
+    if (image.naturalWidth && image.naturalHeight) drawPixelReveal(canvas, image, 1500);
+    else console.error('Unable to load the home research photo:', image.src);
+  }
+  if (image.complete) reveal();
+  else image.addEventListener('load', reveal, { once: true });
+  image.addEventListener('error', function() {
+    console.error('Unable to load the home research photo:', image.src);
+  }, { once: true });
+}
+
+function initResearchSlideshow() {
+  var frame = document.querySelector('.rs-slideshow');
+  if (!frame) return;
+  var canvas = frame.querySelector('.rs-slide-pixels');
+  var caption = frame.querySelector('.rs-slide-caption');
+  var count = frame.querySelector('.rs-slide-count');
+  var progress = frame.querySelector('.rs-slide-progress');
+  var slides = [
+    { src: 'photos/imp.jpg', caption: 'My favourite research moment' },
+    { src: 'photos/IMG_8586.jpg', caption: 'Research, in progress' },
+    { src: 'photos/IMG_8587.jpg', caption: 'A milestone worth remembering' },
+    { src: 'photos/IMG_8588.jpg', caption: 'Work behind the result' },
+    { src: 'photos/IMG_8590.jpg', caption: 'Notes from the journey' },
+    { src: 'photos/IMG_8591.jpg', caption: 'A day in the lab' },
+    { src: 'photos/IMG_8592.jpg', caption: 'Ideas taking shape' },
+    { src: 'photos/IMG_8593.jpg', caption: 'Between the equations' },
+    { src: 'photos/IMG_8594.jpg', caption: 'The people and the process' },
+    { src: 'photos/6B2AA23C-C537-47A6-A6CF-57DC79543D93.PNG', caption: 'A research memory' }
+  ];
+  var index = 0;
+
+  function showSlide() {
+    var slide = slides[index];
+    var image = new Image();
+    count.textContent = ('0' + (index + 1)).slice(-2) + ' / ' + ('0' + slides.length).slice(-2);
+    caption.textContent = slide.caption;
+    progress.style.transition = 'none';
+    progress.style.width = '0';
+    image.onload = function() {
+      drawPixelReveal(canvas, image, 1200);
+      window.requestAnimationFrame(function() {
+        progress.style.transition = 'width 10s linear';
+        progress.style.width = '100%';
+      });
+    };
+    image.onerror = function() {
+      console.error('Unable to load research slideshow image:', slide.src);
+    };
+    image.src = slide.src;
+    window.setTimeout(function() {
+      index = (index + 1) % slides.length;
+      showSlide();
+    }, 10000);
+  }
+
+  showSlide();
+}
+
+initHomePhoto();
+initResearchSlideshow();
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
