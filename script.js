@@ -34,6 +34,7 @@
     ring.style.top  = ry + 'px';
     requestAnimationFrame(animRing);
   })();
+
   var sel = "a, button, [role=\"button\"], .filter-btn, .project-card, .gallery-item, .cert-dark-item, .dog-pick-btn, .dog-pet-btn";
   document.addEventListener('mouseover', function(e) {
     if (e.target.closest(sel)) { cursor.classList.add('cursor-hover'); ring.classList.add('cursor-hover'); }
@@ -86,6 +87,164 @@ if (tb) {
     setTimeout(tl, 240);
   }
   setTimeout(tl, 800);
+}
+
+// ═══════════════════════════════════════
+// RESEARCH PIXEL SLIDESHOW
+// ═══════════════════════════════════════
+const researchSlideshow = document.querySelector('.rs-slideshow');
+if (researchSlideshow) {
+  const slides = [
+    { src: 'photos/imp.jpg', alt: 'Milind working through research on a whiteboard', caption: 'My favourite research moment' },
+    { src: 'photos/IMG_8586.jpg', alt: 'Milind beside handwritten Gaussian process research notes', caption: 'Working through the proof' },
+    { src: 'photos/IMG_8587.jpg', alt: 'Research paper on Wasserstein consensus for video summarisation', caption: 'Six months of work, in print' },
+    { src: 'photos/IMG_8588.jpg', alt: 'Published research archive record for the Civic Energy Disaggregation Mandate', caption: 'Research, preserved in public' },
+    { src: 'photos/IMG_8590.jpg', alt: 'IIIT Kottayam summer research internship report cover', caption: 'A summer at IIIT Kottayam' },
+    { src: 'photos/IMG_8591.jpg', alt: 'Research paper on Wasserstein barycenter consensus', caption: 'When is the barycenter right?' },
+    { src: 'photos/IMG_8592.jpg', alt: 'Milind presenting an energy systems project at Launchpad', caption: 'Taking energy systems to the stage' },
+    { src: 'photos/IMG_8593.jpg', alt: 'Arbitrage-free Gaussian process paper on implied volatility surfaces', caption: 'Gaussian processes for finance' },
+    { src: 'photos/IMG_8594.jpg', alt: 'Milind receiving a second prize at IIT Hyderabad', caption: 'A research journey beyond the board' },
+    { src: 'photos/6B2AA23C-C537-47A6-A6CF-57DC79543D93.PNG', alt: 'IIT Palakkad summer research fellowship certificate', caption: 'Summer Research Fellow · IIT Palakkad' },
+  ];
+  const image = researchSlideshow.querySelector('.rs-slide-image');
+  const canvas = researchSlideshow.querySelector('.rs-slide-pixels');
+  const caption = researchSlideshow.querySelector('.rs-slide-caption');
+  const count = researchSlideshow.querySelector('.rs-slide-count');
+  const context = canvas && canvas.getContext('2d');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let slideIndex = 0;
+  let animationId = 0;
+
+  const resolvePixels = (source, onComplete) => {
+    const bounds = researchSlideshow.getBoundingClientRect();
+    const ratio = window.devicePixelRatio || 1;
+    const width = Math.max(1, Math.round(bounds.width * ratio));
+    const height = Math.max(1, Math.round(bounds.height * ratio));
+    let columns = 14;
+    let lastDraw = 0;
+    canvas.style.display = 'block';
+
+    const draw = (timestamp) => {
+      if (timestamp - lastDraw < 75) {
+        animationId = window.requestAnimationFrame(draw);
+        return;
+      }
+      lastDraw = timestamp;
+      const rows = Math.max(1, Math.round(columns * height / width));
+      canvas.width = columns;
+      canvas.height = rows;
+      context.imageSmoothingEnabled = false;
+
+      const scale = Math.min(columns / source.naturalWidth, rows / source.naturalHeight);
+      const drawWidth = source.naturalWidth * scale;
+      const drawHeight = source.naturalHeight * scale;
+      const drawX = (columns - drawWidth) / 2;
+      const drawY = (rows - drawHeight) / 2;
+      context.fillStyle = '#101010';
+      context.fillRect(0, 0, columns, rows);
+      context.drawImage(source, drawX, drawY, drawWidth, drawHeight);
+
+      if (columns < width) {
+        columns = Math.min(width, Math.ceil(columns * 1.65));
+        animationId = window.requestAnimationFrame(draw);
+      } else {
+        image.src = source.src;
+        image.alt = slides[slideIndex].alt;
+        canvas.style.display = 'none';
+        onComplete();
+      }
+    };
+
+    window.cancelAnimationFrame(animationId);
+    animationId = window.requestAnimationFrame(draw);
+  };
+
+  const showSlide = (index, initial) => {
+    slideIndex = index;
+    caption.textContent = slides[index].caption;
+    count.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+    if (reducedMotion) {
+      image.src = slides[index].src;
+      image.alt = slides[index].alt;
+      return;
+    }
+
+    const nextImage = new Image();
+    nextImage.onload = () => resolvePixels(nextImage, () => {});
+    nextImage.onerror = () => {
+      console.error('Unable to load research slideshow image: ' + slides[index].src);
+      image.src = slides[index].src;
+      image.alt = slides[index].alt;
+    };
+    nextImage.src = slides[index].src;
+    if (initial) researchSlideshow.classList.add('is-playing');
+  };
+
+  if (image && canvas && context && caption && count && !reducedMotion) {
+    showSlide(0, true);
+    window.setInterval(() => showSlide((slideIndex + 1) % slides.length, false), 10000);
+  }
+}
+
+// ═══════════════════════════════════════
+// PIXEL-RESOLVE HERO PHOTO
+// ═══════════════════════════════════════
+const heroPhoto = document.querySelector('.hero-photo-scene');
+if (heroPhoto) {
+  const image = heroPhoto.querySelector('img');
+  const canvas = heroPhoto.querySelector('.hero-photo-pixels');
+  const context = canvas && canvas.getContext('2d');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (image && canvas && context && !prefersReducedMotion) {
+    const resolvePhoto = () => {
+      const bounds = heroPhoto.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      const width = Math.max(1, Math.round(bounds.width * ratio));
+      const height = Math.max(1, Math.round(bounds.height * ratio));
+      let columns = 22;
+      let lastDraw = 0;
+      canvas.style.display = 'block';
+
+      const draw = (timestamp) => {
+        if (timestamp - lastDraw < 70) {
+          window.requestAnimationFrame(draw);
+          return;
+        }
+        lastDraw = timestamp;
+        const rows = Math.max(1, Math.round(columns * height / width));
+        canvas.width = columns;
+        canvas.height = rows;
+        context.imageSmoothingEnabled = false;
+
+        const imageRatio = image.naturalWidth / image.naturalHeight;
+        const frameRatio = width / height;
+        let sx = 0, sy = 0, sw = image.naturalWidth, sh = image.naturalHeight;
+        if (imageRatio > frameRatio) {
+          sw = image.naturalHeight * frameRatio;
+          sx = (image.naturalWidth - sw) / 2;
+        } else {
+          sh = image.naturalWidth / frameRatio;
+          sy = (image.naturalHeight - sh) / 2;
+        }
+        context.clearRect(0, 0, columns, rows);
+        context.drawImage(image, sx, sy, sw, sh, 0, 0, columns, rows);
+
+        if (columns < width) {
+          columns = Math.min(width, Math.ceil(columns * 1.7));
+          window.requestAnimationFrame(draw);
+        } else {
+          canvas.style.display = 'none';
+        }
+      };
+
+      window.requestAnimationFrame(draw);
+    };
+
+    canvas.style.display = 'none';
+    if (image.complete && image.naturalWidth) resolvePhoto();
+    else image.addEventListener('load', resolvePhoto, { once: true });
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1897,113 +2056,27 @@ document.addEventListener('click', function(e) {
   }
 });
 
-function drawPixelReveal(canvas, image, duration) {
-  var ctx = canvas.getContext('2d');
-  var buffer = document.createElement('canvas');
-  var bufferCtx = buffer.getContext('2d');
-  var width = 960;
-  var bounds = canvas.getBoundingClientRect();
-  var height = Math.max(300, Math.round(width * (bounds.height / bounds.width || 0.625)));
-  var start = null;
-  canvas.width = width;
-  canvas.height = height;
-  buffer.width = width;
-  buffer.height = height;
-
-  function draw(timestamp) {
-    if (start === null) start = timestamp;
-    var progress = Math.min(1, (timestamp - start) / duration);
-    var quality = 12 + Math.floor((width - 12) * progress);
-    var scaledHeight = Math.max(8, Math.round(quality * height / width));
-    buffer.width = quality;
-    buffer.height = scaledHeight;
-    bufferCtx.imageSmoothingEnabled = true;
-    bufferCtx.fillStyle = '#080908';
-    bufferCtx.fillRect(0, 0, quality, scaledHeight);
-    var scale = Math.min(quality / image.naturalWidth, scaledHeight / image.naturalHeight);
-    var drawWidth = image.naturalWidth * scale;
-    var drawHeight = image.naturalHeight * scale;
-    bufferCtx.drawImage(image, (quality - drawWidth) / 2, (scaledHeight - drawHeight) / 2, drawWidth, drawHeight);
-    ctx.imageSmoothingEnabled = false;
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(buffer, 0, 0, quality, scaledHeight, 0, 0, width, height);
-    if (progress < 1) window.requestAnimationFrame(draw);
-  }
-
-  window.requestAnimationFrame(draw);
-}
-
-function initHomePhoto() {
-  var frame = document.querySelector('.home-photo');
-  if (!frame) return;
-  var image = frame.querySelector('img');
-  var canvas = frame.querySelector('canvas');
-  function reveal() {
-    if (image.naturalWidth && image.naturalHeight) drawPixelReveal(canvas, image, 1500);
-    else console.error('Unable to load the home research photo:', image.src);
-  }
-  if (image.complete) reveal();
-  else image.addEventListener('load', reveal, { once: true });
-  image.addEventListener('error', function() {
-    console.error('Unable to load the home research photo:', image.src);
-  }, { once: true });
-}
-
-function initResearchSlideshow() {
-  var frame = document.querySelector('.rs-slideshow');
-  if (!frame) return;
-  var canvas = frame.querySelector('.rs-slide-pixels');
-  var caption = frame.querySelector('.rs-slide-caption');
-  var count = frame.querySelector('.rs-slide-count');
-  var progress = frame.querySelector('.rs-slide-progress');
-  var slides = [
-    { src: 'photos/imp.jpg', caption: 'My favourite research moment' },
-    { src: 'photos/IMG_8586.jpg', caption: 'Research, in progress' },
-    { src: 'photos/IMG_8587.jpg', caption: 'A milestone worth remembering' },
-    { src: 'photos/IMG_8588.jpg', caption: 'Work behind the result' },
-    { src: 'photos/IMG_8590.jpg', caption: 'Notes from the journey' },
-    { src: 'photos/IMG_8591.jpg', caption: 'A day in the lab' },
-    { src: 'photos/IMG_8592.jpg', caption: 'Ideas taking shape' },
-    { src: 'photos/IMG_8593.jpg', caption: 'Between the equations' },
-    { src: 'photos/IMG_8594.jpg', caption: 'The people and the process' },
-    { src: 'photos/6B2AA23C-C537-47A6-A6CF-57DC79543D93.PNG', caption: 'A research memory' }
-  ];
-  var index = 0;
-
-  function showSlide() {
-    var slide = slides[index];
-    var image = new Image();
-    count.textContent = ('0' + (index + 1)).slice(-2) + ' / ' + ('0' + slides.length).slice(-2);
-    caption.textContent = slide.caption;
-    progress.style.transition = 'none';
-    progress.style.width = '0';
-    image.onload = function() {
-      drawPixelReveal(canvas, image, 1200);
-      window.requestAnimationFrame(function() {
-        progress.style.transition = 'width 10s linear';
-        progress.style.width = '100%';
-      });
-    };
-    image.onerror = function() {
-      console.error('Unable to load research slideshow image:', slide.src);
-    };
-    image.src = slide.src;
-    window.setTimeout(function() {
-      index = (index + 1) % slides.length;
-      showSlide();
-    }, 10000);
-  }
-
-  showSlide();
-}
-
-initHomePhoto();
-initResearchSlideshow();
-
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
   boot();
 }
 
+})();
+
+(function() {
+  var timeline = document.querySelector('.work-timeline');
+  if (!timeline) return;
+  if (!('IntersectionObserver' in window)) {
+    timeline.classList.add('is-visible');
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      timeline.classList.add('is-visible');
+      observer.unobserve(timeline);
+    });
+  }, { threshold: 0.2 });
+  observer.observe(timeline);
 })();

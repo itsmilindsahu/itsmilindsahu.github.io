@@ -24,13 +24,13 @@
   </a>
   <ul class="nav-links">
     <li><a href="index.html" class="active">Home</a></li>
-    <li><a href="index.html#about">About</a></li>
-    <li><a href="projects.html">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="research-internship.html">Research &amp; Publications</a></li>
     <li><a href="axiom-labs.html">AXL</a></li>
     <li><a href="teaching.html">Teaching</a></li>
-    <li><a href="research-internship.html">Research</a></li>
-    <li><a href="index.html#gallery">Gallery</a></li>
-    <li><a href="projects.html#certificates">Certs</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="certs.html">Certs</a></li>
   </ul>
   <button class="hamburger"><span></span><span></span><span></span></button>
 </nav>
@@ -53,11 +53,12 @@
         <a href="projects.html" class="btn btn-ghost">Projects →</a>
       </div>
     </div>
-    <div class="hero-axl-card fade-in stagger-3">
-      <div class="home-photo">
-        <img src="photos/imp.jpg" alt="Milind at a research whiteboard">
-        <canvas aria-hidden="true"></canvas>
-        <span>RESEARCH, IN FRAME <i>↗</i></span>
+    <div class="hero-axl-card hero-photo-card fade-in stagger-3">
+      <div class="hero-photo-scene">
+        <img src="photos/imp.jpg" alt="Milind working through research on a whiteboard" fetchpriority="high">
+        <canvas class="hero-photo-pixels" aria-hidden="true"></canvas>
+        <span class="hero-photo-label">FIELD NOTES <span>01 / 03</span></span>
+        <span class="hero-photo-caption">Proofs in progress<span class="hero-photo-cursor">_</span></span>
       </div>
       <div class="hero-axl-logo">
         <div class="axl-text">AX<span>L</span></div>
@@ -109,7 +110,7 @@
   <div class="container">
     <p class="section-label"><span class="num">01</span> About</p>
     <div class="about-layout">
-      <div class="about-text fade-in">
+      <div class="about-text">
         <p>I'm a <strong>BS-MS Mathematics student at IISER Tirupati</strong> (Indian Institute of Science Education and Research, an autonomous research institute of the Govt. of India), working at the intersection of mathematical modeling, optimization theory, and computational methods applied to real-world systems.</p>
         <p>My research experience includes working as a <strong>Remote Research Intern at the University of Amsterdam</strong>, a <strong>Summer Research Fellow at IIT Palakkad</strong>, and a <strong>Research Intern at IIIT Kottayam</strong>. I have also published <strong>two papers</strong>: on arbitrage-free GP interpolation of implied volatility surfaces, and a policy and ML framework for civic energy disaggregation.</p>
         <p>Through my research identity <strong>AXL — Axiom Labs</strong>, I also build applied systems — from NILM-based energy disaggregation to proof-theoretic waste traceability — and compete in national hackathons at IITs and IISERs, placing in the top ranks against thousands of participants.</p>
@@ -122,7 +123,7 @@
           <span class="tag-pill">Stochastic Processes</span>
           <span class="tag-pill">Energy Systems</span>
         </div>
-        <div class="about-education fade-in" style="margin-top:26px;padding:18px 20px;border:1px solid var(--light-grey);">
+        <div class="about-education" style="margin-top:26px;padding:18px 20px;border:1px solid var(--light-grey);">
           <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--mid-grey);margin-bottom:10px;">Education</div>
           <p style="font-size:13px;line-height:1.7;margin:0 0 6px;"><strong>IISER Tirupati</strong> — BS–MS Dual Degree, Major: Mathematics · 2025–Present (Expected 2030)</p>
           <p style="font-size:12px;line-height:1.7;color:var(--mid-grey);margin:0 0 8px;">Coursework: Real Analysis, Linear Algebra, Probability Theory, Convex Optimization, Stochastic Processes, Time-Series Analysis</p>
@@ -130,14 +131,14 @@
         </div>
         <p style="font-size:11px;color:var(--mid-grey);margin-top:20px;line-height:1.8;border-left:2px solid var(--light-grey);padding-left:12px;">
           Outside research — I shoot and edit. Mostly street, campus life, and the quiet moments between things.
-          <a href="https://www.instagram.com/its_milindsahu/" target="_blank" style="color:var(--accent);text-decoration:none;"> @its_milindsahu →</a>
+          <a href="https://www.instagram.com/its_milindsahu/" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;"> @its_milindsahu →</a>
         </p>
         <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">
           <a href="axiom-labs.html" class="btn btn-primary">Explore AXL →</a>
           <a href="projects.html" class="btn btn-ghost">See Projects</a>
         </div>
       </div>
-      <div class="about-right fade-in stagger-2">
+      <div class="about-right">
         <div class="stat-box"><div class="stat-num">11</div><div class="stat-label">Awards &amp; Recognitions</div></div>
         <div class="stat-box"><div class="stat-num">5K+</div><div class="stat-label">Competitors Beaten</div></div>
         <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Research Positions</div></div>
@@ -147,49 +148,99 @@
   </div>
 </section>
 
-<!-- RESEARCH -->
-<section id="research-index" style="padding:80px 0 40px;background:var(--off-white)"><div class="container"><p class="section-label"><span class="num">02</span> Research &amp; Publications</p><div class="rs-list"><a class="rs-item fade-in" style="--c:#1a56db" href="research/gp-regression.html"><div class="rs-n">01</div><div class="rs-body"><h3>Gaussian Process Regression for Distribution-Valued Inputs</h3><p>Replicates Bachoc et al. (2018) on GP regression with probability distributions as inputs, then extends it to Wasserstein Tangent Gaussian Processes.</p><span class="rs-go">Open reader →</span></div><div class="rs-meta"><b>IIT Palakkad · Statistics</b>Dr. Tanmay Sahoo<br>2026 · Completed<br>Research fellowship completed</div></a><a class="rs-item fade-in" style="--c:#c8102e" href="research/capture-price.html"><div class="rs-n">02</div><div class="rs-body"><h3>Renewable Capture-Price Forecasting with Wasserstein GPs</h3><p>Treats the joint price–production forecast as a probability measure so that the cannibalisation effect in renewable markets enters the GP.</p><span class="rs-go">Open reader →</span></div><div class="rs-meta"><b>University of Amsterdam · Remote</b>Dr. Sven Karbach<br>Jul 2026 – ongoing<br>Research collaboration</div></a><a class="rs-item fade-in" style="--c:#2f6fb5" href="research/wasserstein-diffusion.html"><div class="rs-n">03</div><div class="rs-body"><h3>Wasserstein Diffusion on the Annotation Simplex</h3><p>Corrects the geometry of diffusion-based video summarisation: barycenter consensus, Dirichlet noise and a Wasserstein loss.</p><span class="rs-go">Open reader →</span></div><div class="rs-meta"><b>IIIT Kottayam · CSE</b>Dr. Priyadarshani<br>May – Aug 2026<br>Research internship completed</div></a><div class="rs-item rs-pub fade-in" style="--c:#1a56db"><div class="rs-n">P1</div><div class="rs-body"><h3 style="font-size:24px">Arbitrage-Free Gaussian Process Interpolation for Implied Volatility Surfaces</h3><p style="margin-bottom:4px">Milind Sahu, Darun, Latheesh Roy</p><p>A GP-based interpolation scheme for implied volatility surfaces that embeds no-arbitrage constraints directly in the covariance structure, avoiding post-hoc smoothing or projection.</p><a class="rs-doi" href="https://doi.org/10.13140/RG.2.2.33170.62400" target="_blank" rel="noopener">DOI 10.13140/RG.2.2.33170.62400 ↗</a></div><div class="rs-meta"><b>Published</b>August 2026</div></div><div class="rs-item rs-pub fade-in" style="--c:#1a56db"><div class="rs-n">P2</div><div class="rs-body"><h3 style="font-size:24px">From Opt-In to Infrastructure: Non-Intrusive Load Monitoring, Sustained Household Energy Conservation, and the Civic Energy Disaggregation Mandate</h3><p style="margin-bottom:4px">Milind Sahu, Darun A. · Axiom Lab · CC BY-NC 4.0</p><p>Introduces the Civic Energy Disaggregation Mandate (CEDM), arguing for NILM as public utility infrastructure rather than opt-in consumer technology, with a five-model ML pipeline benchmarking disaggregation accuracy and deployment feasibility.</p><a class="rs-doi" href="https://doi.org/10.13140/RG.2.2.20940.17283" target="_blank" rel="noopener">DOI 10.13140/RG.2.2.20940.17283 ↗</a></div><div class="rs-meta"><b>Published</b>June 2026</div></div></div><p style="margin-top:28px"><a class="btn" href="research-internship.html">All research →</a></p></div></section>
+<!-- WORK -->
+<section id="work" class="work-timeline-section">
+  <div class="container">
+    <p class="section-label"><span class="num">02</span> Work</p>
+    <div class="work-heading"><h2>Work<span>_</span></h2></div>
+    <div class="work-timeline" aria-label="Research projects and publications from May to November 2026">
+      <div class="work-calendar">
+        <div class="work-months" aria-hidden="true">
+          <span>MAY</span><span>JUN</span><span>JUL</span><span>AUG</span><span>SEP</span><span>OCT</span><span>NOV</span>
+        </div>
+        <div class="work-now" aria-hidden="true"><span>NOW</span></div>
+        <ol class="work-rows">
+          <li class="work-entry" style="--start:1;--end:5;--duration:57%">
+            <a class="work-entry-title" href="research/wasserstein-diffusion.html">Wasserstein Diffusion on the Annotation Simplex</a>
+            <span class="work-bar"></span>
+            <div class="work-entry-meta">IIIT KOTTAYAM · MAY — AUG <span class="work-status">COMPLETED</span></div>
+          </li>
+          <li class="work-entry" style="--start:2;--end:8;--duration:86%">
+            <a class="work-entry-title" href="research/gp-regression.html">GP Regression for Distribution-Valued Inputs</a>
+            <span class="work-bar"></span>
+            <div class="work-entry-meta">IIT PALAKKAD · FROM JUN <span class="work-status">COMPLETED</span></div>
+          </li>
+          <li class="work-entry work-entry-active" style="--start:3;--end:8;--duration:71%">
+            <a class="work-entry-title" href="research/capture-price.html">Capture-Price Forecasting with Wasserstein GPs</a>
+            <span class="work-bar"></span>
+            <div class="work-entry-meta">UNIV. OF AMSTERDAM · JUL — NOW <span class="work-status">ONGOING</span></div>
+          </li>
+        </ol>
+        <div class="work-papers" aria-label="Published papers">
+          <div class="work-paper" style="--month:2">
+            <a href="https://doi.org/10.13140/RG.2.2.20940.17283" target="_blank" rel="noopener">
+              <span class="work-paper-dot"></span><span>JUN · NILM PAPER</span>
+            </a>
+          </div>
+          <div class="work-paper" style="--month:4">
+            <a href="https://doi.org/10.13140/RG.2.2.33170.62400" target="_blank" rel="noopener">
+              <span class="work-paper-dot"></span><span>AUG · ARBITRAGE-FREE GP PAPER</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="work-footer">
+        <a class="work-projects-link" href="projects.html">5 systems &amp; hackathons — NILM, TRACEWASTE, EcoFusion&nbsp;<span>→</span></a>
+        <a class="work-research-link" href="research-internship.html">RESEARCH &amp; PUBLICATIONS <span>→</span></a>
+        <a class="work-all-link" href="projects.html">ALL WORK <span>→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-
-<!-- RESEARCH -->
+<!-- RESEARCH GALAXY -->
 <section id="research">
   <div class="container">
     <p class="section-label"><span class="num">03</span> Research Galaxy</p>
-    <div class="graph-hint">Drag to rotate · Scroll to zoom · Hover planets</div>
-    <div id="research-graph"></div>
+    <p class="graph-hint">Drag to rotate · Scroll to zoom · Hover planets</p>
+    <div id="research-graph" role="img" aria-label="Interactive galaxy of research topics and projects"></div>
+  </div>
+</section>
 
-    <p class="section-label" id="certificates" style="margin-top:72px;"><span class="num">—</span> Certificates & Awards</p>
+<!-- CERTIFICATES & AWARDS -->
+<section id="certificates">
+  <div class="container">
+    <p class="section-label"><span class="num">04</span> Certificates &amp; Awards</p>
     <div class="certs-grid-dark">
-      <div class="cert-dark-item fade-in">
-        <div class="cert-dark-img"><img src="cert-hbl-award.jpg" alt="Rank 5 Hack Beyond Limits" loading="lazy"></div>
-        <div class="cert-dark-label">🏅 Rank 5 · Hack Beyond Limits</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-1">
-        <div class="cert-dark-img"><img src="cert-hbl.jpg" alt="Hack Beyond Limits Participation" loading="lazy"></div>
-        <div class="cert-dark-label">Hack Beyond Limits · Participation</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-2">
-        <div class="cert-dark-img"><img src="cert-cs1.jpg" alt="CodeSynthesis" loading="lazy"></div>
-        <div class="cert-dark-label">CodeSynthesis · Participation</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-3">
-        <div class="cert-dark-img"><img src="cert-cs2.jpg" alt="CodeSynthesis Round 1" loading="lazy"></div>
-        <div class="cert-dark-label">CodeSynthesis · Round 1</div>
-      </div>
-      <div class="cert-dark-item fade-in stagger-4">
-        <div class="cert-dark-img"><img src="cert-cs3.jpg" alt="CodeSynthesis Round 2" loading="lazy"></div>
-        <div class="cert-dark-label">CodeSynthesis · Round 2</div>
-      </div>
+      <a class="cert-dark-item" href="cert-hbl-award.jpg" target="_blank" rel="noopener noreferrer">
+        <div class="cert-dark-img"><img src="cert-hbl-award.jpg" alt="Hack Beyond Limits fifth-place award certificate" loading="lazy"></div>
+        <span class="cert-dark-label">Rank 5 · Hack Beyond Limits</span>
+      </a>
+      <a class="cert-dark-item" href="cert-hbl.jpg" target="_blank" rel="noopener noreferrer">
+        <div class="cert-dark-img"><img src="cert-hbl.jpg" alt="Hack Beyond Limits participation certificate" loading="lazy"></div>
+        <span class="cert-dark-label">Hack Beyond Limits · Participation</span>
+      </a>
+      <a class="cert-dark-item" href="cert-cs1.jpg" target="_blank" rel="noopener noreferrer">
+        <div class="cert-dark-img"><img src="cert-cs1.jpg" alt="CodeSynthesis participation certificate" loading="lazy"></div>
+        <span class="cert-dark-label">CodeSynthesis · Participation</span>
+      </a>
+      <a class="cert-dark-item" href="cert-cs2.jpg" target="_blank" rel="noopener noreferrer">
+        <div class="cert-dark-img"><img src="cert-cs2.jpg" alt="CodeSynthesis Round 1 certificate" loading="lazy"></div>
+        <span class="cert-dark-label">CodeSynthesis · Round 1</span>
+      </a>
+      <a class="cert-dark-item" href="cert-cs3.jpg" target="_blank" rel="noopener noreferrer">
+        <div class="cert-dark-img"><img src="cert-cs3.jpg" alt="CodeSynthesis Round 2 certificate" loading="lazy"></div>
+        <span class="cert-dark-label">CodeSynthesis · Round 2</span>
+      </a>
     </div>
-    <a class="certificates-all-link" href="projects.html#certificates">View certificates with projects ↗</a>
+    <a class="certificates-all-link" href="certs.html">View certificates &amp; awards →</a>
   </div>
 </section>
 
 <!-- AXL -->
 <section id="axl-preview">
   <div class="container">
-    <p class="section-label"><span class="num">04</span> Research Identity</p>
+    <p class="section-label"><span class="num">05</span> Research Identity</p>
     <div class="axl-stack-layout fade-in">
       <div class="axl-stack-left">
         <div class="axl-name">AX<span>L</span></div>
@@ -227,39 +278,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROJECTS CTA -->
-<section id="projects" style="background:var(--black);padding:80px 0;position:relative;overflow:hidden;">
-  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(26,86,219,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,86,219,.06) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
-  <div style="position:absolute;top:50%;left:50%;width:600px;height:400px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(26,86,219,.12) 0%,transparent 65%);pointer-events:none;"></div>
-  <div class="container" style="position:relative;z-index:1;text-align:center;">
-    <p class="section-label" style="justify-content:center;color:#333;margin-bottom:28px;"><span class="num">05</span> Projects</p>
-    <div style="font-family:var(--font-display);font-size:clamp(52px,8vw,96px);line-height:.9;letter-spacing:4px;color:white;margin-bottom:12px;">5 PROJECTS<span style="color:var(--accent)">.</span></div>
-    <p style="font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#444;margin-bottom:12px;">11 Awards · IITs &amp; IISERs · 5000+ Competitors</p>
-    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:28px 0 36px;">
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Energy</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">ML / AI</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Policy</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Optimization</span>
-      <span style="padding:5px 14px;border:1px solid #1e1e1c;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#555;">Systems</span>
-    </div>
-    <a href="axiom-labs.html#projects" class="btn btn-primary" style="font-size:11px;padding:13px 32px;">View All Projects under AXL →</a>
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section id="gallery">
-  <div class="container">
-    <p class="section-label"><span class="num">06</span> Gallery</p>
-    <div class="gallery-grid">
-      <div class="gallery-item"><img src="photo1.jpg" alt="2nd Prize IIT Hyderabad" loading="lazy"><div class="gallery-overlay">2nd Prize · IIT Hyderabad</div></div>
-      <div class="gallery-item"><img src="photo2.jpg" alt="Presentation IIES" loading="lazy"><div class="gallery-overlay">Presentation · IIES</div></div>
-      <div class="gallery-item"><img src="photo3.jpg" alt="IISER Tirupati Team" loading="lazy"><div class="gallery-overlay">IISER Tirupati Team</div></div>
-      <div class="gallery-item"><img src="photo4.jpg" alt="Pitched to Judges" loading="lazy"><div class="gallery-overlay">Pitched to Judges · IIES</div></div>
-      <div class="gallery-item"><img src="photo5.jpg" alt="3rd Prize IIES" loading="lazy"><div class="gallery-overlay">3rd Prize · IIES</div></div>
     </div>
   </div>
 </section>
